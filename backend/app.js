@@ -1,22 +1,9 @@
 const express = require('express');
-const { Sequelize } = require('sequelize');
-require('dotenv').config()
+const Sequelize = require("sequelize")
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
-
-const User = process.env.DB_USER;
-const Password = process.env.DB_PASSWORD;
-
-const sequelize = new Sequelize("groupomania", `${User}`, `${Password}`, {
-  dialect: "mysql",
-  host: "localhost"
-});
-try {
-  sequelize.authenticate();
-  console.log('Connecté à la base de données MySQL!');
-} catch (error) {
-  console.error('Impossible de se connecter, erreur suivante :', error);
-}
+const db = require('./models');
+const authRoutes = require('./routes/auth_routes');
 
 const app = express();
 
@@ -36,7 +23,23 @@ app.use(bodyParser.json());
 app.use('/image/gif', express.static('gif'));
 app.use('/image/images', express.static('images'));
 
-// app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 // app.use('/api/post', postRoutes);
+
+const User = db.users;
+const Post = db.posts;
+
+db.sequelize.sync()
+
+app.use((req, res, next) => {
+  User.create({
+    email: req.body.email,
+    password: req.body.password,
+    nickname: req.body.nickname,
+    isAdmin: true
+  })
+  .then(() => res.status(201).json({message: 'Utilisateur créé'}))
+  .catch(error => res.status(400).json({message: 'Erreur'}));
+})
 
 module.exports = app;
