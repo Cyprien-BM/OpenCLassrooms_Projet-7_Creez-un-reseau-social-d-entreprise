@@ -1,15 +1,21 @@
 const db = require('../models');
+const bcrypt = require('bcrypt');
 
 const User = db.users;
 
 exports.signeUp = (req, res, next) => {
-  User.create({
-    email: req.body.email,
-    password: req.body.password,
-    nickname: req.body.nickname,
-  })
-  .then(() => res.status(201).json({message: 'Utilisateur créé'}))
-  .catch(error => res.status(400).json({error}));
+  bcrypt.hash(req.body.password, 10)
+    .then(hash => {
+      User.create({
+        email: req.body.email,
+        password: hash,
+        nickname: req.body.nickname,
+        isAdmin : true,
+      })
+        .then(() => res.status(201).json({message: 'Utilisateur créé'}))
+        .catch(error => res.status(400).json({error}));
+    })
+  .catch(error => res.status(500).json({error}));
 }
 
 exports.deleteUser = (req, res, next) => {

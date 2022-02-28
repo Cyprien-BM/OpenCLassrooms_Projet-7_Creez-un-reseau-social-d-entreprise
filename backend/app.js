@@ -20,8 +20,9 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-app.use('/image/gif', express.static('gif'));
-app.use('/image/images', express.static('images'));
+app.use('/image/posts/gif', express.static('gif'));
+app.use('/image/posts/images', express.static('images'));
+app.use('/image/profile/images', express.static('images'));
 
 app.use('/api/auth', authRoutes);
 // app.use('/api/post', postRoutes);
