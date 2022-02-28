@@ -1,5 +1,23 @@
+'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  const Post = sequelize.define('POST', {
+  class post extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      models.post.belongsTo(models.user, {
+        foreignKey: {
+          allowNull: false
+        }
+      })
+    }
+  }
+  post.init({
     idPOSTS: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -10,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     title: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: false,
       unique: true
     },
@@ -33,6 +51,9 @@ module.exports = (sequelize, DataTypes) => {
     usersDisliked: {
       type: DataTypes.JSON,
     }
+  }, {
+    sequelize,
+    modelName: 'post',
   });
-  return Post
-}
+  return post;
+};

@@ -18,7 +18,7 @@ exports.signeUp = (req, res, next) => {
         .then(() => res.status(201).json({message: 'Utilisateur créé'}))
         .catch(error => res.status(400).json({error}));
     })
-  .catch(error => res.status(500).json({error}));
+    .catch(error => res.status(500).json({error}));
 }
 
 exports.deleteUser = (req, res, next) => {

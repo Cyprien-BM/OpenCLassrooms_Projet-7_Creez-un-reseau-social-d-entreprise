@@ -1,3 +1,5 @@
+'use strict';
+
 // Check if input contain forbiden char and/or string
 function inputValidator (input) {
   if (/<script>|<script\/>|SELECT|FROM|UPDATE|DELETE|=|;/g.test(input)) {
@@ -6,12 +8,26 @@ function inputValidator (input) {
 }
 //----------------------------------------------------------//
 
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('USER', {
-    idUSERS: {
-      type: DataTypes.INTEGER,
+  class user extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      models.user.hasMany(models.post)
+    }
+  }
+  user.init({
+    idUSER: {
+      allowNull: false,
       autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
+      type: DataTypes.INTEGER
     },
     email: {
       type: DataTypes.STRING,
@@ -33,10 +49,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     firstname: {
-      type: DataTypes.STRING(64),
+      type: DataTypes.STRING(100),
     },
     lastname: {
-      type: DataTypes.STRING(64),
+      type: DataTypes.STRING(100),
     },
     pictureUrl: {
       type: DataTypes.BLOB("long"),
@@ -59,6 +75,9 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     }
+  }, {
+    sequelize,
+    modelName: 'user',
   });
-  return User
-}
+  return user;
+};
