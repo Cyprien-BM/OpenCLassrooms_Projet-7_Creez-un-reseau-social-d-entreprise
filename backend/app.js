@@ -26,20 +26,20 @@ app.use('/image/images', express.static('images'));
 app.use('/api/auth', authRoutes);
 // app.use('/api/post', postRoutes);
 
-const User = db.users;
-const Post = db.posts;
 
-db.sequelize.sync()
+// const Post = db.posts;
 
-app.use((req, res, next) => {
-  User.create({
-    email: req.body.email,
-    password: req.body.password,
-    nickname: req.body.nickname,
-    isAdmin: true
-  })
-  .then(() => res.status(201).json({message: 'Utilisateur créé'}))
-  .catch(error => res.status(400).json({message: 'Erreur'}));
-})
+// app.use((req, res, next) => {
+//   User.create({
+//     email: req.body.email,
+//     password: req.body.password,
+//     nickname: req.body.nickname,
+//     isAdmin: true
+//   })
+//   .then(() => res.status(201).json({message: 'Utilisateur créé'}))
+//   .catch(error => res.status(400).json({error}));
+// })
+
+
 
 module.exports = app;

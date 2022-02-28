@@ -7,7 +7,9 @@ const db = {};
 
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
-const sequelize = new Sequelize("groupomania", `${dbUser}`, `${dbPassword}`, {
+const dbDatabase = process.env.DB_DATABASE;
+
+const sequelize = new Sequelize(`${dbDatabase}`, `${dbUser}`, `${dbPassword}`, {
   dialect: "mysql",
   host: "localhost"
 });
@@ -22,7 +24,7 @@ try {
 fs.readdirSync(__dirname)
   .filter(file => file.indexOf('.') !== 0 && file !== 'index.js' && file.slice(-3) === '.js')
   .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    const model = require(path.join(__dirname, file));
     db[model.name] = model;
   });
 
