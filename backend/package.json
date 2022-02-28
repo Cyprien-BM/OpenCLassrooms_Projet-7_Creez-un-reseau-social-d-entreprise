@@ -16,6 +16,7 @@
     "express-rate-limit": "^6.3.0",
     "fs": "0.0.1-security",
     "helmet": "^5.0.2",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "mysql2": "^2.3.3",
     "password-validator": "^5.2.1",
