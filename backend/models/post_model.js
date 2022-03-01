@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     imageUrl: {
-      type: DataTypes.BLOB("long"),
+      type: DataTypes.STRING(500),
     },
     likes: {
       type: DataTypes.INTEGER,

@@ -25,6 +25,7 @@ module.exports = {
       },
       nickname: {
         allowNull: false,
+        unique: true,
         type: Sequelize.STRING(100)
       },
       firstname: {
@@ -34,7 +35,7 @@ module.exports = {
         type: Sequelize.STRING(100)
       },
       pictureUrl: {
-        type: Sequelize.BLOB("long")
+        type: Sequelize.STRING(500)
       },
       isAdmin: {
         type: Sequelize.BOOLEAN

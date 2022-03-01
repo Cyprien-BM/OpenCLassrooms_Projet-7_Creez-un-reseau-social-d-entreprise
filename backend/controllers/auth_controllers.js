@@ -13,22 +13,13 @@ exports.signeUp = (req, res, next) => {
         email: req.body.email,
         password: hash,
         nickname: req.body.nickname,
-        isAdmin : true,
+        pictureUrl: `${req.protocol}://${req.get('host')}/image/profile/images/Default.png`,
+        isAdmin: true,
       })
         .then(() => res.status(201).json({message: 'Utilisateur créé'}))
         .catch(error => res.status(400).json({error}));
     })
     .catch(error => res.status(500).json({error}));
-}
-
-exports.deleteUser = (req, res, next) => {
-  User.destroy({
-    where: {
-      idUSERS: req.body.idUser
-    }
-  })
-  .then(() => res.status(201).json({message: 'Utilisateur Supprimé'}))
-  .catch(error => res.status(500).json({error}));
 }
 
 exports.login = (req, res, next) => {
@@ -42,16 +33,15 @@ exports.login = (req, res, next) => {
     if (!user){
       return res.status(401).json({error:'Email non trouvé : Cette utilisateur n\'éxiste pas'});
     }
-    console.log(user.email);
     bcrypt.compare(req.body.password, user.password)
       .then(valid => {
         if (!valid) {
           return res.status(401).json({error: 'Mot de passe incorrect !'})
         }
         res.status(200).json({
-          userId: user.idUSERS,
+          userId: user.idUSER,
           token: jsonWebToken.sign(
-            {userId: user.idUSERS},
+            {userId: user.idUSER},
             `${token}`,
             {expiresIn: '24h'}
           )
@@ -59,5 +49,10 @@ exports.login = (req, res, next) => {
       })
       .catch(error => res.status(501).json({error}));
   })
-  .catch(error => res.status(500).json({error}));
+  .catch(error => {
+    console.log(error)
+    res.status(500).json({error});
+  })
 };
+
+

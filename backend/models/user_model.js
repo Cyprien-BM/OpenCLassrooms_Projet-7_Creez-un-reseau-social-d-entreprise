@@ -45,8 +45,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     nickname: {
+      unique: true,
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: false,
     },
     firstname: {
       type: DataTypes.STRING(100),
@@ -55,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(100),
     },
     pictureUrl: {
-      type: DataTypes.BLOB("long"),
+      type: DataTypes.STRING(500),
     },
     isAdmin: {
       type: DataTypes.BOOLEAN,

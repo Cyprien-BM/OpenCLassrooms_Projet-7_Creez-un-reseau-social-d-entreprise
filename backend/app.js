@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const db = require('./models');
 const authRoutes = require('./routes/auth_routes');
+const profileRoutes = require('./routes/profile_routes');
 
 const app = express();
 
@@ -20,11 +21,10 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-app.use('/image/posts/gif', express.static('gif'));
-app.use('/image/posts/images', express.static('images'));
-app.use('/image/profile/images', express.static('images'));
+app.use('/image', express.static('image'));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/profile', profileRoutes);
 // app.use('/api/post', postRoutes);
 
 
