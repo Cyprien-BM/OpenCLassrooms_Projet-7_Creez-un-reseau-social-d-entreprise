@@ -27,31 +27,39 @@ exports.deleteUser = (req, res, next) => {
 }
 
 exports.modifyEmail = (req, res, next) => {
-  User.update({
-    email: req.body.email
-  },{
+  User.findOne({
     where: {
       idUSER: req.params.id
     }
   })
-  .then (res.status(200).json({message : 'Email modifié !'}))
-  .catch(error => res.status(500).json({error}));
+    .then ( user => {
+      user.update({
+        email: req.body.email
+      })
+        .then (() => res.status(200).json({message : 'Email modifié !'}))
+        .catch(error => res.status(400).json({error}));
+    })
+    .catch(error => res.status(500).json({error}));
 }
 
 exports.modifyPassword = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
-  .then(hash => {
-    User.update({
-      password: hash
-    },{
-      where: {
-        idUSER: req.params.id
-      }
-    })
-    .then (res.status(200).json({message : 'Mots de passe modifié !'}))
-    .catch(error => res.status(500).json({error}));
+  User.findOne({
+    where: {
+      idUSER: req.params.id
+    }
   })
-  .catch(error => res.status(500).json({error}));
+    .then (user => {
+      bcrypt.hash(req.body.password, 10)
+      .then(hash => {
+        user.update({
+          password: hash
+        })
+          .then (() => res.status(200).json({message : 'Mots de passe modifié !'}))
+          .catch(error => res.status(400).json({error}));
+      })
+      .catch(error => res.status(400).json({error}));
+    })
+    .catch(error => res.status(500).json({error}));
 }
 
 exports.modifyUserInformation = (req, res, next) => {
@@ -61,7 +69,7 @@ exports.modifyUserInformation = (req, res, next) => {
     },
     raw: true,
   })
-  .then(user => {
+  .then(() => {
     let imgUrl;
     if (req.file) {
       const fileName = pictureUrl.split('/images/')[1];
@@ -82,8 +90,8 @@ exports.modifyUserInformation = (req, res, next) => {
         idUSER: req.params.id
       }
     })
-    .then (res.status(200).json({message : 'Profil modifié !'}))
-    .catch(error => res.status(500).json({error}));
+    .then (() => res.status(200).json({message : 'Profil modifié !'}))
+    .catch(error => res.status(400).json({error}));
   })
   .catch(error => res.status(500).json({error}));
 }
