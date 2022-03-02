@@ -2,7 +2,7 @@
 
 // Check if input contain forbiden char and/or string
 function inputValidator (input) {
-  if (/<script>|<script\/>|SELECT|FROM|UPDATE|DELETE|=|;/g.test(input)) {
+  if (/<script>|<script\/>|SELECT|FROM|UPDATE|DELETE|CREATE|SHOW|=|;/g.test(input)) {
     return true;
   }else{return false}
 }
@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      models.user.hasMany(models.post)
+      // models.user.hasMany(models.post, {
+      // })
     }
   }
   user.init({

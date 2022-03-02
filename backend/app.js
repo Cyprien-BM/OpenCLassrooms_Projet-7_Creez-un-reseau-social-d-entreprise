@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const db = require('./models');
 const authRoutes = require('./routes/auth_routes');
 const profileRoutes = require('./routes/profile_routes');
+const postRoutes = require('./routes/post_routes');
 
 const app = express();
 
@@ -25,7 +26,7 @@ app.use('/image', express.static('image'));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
-// app.use('/api/post', postRoutes);
+app.use('/api/post', postRoutes);
 
 
 // const Post = db.posts;

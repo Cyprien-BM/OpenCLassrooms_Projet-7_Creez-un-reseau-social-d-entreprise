@@ -1,4 +1,13 @@
 'use strict';
+
+// Check if input contain forbiden char and/or string
+function inputValidator (input) {
+  if (/<script>|<script\/>|SELECT|FROM|UPDATE|DELETE|CREATE|SHOW|=|;/g.test(input)) {
+    return true;
+  }else{return false}
+}
+//----------------------------------------------------------//
+
 const {
   Model
 } = require('sequelize');
@@ -10,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      models.post.belongsTo(models.user, {
-        foreignKey: {
-          allowNull: false
-        }
-      })
+      // models.post.belongsTo(models.user, {
+      //   foreignKey: {
+      //     allowNull: false
+      //   }
+      // })
     }
   }
   post.init({
@@ -23,9 +32,13 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true
     },
-    postIdUSERS: {
-      type: DataTypes.INTEGER,
+    userId: {
       allowNull: false,
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'users',
+        key: 'idUSER'
+      }
     },
     title: {
       type: DataTypes.STRING(100),
@@ -45,11 +58,17 @@ module.exports = (sequelize, DataTypes) => {
     dislikes: {
       type: DataTypes.INTEGER,
     },
-    usersLiked: {
-      type: DataTypes.JSON,
-    },
-    usersDisliked: {
-      type: DataTypes.JSON,
+  }, {
+    sequelize,
+    validate: {
+      validateInput() {
+        if (
+          inputValidator(this.title) ||
+          inputValidator(this.content)
+        ) {
+          throw new Error('Veuillez remplir les champs d\'input avec des caractères valides');
+        }
+      }
     }
   }, {
     sequelize,

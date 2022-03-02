@@ -43,11 +43,16 @@ db.posts = require('./post_model')(sequelize, Sequelize);
 // Association one to many between user and post
 db.users.hasMany(db.posts, {
   foreignKey: {
-    name: 'postIdUSERS',
+    name: 'userId',
     allowNull: false,
   }
 });
-db.posts.belongsTo(db.users);
-//----------------------------------------------//
+db.posts.belongsTo(db.users, {
+  foreignKey: {
+    name: 'userId',
+    allowNull: false,
+  }
+});
+// ----------------------------------------------//
 
 module.exports = db;

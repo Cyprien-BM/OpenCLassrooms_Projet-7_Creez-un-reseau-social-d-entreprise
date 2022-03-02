@@ -8,7 +8,7 @@ const User = db.users;
 exports.getUser = (req, res, next) => {
   User.findOne({
     where: {
-      idUSER: req.params.id
+      idUSER: res.locals.id
     },
     raw: true,
   })
@@ -19,7 +19,7 @@ exports.getUser = (req, res, next) => {
 exports.deleteUser = (req, res, next) => {
   User.destroy({
     where: {
-      idUSER: req.params.id
+      idUSER: res.locals.id
     }
   })
   .then(() => res.status(201).json({message: 'Utilisateur Supprimé'}))
@@ -29,7 +29,7 @@ exports.deleteUser = (req, res, next) => {
 exports.modifyEmail = (req, res, next) => {
   User.findOne({
     where: {
-      idUSER: req.params.id
+      idUSER: res.locals.id
     }
   })
     .then ( user => {
@@ -45,7 +45,7 @@ exports.modifyEmail = (req, res, next) => {
 exports.modifyPassword = (req, res, next) => {
   User.findOne({
     where: {
-      idUSER: req.params.id
+      idUSER: res.locals.id
     }
   })
     .then (user => {
@@ -65,7 +65,7 @@ exports.modifyPassword = (req, res, next) => {
 exports.modifyUserInformation = (req, res, next) => {
   User.findOne({
     where: {
-      idUSER: req.params.id
+      idUSER: res.locals.id
     },
     raw: true,
   })
@@ -87,7 +87,7 @@ exports.modifyUserInformation = (req, res, next) => {
       pictureUrl: imgUrl,
     },{
       where: {
-        idUSER: req.params.id
+        idUSER: res.locals.id
       }
     })
     .then (() => res.status(200).json({message : 'Profil modifié !'}))
