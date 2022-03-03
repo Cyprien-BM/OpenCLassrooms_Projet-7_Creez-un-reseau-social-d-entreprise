@@ -45,7 +45,8 @@ db.users.hasMany(db.posts, {
   foreignKey: {
     name: 'userId',
     allowNull: false,
-  }
+  },
+  onDelete: 'CASCADE',
 });
 db.posts.belongsTo(db.users, {
   foreignKey: {

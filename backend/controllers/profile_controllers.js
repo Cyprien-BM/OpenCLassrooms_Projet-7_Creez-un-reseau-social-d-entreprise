@@ -4,6 +4,7 @@ const multer = require('../middleware/multer-profile');
 const fs = require('fs');
 
 const User = db.users;
+const Post = db.posts;
 
 exports.getUser = (req, res, next) => {
   User.findOne({
@@ -14,16 +15,6 @@ exports.getUser = (req, res, next) => {
   })
   .then (user => res.status(200).json(user))
   .catch (error => res.status(400).json({error}));
-}
-
-exports.deleteUser = (req, res, next) => {
-  User.destroy({
-    where: {
-      idUSER: res.locals.id
-    }
-  })
-  .then(() => res.status(201).json({message: 'Utilisateur Supprimé'}))
-  .catch(error => res.status(500).json({error}));
 }
 
 exports.modifyEmail = (req, res, next) => {
@@ -94,4 +85,50 @@ exports.modifyUserInformation = (req, res, next) => {
     .catch(error => res.status(400).json({error}));
   })
   .catch(error => res.status(500).json({error}));
+}
+
+
+exports.deleteUser = (req, res, next) => {
+   User.findOne({
+    where: {
+      idUSER: res.locals.id
+    }
+  })
+  .then(async user => {
+    const fileName = user.pictureUrl.split('/images/')[1];
+    if (fileName != "Default.png") {
+      fs.unlink(`image/profile/images/${fileName}`, (error) => {error})
+    }
+    console.log(user.idUSER)
+    
+    // Find all posts related to the user and delete all image file associated to them before cascade deletion
+    await Post.findAll({
+      where: {
+        userId: res.locals.id
+      }
+    })
+    .then(posts => {
+      for (const post of posts) {
+        console.log('pendant')
+        if (post.imageUrl != null) {
+          const fileName = post.imageUrl.split('/images/')[1];
+          fs.unlinkSync(`image/profile/images/${fileName}`, (error) => {error});
+        }
+      }
+    })
+    .catch(error => res.status(502).json({error}));
+    console.log('fin')
+    // Delete user
+    User.destroy({
+      where: {
+        idUSER: res.locals.id
+      }
+    })
+    .then(() => res.status(201).json({message: 'Utilisateur Supprimé'}))
+    .catch(error => {
+      console.log(error)
+      res.status(500).json({error})
+    });
+  })
+  .catch(error => res.status(502).json({error}));
 }
