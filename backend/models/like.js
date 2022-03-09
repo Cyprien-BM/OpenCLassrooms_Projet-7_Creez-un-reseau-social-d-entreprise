@@ -27,6 +27,9 @@ module.exports = (sequelize, DataTypes) => {
         model: 'user',
         key: 'idUSER'
       }
+    },
+    likeValue: {
+      type: DataTypes.INTEGER,
     }
   }, {
     sequelize,

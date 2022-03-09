@@ -55,9 +55,6 @@ module.exports = (sequelize, DataTypes) => {
     likes: {
       type: DataTypes.INTEGER,
     },
-    dislikes: {
-      type: DataTypes.INTEGER,
-    },
   }, {
     sequelize,
     validate: {

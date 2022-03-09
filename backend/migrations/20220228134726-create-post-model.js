@@ -31,9 +31,6 @@ module.exports = {
       likes: {
         type: Sequelize.INTEGER
       },
-      dislikes: {
-        type: Sequelize.INTEGER
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
