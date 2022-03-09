@@ -8,10 +8,14 @@ module.exports = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodeToken = jsonWebToken.verify(token, `${secretToken}`);
     const userId = decodeToken.userId;
-    if (req.body.userId && req.body.userId !== userId) {
+    console.log(req.body.userId);
+    console.log(userId);
+    if ((req.body.userId && req.body.userId !== userId) || !req.body.userId) {
+      console.log('ici')
       throw 'User ID non valable'
     }else {
       res.locals.id = userId;
+      console.log('là');
       next();
     }
   }catch(error){
