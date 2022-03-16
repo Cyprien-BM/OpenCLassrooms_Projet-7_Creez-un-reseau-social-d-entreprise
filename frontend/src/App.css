@@ -1,0 +1,16 @@
+.login-page, .register-page {
+  background-image: url('./Assets/Background.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-page img, .register-page img {
+  position: relative;
+  bottom: 60px;
+}

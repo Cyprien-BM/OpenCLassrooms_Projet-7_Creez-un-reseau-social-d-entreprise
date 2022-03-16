@@ -3,6 +3,7 @@ const router = express.Router();
 const authController = require('../controllers/auth_controllers');
 const rateLimit = require('express-rate-limit')
 const passwordValidator = require('../middleware/password-validator');
+const auth = require('../middleware/token_auth');
 
 // Limiter for IP request
 const limiter = rateLimit({
@@ -16,5 +17,6 @@ const limiter = rateLimit({
 
 router.post('/signup', passwordValidator, authController.signeUp);
 router.post('/login', limiter, passwordValidator, authController.login);
+router.get('/cookie-delete', auth, authController.deleteCookie);
 
 module.exports = router;

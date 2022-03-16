@@ -9,6 +9,6 @@ passwordSchema
   .has().lowercase()                              
   .has().digits(2)                                
   .has(/[\\ !"#$%&'()*+,-./:;<=>?@\[\]^_`{|}~]/g)
-  .not(/<script>|<script\/>|SELECT|FROM|UPDATE|DELETE|SHOW|CREATE|ALTER|INSERT/gi);
+  .not(/<script>|<script\/>|SELECT|FROM|UPDATE|DELETE|SHOW|CREATE|ALTER|INSERT|DROP/gi);
 
 module.exports = passwordSchema;
