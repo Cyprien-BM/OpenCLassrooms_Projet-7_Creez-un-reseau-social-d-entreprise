@@ -2,7 +2,7 @@
 
 // Check if input contain forbiden char and/or string
 function inputValidator (input) {
-  if (/<script>|<script\/>|SELECT|FROM|UPDATE|DELETE|CREATE|SHOW|=|;/g.test(input)) {
+  if (/<script>|<script\/>|SELECT|FROM|UPDATE|DELETE|SHOW|CREATE|ALTER|INSERT|DROP|=|;/g.test(input)) {
     return true;
   }else{return false}
 }
@@ -13,17 +13,8 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class post extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+
     static associate(models) {
-      // models.post.belongsTo(models.user, {
-      //   foreignKey: {
-      //     allowNull: false
-      //   }
-      // })
     }
   }
   post.init({

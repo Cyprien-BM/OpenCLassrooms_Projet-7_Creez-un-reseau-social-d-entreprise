@@ -14,7 +14,6 @@ exports.signeUp = (req, res, next) => {
         password: hash,
         nickname: req.body.nickname,
         pictureUrl: `${req.protocol}://${req.get('host')}/image/profile/images/Default.png`,
-        isAdmin: true,
       })
         .then(() => res.status(201).json({message: 'Utilisateur créé'}))
         .catch(error => res.status(400).json({error}));
@@ -38,14 +37,25 @@ exports.login = (req, res, next) => {
         if (!valid) {
           return res.status(401).json({error: 'Mot de passe incorrect !'})
         }
-        res.status(200).json({
+        res.cookie('user', {
           userId: user.idUSER,
           token: jsonWebToken.sign(
             {userId: user.idUSER},
             `${token}`,
             {expiresIn: '24h'}
-          )
+          ),
+          isAdmin: user.isAdmin,
         });
+        res.send('Utilisateur connecté');
+        // res.status(200).json({
+        //   userId: user.idUSER,
+        //   token: jsonWebToken.sign(
+        //     {userId: user.idUSER},
+        //     `${token}`,
+        //     {expiresIn: '24h'}
+        //   ),
+        //   isAdmin: user.isAdmin,
+        // });
       })
       .catch(error => res.status(501).json({error}));
   })
@@ -55,4 +65,8 @@ exports.login = (req, res, next) => {
   })
 };
 
+exports.deleteCookie = (req, res, next) => {
+  res.clearCookie('user')
+  res.send('Cookie supprimé');
+} 
 

@@ -9,7 +9,7 @@ exports.getAllPost = (req, res, next) => {
   Post.findAll({
   include: [{
     model: db.users,
-    attributes: ['nickname']
+    attributes: ['nickname', 'idUSER']
     }]
   })
     .then (posts => res.status(200).json(posts))
@@ -23,7 +23,7 @@ exports.getOnePost = (req, res, next) => {
     },
     include : [{
       model: db.users,
-      attributes: ['nickname']
+      attributes: ['nickname', 'idUSER']
     }]
   })
     .then (post => res.status(200).json(post))
