@@ -1,14 +1,13 @@
-const INITIAL_STATE = {
-  userData: []
-};
+import axios from 'axios';
+
+const INITIAL_STATE = {};
 
 function loginReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case 'LOGIN': {
-      const newArr = action.payload
       return {
         ...state,
-        userData: newArr,
+        state: action.payload,
       };
     }
     default: 
@@ -19,19 +18,13 @@ function loginReducer(state = INITIAL_STATE, action) {
 export default loginReducer;
 
 export const loginFunction = (user) => (dispatch) => {
-  user = JSON.stringify(user);
-  fetch('http://localhost:3000/api/auth/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: user,
-  })
-    .then((response) => response.json())
-    .then((userData) => {
-      dispatch({
-        type: 'LOGIN',
-        payload: userData,
-      });
+  // user = JSON.stringify(user);
+  console.log(user);
+  axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, {
+    email: user.email,
+    password: user.password
+  }, { withCredentials: true })
+    .then(response => {
+      console.log(response)
     });
 };

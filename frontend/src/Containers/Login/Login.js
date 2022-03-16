@@ -1,6 +1,5 @@
 import React from 'react';
-import './Login.css';
-import LoginComp from '../../Component/FormLogin/FormLogin';
+import LoginComp from '../../Component/FormLoginRegister/FormLogin';
 import imgLogoWhite from '../../Assets/logo/icon-left-font-monochrome-white.png';
 
 export default function Login() {
