@@ -28,11 +28,13 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: {
+        msg: 'Cet email est déjà utilisé'
+      },
       validate: {
         isEmail: {
           args: true,
-          msg: "Veuillez rentrer un email valide"
+          msg: 'Veuillez rentrer un email valide'
         }
       }
     },
@@ -47,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: {
           args: [4,50],
-          msg: "Le pseudo doit faire entre 4 et 50 caractères"
+          msg: 'Le pseudo doit faire entre 4 et 50 caractères'
         }
       }
     },

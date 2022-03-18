@@ -45,17 +45,11 @@ exports.login = (req, res, next) => {
             {expiresIn: '24h'}
           ),
           isAdmin: user.isAdmin,
+        }, {
+          httpOnly: true,
+          sameSite: 'strict',
         });
         res.send('Utilisateur connecté');
-        // res.status(200).json({
-        //   userId: user.idUSER,
-        //   token: jsonWebToken.sign(
-        //     {userId: user.idUSER},
-        //     `${token}`,
-        //     {expiresIn: '24h'}
-        //   ),
-        //   isAdmin: user.isAdmin,
-        // });
       })
       .catch(error => res.status(501).json({error}));
   })
