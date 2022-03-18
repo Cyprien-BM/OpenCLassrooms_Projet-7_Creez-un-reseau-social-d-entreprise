@@ -1,4 +1,4 @@
-.form-log-reg-container {
+.form-container {
   position: relative;
   background-color: white;
   width: 400px;
@@ -6,6 +6,11 @@
   padding: 1.5rem 2rem;
   border-radius: 20px;
   box-shadow: 2px 5px 10px rgb(0, 0, 0, 0.5);
+  top: 210px
+}
+
+.form-container.register {
+  height: 600px;
 }
 
 .form-log-reg-container__title {
@@ -28,19 +33,21 @@
   height: 2rem;
   margin-bottom: 2rem;
   padding: 0 0.5rem;
-  border: 1px solid #222;
+  border: 1px solid #000520;
 }
 
 .form-log-reg input:focus {
   border: none;
-  outline: 1px solid #fd5b39;
+  outline: 1px solid #fd6c42;
 }
 
 .log-reg__button {
   position: relative;
-  background-color: #fd5b39;
-  color: white;
-  border: 1px solid #222;
+  /* background-color: #fd6c42; */
+  background: rgb(255,205,195);
+  background: linear-gradient(189deg, rgba(255,205,195,1) 0%, rgba(253,108,66,1) 100%);  
+  color: #000520;
+  border: none;
   width: 150px;
   height: 40px;
   border-radius: 20px;
@@ -48,6 +55,8 @@
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
   font-size: 1rem;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
   box-shadow: 2px 5px 10px rgb(0, 0, 0, 0.5);
   z-index: 1;
 }
@@ -60,7 +69,8 @@
   right: 0;
   bottom: 0;
   border-radius: 20px;
-  background-color: #fd5b39;
+  background: rgb(255,205,195);
+  background: linear-gradient(189deg, rgba(255,205,195,1) 0%, rgba(253,108,66,1) 100%); 
   filter: brightness(140%);
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
@@ -81,7 +91,7 @@
   right: 20px;
 }
 
-.form-log-reg-container a {
+.form-container a {
   text-decoration: none;
   color: blue;
   cursor: pointer;
@@ -90,7 +100,7 @@
   right: 30px;
 }
 
-.form-log-reg-container a:hover {
+.form-container a:hover {
   text-decoration: underline;
 }
 

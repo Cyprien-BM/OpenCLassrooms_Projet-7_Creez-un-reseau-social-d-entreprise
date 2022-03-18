@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './FormLoginRegister.css';
 import { Link } from 'react-router-dom';
-import { loginFunction } from '../../redux/login/loginReducer';
+import { loginFunction } from '../../redux/user/userReducer';
 import { useNavigate } from 'react-router-dom';
 
 
-export default function FormLogin(props) {
+export default function FormLogin() {
   const navigate = useNavigate();
 
-  const loginState = useSelector((state) => state.loginReducer);
+  const loginState = useSelector((state) => state.userReducer);
 
   const [user, setUser] = useState({
     email: '',
@@ -25,23 +25,18 @@ export default function FormLogin(props) {
     event.preventDefault();
     if (user.email && user.password) {
       dispatch(loginFunction(user));
-    } else {
-      console.log('non');
     }
   };
 
   //Checking if we received user data from API, if yes : redirect to page /home
   useEffect(() => {
     if (
-      !loginState.state.error &&
-      loginState.state.userId &&
-      loginState.state.token &&
-      (loginState.state.isAdmin === 0 || loginState.state.isAdmin === 1)
+      loginState.state == 'Utilisateur connecté'
     ) {
       setError();
-      navigate('/home');
-    } else if (loginState.state.error) {
-      setError(loginState.state.error);
+      navigate('/home')
+    } else if (loginState.error) {
+      setError(loginState.error);
     }
   }, [loginState]);
 
@@ -56,7 +51,7 @@ export default function FormLogin(props) {
   };
 
   return (
-    <div className='form-log-reg-container'>
+    <div className='form-container login'>
       <h1 className='form-log-reg-container__title'>Connexion à votre compte</h1>
 
       <form onSubmit={submitForm} className='form-log-reg'>

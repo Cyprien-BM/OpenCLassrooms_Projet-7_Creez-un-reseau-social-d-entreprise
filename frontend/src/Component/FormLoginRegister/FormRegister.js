@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './FormLoginRegister.css';
 import { Link } from 'react-router-dom';
-import { loginFunction } from '../../redux/login/loginReducer';
+import { registerFunction } from '../../redux/user/userReducer';
 import { useNavigate } from 'react-router-dom';
+import ModalPassword from '../Modal/Modal';
 
-export default function FormLogin(props) {
+export default function FormLogin() {
   const navigate = useNavigate();
 
-  const registerState = useSelector((state) => state.login);
+  const registerState = useSelector((state) => state.userReducer);
 
   const [user, setUser] = useState({
     email: '',
     password: '',
-    nickname: ''
+    nickname: '',
   });
 
   const [error, setError] = useState();
@@ -23,20 +24,22 @@ export default function FormLogin(props) {
   // Send data to reducer and try to request the API
   const submitForm = (event) => {
     event.preventDefault();
-    if (user.email && user.password) {
-    } else {
+    if (user.email && user.password && user.nickname) {
+      dispatch(registerFunction(user));
     }
   };
 
   //Checking if we received user data from API, if yes : redirect to page /login
-  // useEffect(() => {
-  //   if (false) {
-  //     setError();
-  //     navigate('/login');
-  //   } else if (loginState.state.error) {
-  //     setError(loginState.state.error);
-  //   }
-  // });
+  useEffect(() => {
+    if (
+      registerState.state.message == 'Utilisateur créé'
+    ) {
+      setError();
+      navigate('/login')
+    } else if (registerState.error) {
+      setError(registerState.error);
+    }
+  }, [registerState]);
 
   const handleInputs = (event) => {
     if (event.target.classList.contains('form-log-reg__email__input')) {
@@ -56,11 +59,10 @@ export default function FormLogin(props) {
   };
 
   return (
-    <div className='form-log-reg-container'>
+    <div className='form-container register'>
       <h1 className='form-log-reg-container__title'>Inscrivez-vous</h1>
 
       <form onSubmit={submitForm} className='form-log-reg'>
-
         <label htmlFor='form-log-reg__email'>Adresse email</label>
         <input
           onInput={handleInputs}
@@ -72,6 +74,7 @@ export default function FormLogin(props) {
         />
 
         <label htmlFor='form-log-reg__password'>Mot de passe</label>
+        <ModalPassword />
         <input
           onInput={handleInputs}
           type='password'
@@ -83,6 +86,7 @@ export default function FormLogin(props) {
 
         <label htmlFor='form-log-reg__nickname'>Pseudo</label>
         <input
+          onInput={handleInputs}
           type='text'
           id='form-log-reg__nickname'
           value={user.nickname}
