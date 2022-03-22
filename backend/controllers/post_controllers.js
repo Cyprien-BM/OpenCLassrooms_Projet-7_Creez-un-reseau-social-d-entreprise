@@ -7,6 +7,9 @@ const Like = db.like;
 
 exports.getAllPost = (req, res, next) => {
   Post.findAll({
+  order: [
+    ['createdAt', 'DESC']
+  ],
   include: [{
     model: db.users,
     attributes: ['nickname', 'idUSER']

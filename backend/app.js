@@ -17,7 +17,7 @@ app.use(helmet({
 }));
 
 app.use((req, res, next) => {
-	res.setHeader('Access-Control-Allow-Origin', req.header('Origin'));
+	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
 	res.setHeader('Access-Control-Allow-Credentials', true);
 	res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
@@ -31,21 +31,5 @@ app.use('/image', express.static('image'));
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/post', postRoutes);
-
-
-// const Post = db.posts;
-
-// app.use((req, res, next) => {
-//   User.create({
-//     email: req.body.email,
-//     password: req.body.password,
-//     nickname: req.body.nickname,
-//     isAdmin: true
-//   })
-//   .then(() => res.status(201).json({message: 'Utilisateur créé'}))
-//   .catch(error => res.status(400).json({error}));
-// })
-
-
 
 module.exports = app;
