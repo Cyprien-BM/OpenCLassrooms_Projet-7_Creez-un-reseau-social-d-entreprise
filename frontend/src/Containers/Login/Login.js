@@ -6,7 +6,7 @@ export default function Login() {
 
   return (
     <div className='login-page'>
-      <img src={imgLogoWhite} alt=''/>
+      <img src={imgLogoWhite} alt='Logo groupomania'/>
       <LoginComp />
     </div>
   );

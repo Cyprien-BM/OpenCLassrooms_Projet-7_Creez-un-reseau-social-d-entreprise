@@ -32,7 +32,7 @@ export default function FormLogin() {
   //Checking if we received user data from API, if yes : redirect to page /login
   useEffect(() => {
     if (
-      registerState.state.message == 'Utilisateur créé'
+      registerState.state.message === 'Utilisateur créé'
     ) {
       setError();
       navigate('/login')
@@ -59,7 +59,7 @@ export default function FormLogin() {
   };
 
   return (
-    <div className='form-container register'>
+    <main className='form-container register'>
       <h1 className='form-log-reg-container__title'>Inscrivez-vous</h1>
 
       <form onSubmit={submitForm} className='form-log-reg'>
@@ -100,6 +100,6 @@ export default function FormLogin() {
       </form>
       <p className='form-log-reg-container__footer'>Déjà inscrit ?</p>
       <Link to='/login'>Connexion</Link>
-    </div>
+    </main>
   );
 }

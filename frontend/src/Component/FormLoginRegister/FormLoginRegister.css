@@ -43,7 +43,6 @@
 
 .log-reg__button {
   position: relative;
-  /* background-color: #fd6c42; */
   background: rgb(255,205,195);
   background: linear-gradient(189deg, rgba(255,205,195,1) 0%, rgba(253,108,66,1) 100%);  
   color: #000520;

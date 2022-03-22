@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const INITIAL_STATE = {};
+const INITIAL_STATE = {
+  userData: {},
+};
 
 function userReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -18,6 +20,12 @@ function userReducer(state = INITIAL_STATE, action) {
         error: '',
       }
     }
+    case 'GET-USER': {
+      return {
+        ...state,
+        userData: action.payload
+      }
+    }
     case 'USER-ERROR': {
       return {
         ...state,
@@ -25,7 +33,7 @@ function userReducer(state = INITIAL_STATE, action) {
       };
     }
     default:
-      return { state };
+      return state;
   }
 }
 
@@ -34,20 +42,20 @@ export default userReducer;
 export const loginFunction = (user) => (dispatch) => {
   axios
     .post(
-      `${process.env.REACT_APP_API_URL}/auth/login`,
+      `${process.env.REACT_APP_API_URL}api/auth/login`,
       {
         email: user.email,
         password: user.password,
       },
       { withCredentials: true }
     )
-    .then((response) => {
+    .then(response => {
       dispatch({
         type: 'LOGIN',
         payload: response.data,
       });
     })
-    .catch((error) => {
+    .catch(error => {
       dispatch({
         type: 'USER-ERROR',
         payload: error.response.data.error,
@@ -57,18 +65,18 @@ export const loginFunction = (user) => (dispatch) => {
 
 export const registerFunction = (user) => (dispatch) => {
   axios
-    .post(`${process.env.REACT_APP_API_URL}/auth/signup`, {
+    .post(`${process.env.REACT_APP_API_URL}api/auth/signup`, {
       email: user.email,
       password: user.password,
       nickname: user.nickname,
     })
-    .then((response) => {
+    .then(response => {
       dispatch({
         type: 'REGISTER',
         payload: response.data,
       });
     })
-    .catch((e) => {
+    .catch(e => {
       const error = e.response.data.error
       if(error.errors) {
         dispatch({
@@ -83,3 +91,14 @@ export const registerFunction = (user) => (dispatch) => {
       }
     });
 };
+
+export const getUserFunction = () => (dispatch) => {
+  axios.get(`${process.env.REACT_APP_API_URL}api/profile/user`,
+  { withCredentials: true })
+  .then(response => {
+    dispatch({
+      type: 'GET-USER',
+      payload: response.data,
+    })
+  })
+}

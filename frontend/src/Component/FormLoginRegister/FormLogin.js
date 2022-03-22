@@ -51,7 +51,7 @@ export default function FormLogin() {
   };
 
   return (
-    <div className='form-container login'>
+    <main className='form-container login'>
       <h1 className='form-log-reg-container__title'>Connexion à votre compte</h1>
 
       <form onSubmit={submitForm} className='form-log-reg'>
@@ -67,7 +67,7 @@ export default function FormLogin() {
         <label htmlFor='form-log-reg__password'>Mot de passe</label>
         <input
           onInput={handleInputs}
-          type='text'
+          type='password'
           id='form-log-reg__password'
           value={user.password}
           placeholder='Entrez votre mot de passe'
@@ -80,6 +80,6 @@ export default function FormLogin() {
       </form>
       <p className='form-log-reg-container__footer'>Pas de encore de compte ?</p>
       <Link to='/register'>Inscription</Link>
-    </div>
+    </main>
   );
 }
