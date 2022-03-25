@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const INITIAL_STATE = {
-  posts:[],
+  posts: [],
+  error: '',
 };
 
 function postReducer(state = INITIAL_STATE, action) {
@@ -13,7 +14,14 @@ function postReducer(state = INITIAL_STATE, action) {
         error: '',
       };
     }
-  
+    case 'POST-ERROR': {
+      return {
+        ...state,
+        posts: [],
+        error: action.payload,
+      };
+    }
+
     default:
       return state;
   }
@@ -26,10 +34,24 @@ export const getAllPosts = () => (dispatch) => {
     .get(`${process.env.REACT_APP_API_URL}api/post/all`, {
       withCredentials: true,
     })
-    .then(response => {
+    .then((response) => {
       dispatch({
         type: 'GET-ALL-POST',
         payload: response.data,
       });
     })
+    .catch((e) => {
+      const error = e.response.data;
+      if (error.message) {
+        dispatch({
+          type: 'POST-ERROR',
+          payload: error.message,
+        });
+      } else {
+        dispatch({
+          type: 'POST-ERROR',
+          payload: error,
+        });
+      }
+    });
 };

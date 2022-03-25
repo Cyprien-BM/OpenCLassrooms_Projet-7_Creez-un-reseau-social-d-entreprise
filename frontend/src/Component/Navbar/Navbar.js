@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import './Navbar.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getUserFunction } from '../../redux/user/userReducer';
 import { useDispatch, useSelector } from 'react-redux';
+import { logoutFunction } from '../../redux/user/userReducer';
 import logo from '../../Assets/logo/icon-left-font-monochrome-black.png';
 import houseLogo from '../../Assets/logo/house.png';
 import offline from '../../Assets/logo/offline-button.png';
 
-export default function Navbar() {
+export default function Navbar(props) {
   const dispatch = useDispatch();
 
-  const userData = useSelector((state) => state.userReducer.userData);
+  const navigate = useNavigate();
+
+  const logState = useSelector((state) => state.userReducer.state);
 
   useEffect(() => {
-    dispatch(getUserFunction());
-  }, []);
+    if (logState === 'Session terminée') {
+      navigate('/login');
+    }
+  }, [logState]);
 
   return (
     <nav>
@@ -29,11 +34,16 @@ export default function Navbar() {
         </Link>
       </div>
       <div className='nav__right-block'>
-        <div className='user-insert'>
-          <img src={userData.pictureUrl} />
-          <p>{userData.nickname}</p>
-        </div>
-        <button className='Logout-btn'>
+        <Link className='user-link' to={`/user?id=${props.userData.idUSER}`}>
+          <div className='user-insert'>
+            <img src={props.userData.pictureUrl} alt='Photo de profil' />
+            <p>{props.userData.nickname}</p>
+          </div>
+        </Link>
+        <button
+          onClick={() => dispatch(logoutFunction())}
+          className='Logout-btn'
+        >
           <img src={offline} alt='Boutton déconnexion' title='Déconnexion' />
         </button>
       </div>

@@ -11,4 +11,23 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+}
+
+.post-created-info {
+  font-size: .8rem;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.post-header h2 {
+  margin-bottom: 1rem;
+}
+
+.post-likes {
+  display: flex;
+  justify-content: space-between;
+  width: 80px;
+  position: relative;
+  bottom: 30px
 }

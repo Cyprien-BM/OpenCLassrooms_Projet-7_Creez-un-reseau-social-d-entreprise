@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './FormLoginRegister.css';
-import { Link } from 'react-router-dom';
 import { loginFunction } from '../../redux/user/userReducer';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 
 export default function FormLogin() {
   const navigate = useNavigate();
 
-  const loginState = useSelector((state) => state.userReducer);
+  const loginState = useSelector(state => state.userReducer);
+  
 
   const [user, setUser] = useState({
     email: '',
@@ -19,14 +19,6 @@ export default function FormLogin() {
   const [error, setError] = useState();
 
   const dispatch = useDispatch();
-
-  // Send data to reducer and try to request the API
-  const submitForm = (event) => {
-    event.preventDefault();
-    if (user.email && user.password) {
-      dispatch(loginFunction(user));
-    }
-  };
 
   //Checking if we received user data from API, if yes : redirect to page /home
   useEffect(() => {
@@ -49,6 +41,14 @@ export default function FormLogin() {
       setUser(newUserState);
     }
   };
+
+    // Send data to reducer and try to request the API
+    const submitForm = (event) => {
+      event.preventDefault();
+      if (user.email && user.password) {
+        dispatch(loginFunction(user));
+      }
+    };
 
   return (
     <main className='form-container login'>

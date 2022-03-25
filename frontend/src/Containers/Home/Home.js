@@ -1,54 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { getUserFunction } from '../../redux/user/userReducer';
 import Navbar from '../../Component/Navbar/Navbar';
-import Post from '../../Component/Post/Post';
-import { v4 as uuidv4 } from 'uuid';
-import { getAllPosts } from '../../redux/posts/postReducer';
+import Posts from '../../Component/Post/Post';
 import './Home.css';
-import moment from 'moment';
-import localization from 'moment/locale/fr';
-
-moment.updateLocale('fr', localization);
 
 export default function Home() {
   const dispatch = useDispatch();
 
-  const posts = useSelector((state) => state.postReducer.posts);
+  const userData = useSelector((state) => state.userReducer.userData);
 
   useEffect(() => {
-    if (posts.length === 0) {
-      dispatch(getAllPosts());
-    }
+    dispatch(getUserFunction());
   }, []);
-
-  console.log(posts);
 
   return (
     <>
       <header className='home-header'>
-        <Navbar />
+        <Navbar userData={userData} />
       </header>
       <main className='home-main'>
+        <button className='create-post-btn'>
+          <h1>Créé un nouveau post</h1>
+        </button>
         <section className='home-post-section'>
-          {posts.map((post) => {
-            return (
-              <Post key={uuidv4()}>
-                <div className='post-header'>
-                  <div className='post-header-content'>
-                    <p>Créer par {post.user.nickname} le {moment(post.createdAt).format('Do MMMM YYYY, H:mm:ss')}</p>
-                    <h2>{post.title}</h2>
-                    <p className='created-at'>
-                      
-                    </p>
-                  </div>
-                  <div className='post-likes'>
-                    <p>{post.likes}</p>
-                  </div>
-                </div>
-                <p>{post.content}</p>
-              </Post>
-            );
-          })}
+          <Posts />
         </section>
       </main>
     </>

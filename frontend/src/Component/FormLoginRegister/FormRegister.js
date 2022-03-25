@@ -9,7 +9,7 @@ import ModalPassword from '../Modal/Modal';
 export default function FormLogin() {
   const navigate = useNavigate();
 
-  const registerState = useSelector((state) => state.userReducer);
+  const registerState = useSelector(state => state.userReducer);
 
   const [user, setUser] = useState({
     email: '',
