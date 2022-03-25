@@ -1,0 +1,39 @@
+.btn-component {
+  position: relative;
+  background: rgb(255,205,195);
+  background: linear-gradient(189deg, rgba(255,205,195,1) 0%, rgba(253,108,66,1) 100%);  
+  color: #000520;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  box-shadow: 2px 5px 10px rgb(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.btn-component::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 20px;
+  background: rgb(255,205,195);
+  background: linear-gradient(189deg, rgba(255,205,195,1) 0%, rgba(253,108,66,1) 100%); 
+  filter: brightness(140%);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  z-index: -1;
+}
+
+.btn-component:hover {
+  transform: scale(1.05);
+}
+
+.btn-component:hover::after {
+  opacity: 1;
+}
+

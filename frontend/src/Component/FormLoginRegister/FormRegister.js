@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { registerFunction } from '../../redux/user/userReducer';
 import { useNavigate } from 'react-router-dom';
 import ModalPassword from '../Modal/Modal';
+import Button from '../Button/Button';
 
 export default function FormLogin() {
   const navigate = useNavigate();
@@ -96,7 +97,7 @@ export default function FormLogin() {
         <div className='form-log-reg__error-container'>
           <p className='form-log-reg__error'>{error}</p>
         </div>
-        <button className='log-reg__button'>Inscription</button>
+        <Button className='btn-component form-log-reg-button' txt='Inscription' />
       </form>
       <p className='form-log-reg-container__footer'>Déjà inscrit ?</p>
       <Link to='/login'>Connexion</Link>

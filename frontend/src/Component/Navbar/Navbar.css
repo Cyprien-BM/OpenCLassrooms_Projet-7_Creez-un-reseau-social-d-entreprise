@@ -21,6 +21,11 @@ nav, .nav__left-block, .user-insert, .nav__right-block {
   width: 20px;
   height: auto;
   margin: 0 40px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.nav-home-btn:hover {
+  transform: scale(1.5);
 }
 
 .nav__right-block {
@@ -34,6 +39,8 @@ nav, .nav__left-block, .user-insert, .nav__right-block {
   padding-right: 1rem;
   border-radius: 30px ;
   transition: 0.15s ease-in-out;
+  font-weight: bold;
+  font-size: 1.3rem;
 }
 
 .user-link {

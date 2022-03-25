@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import './FormLoginRegister.css';
 import { loginFunction } from '../../redux/user/userReducer';
 import { useNavigate, Link } from 'react-router-dom';
+import Button from '../Button/Button';
 
 
 export default function FormLogin() {
@@ -76,7 +77,7 @@ export default function FormLogin() {
         <div className='form-log-reg__error-container'>
           <p className='form-log-reg__error'>{error}</p>
         </div>
-        <button className='log-reg__button'>Connexion</button>
+        <Button className='btn-component form-log-reg-button' txt='Connexion' />
       </form>
       <p className='form-log-reg-container__footer'>Pas de encore de compte ?</p>
       <Link to='/register'>Inscription</Link>

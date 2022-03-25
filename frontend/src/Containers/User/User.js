@@ -6,6 +6,7 @@ import {
   changeUserDataFunction,
 } from '../../redux/user/userReducer';
 import './User.css';
+import Button from '../../Component/Button/Button';
 
 export default function User() {
   const dispatch = useDispatch();
@@ -31,14 +32,10 @@ export default function User() {
     }
   }, [userState]);
 
-  console.log(userState);
-
   const handleInputs = (event) => {
     if (event.target.classList.contains('form-user_picture')) {
       const previewUrl = URL.createObjectURL(event.target.files[0]);
       ref.current.src = previewUrl;
-      // const newUserState = { ...user, pictureUrl: event.target.files[0] };
-      // setUser(newUserState);
     } else if (event.target.classList.contains('form-user_nickname')) {
       const newUserState = { ...user, nickname: event.target.value };
       setUser(newUserState);
@@ -56,6 +53,7 @@ export default function User() {
 
   // Send data to reducer and try to request the API
   const submitForm = (event) => {
+    console.log('ha');
     event.preventDefault();
     dispatch(changeUserDataFunction(user, event.target[0].files[0]));
   };
@@ -73,7 +71,9 @@ export default function User() {
           encType='multipart/form-data'
         >
           <div className='user-form_img-container'>
-            <label htmlFor='user-picture'>Changer votre photo de profil</label>
+            <label htmlFor='user-picture' className='label-user-input-file'>
+              Envi d'une nouvelle photo de profil ?
+            </label>
             <input
               onInput={handleInputs}
               type='file'
@@ -108,9 +108,11 @@ export default function User() {
               onInput={handleInputs}
               type='text'
               value={
-                user.firstname & (user.firstname != 'null')
-                  ? user.firstname
-                  : ''
+                !user.firstname
+                  ? ''
+                  : user.firstname == 'null'
+                  ? ''
+                  : user.firstname
               }
               id='user-firstname'
               placeholder='Votre prénom'
@@ -121,7 +123,11 @@ export default function User() {
               onInput={handleInputs}
               type='text'
               value={
-                user.lastname & (user.lastname != 'null') ? user.lastname : ''
+                !user.lastname
+                  ? ''
+                  : user.lastname == 'null'
+                  ? ''
+                  : user.lastname
               }
               id='user-lastname'
               placeholder='Votre nom'
@@ -129,10 +135,21 @@ export default function User() {
             />
           </div>
           <div className='user-form_btn-container'>
-            <button className='form-user-btn_change-data'>
-              Modifier votre profil
-            </button>
-            <button type='button'>Supprimer le profil</button>
+            <Button
+              className='btn-component form-user-button'
+              txt='Modifier le profil'
+            />
+            <Button
+              onClick={() => console.log('hello')}
+              type='button'
+              className='btn-component form-user-button'
+              txt='Modifier le mot de passe'
+            />
+            <Button
+              type='button'
+              className='btn-component form-user-button'
+              txt='Supprimer le profil'
+            />
           </div>
         </form>
       </main>
