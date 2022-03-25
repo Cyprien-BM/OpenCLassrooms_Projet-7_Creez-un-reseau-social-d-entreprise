@@ -15,7 +15,8 @@ exports.getAllPost = (req, res, next) => {
     attributes: ['nickname', 'idUSER']
     }]
   })
-    .then (posts => res.status(200).json(posts))
+    .then (posts => {
+      res.status(200).json(posts)})
     .catch(() => res.status(500).json({message: 'Aucun post trouvé'}));
 }
 

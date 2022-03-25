@@ -5,10 +5,10 @@ const secretToken = process.env.TOKEN;
 
 module.exports = (req, res, next) => {
   try {
-    const token = req.cookies.user.token
+    const token = req.session.token;
     const decodeToken = jsonWebToken.verify(token, `${secretToken}`);
     const userId = decodeToken.userId;
-    if (req.cookies.user.userId && req.cookies.user.userId !== userId) {
+    if (req.session.userId && req.session.userId !== userId) {
       throw 'User ID non valable'
     }else {
       res.locals.id = userId;

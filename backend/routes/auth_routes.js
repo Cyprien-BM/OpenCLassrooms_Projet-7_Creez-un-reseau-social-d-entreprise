@@ -17,6 +17,6 @@ const limiter = rateLimit({
 
 router.post('/signup', passwordValidator, authController.signeUp);
 router.post('/login', limiter, passwordValidator, authController.login);
-router.get('/cookie-delete', auth, authController.deleteCookie);
+router.get('/cookie-delete', auth, authController.logOut);
 
 module.exports = router;

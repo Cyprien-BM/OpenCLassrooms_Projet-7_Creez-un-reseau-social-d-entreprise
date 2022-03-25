@@ -1,66 +1,67 @@
 const db = require('../models');
 const bcrypt = require('bcrypt');
 const jsonWebToken = require('jsonwebtoken');
-require('dotenv').config()
+const session = require('express-session');
+require('dotenv').config();
 
 const User = db.users;
 const token = process.env.TOKEN;
 
 exports.signeUp = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => {
+  bcrypt
+    .hash(req.body.password, 10)
+    .then((hash) => {
       User.create({
         email: req.body.email,
         password: hash,
         nickname: req.body.nickname,
-        pictureUrl: `${req.protocol}://${req.get('host')}/image/profile/images/Default.png`,
+        pictureUrl: `${req.protocol}://${req.get(
+          'host'
+        )}/image/profile/images/Default.png`,
       })
-        .then(() => res.status(201).json({message: 'Utilisateur créé'}))
-        .catch(error => res.status(400).json({error}));
+        .then(() => res.status(201).json({ message: 'Utilisateur créé' }))
+        .catch((error) => res.status(400).json({ error }));
     })
-    .catch(error => res.status(500).json({error}));
-}
+    .catch((error) => res.status(500).json({ error }));
+};
 
 exports.login = (req, res, next) => {
   User.findOne({
     where: {
-      email: req.body.email
+      email: req.body.email,
     },
     raw: true,
   })
-  .then(user => {
-    if (!user){
-      return res.status(401).json({error:'Email non trouvé : Cette utilisateur n\'éxiste pas'});
-    }
-    bcrypt.compare(req.body.password, user.password)
-      .then(valid => {
-        if (!valid) {
-          return res.status(401).json({error: 'Mot de passe incorrect !'})
-        }
-        res.cookie('user', {
-          userId: user.idUSER,
-          token: jsonWebToken.sign(
-            {userId: user.idUSER},
+    .then((user) => {
+      if (!user) {
+        return res
+          .status(401)
+          .json({ error: "Email non trouvé : Cette utilisateur n'éxiste pas" });
+      }
+      bcrypt
+        .compare(req.body.password, user.password)
+        .then((valid) => {
+          if (!valid) {
+            return res.status(401).json({ error: 'Mot de passe incorrect !' });
+          }
+          req.session.isAdmin = user.isAdmin;
+          req.session.userId = user.idUSER;
+          req.session.token = jsonWebToken.sign(
+            { userId: user.idUSER },
             `${token}`,
-            {expiresIn: '24h'}
-          ),
-          isAdmin: user.isAdmin,
-        }, {
-          httpOnly: true,
-          sameSite: 'strict',
-        });
-        res.send('Utilisateur connecté');
-      })
-      .catch(error => res.status(501).json({error}));
-  })
-  .catch(error => {
-    console.log(error)
-    res.status(500).json({error});
-  })
+            { expiresIn: '24h' }
+          );
+          res.send('Utilisateur connecté');
+        })
+        .catch((error) => res.status(501).json({ error }));
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
 };
 
-exports.deleteCookie = (req, res, next) => {
-  res.clearCookie('user')
-  res.send('Cookie supprimé');
-} 
-
+exports.logOut = (req, res, next) => {
+  req.session.destroy();
+  res.clearCookie('connect.sid');
+  res.send('Session terminée');
+};
