@@ -11,9 +11,4 @@ router.delete('/delete', tokenAuth, profileController.deleteUser);
 router.put('/password', tokenAuth, passwordValidator, profileController.modifyPassword)
 router.put('/modify', tokenAuth, multer, profileController.modifyUserInformation)
 
-// router.put('/modify', tokenAuth, multer, (req, res, next) => {
-//   console.log(req.body)
-// })
-
 module.exports = router;
-

@@ -34,6 +34,7 @@ exports.getUser = (req, res, next) => {
 // }
 
 exports.modifyPassword = (req, res, next) => {
+  console.log(req.body);
   User.findOne({
     where: {
       idUSER: res.locals.id,
