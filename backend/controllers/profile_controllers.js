@@ -17,24 +17,18 @@ exports.getUser = (req, res, next) => {
     .catch((error) => res.status(400).json({ error }));
 };
 
-// exports.modifyEmail = (req, res, next) => {
-//   User.findOne({
-//     where: {
-//       idUSER: res.locals.id
-//     }
-//   })
-//     .then ( user => {
-//       user.update({
-//         email: req.body.email
-//       })
-//         .then (() => res.status(200).json({message : 'Email modifié !'}))
-//         .catch(error => res.status(400).json({error}));
-//     })
-//     .catch(error => res.status(500).json({error}));
-// }
+exports.getUserById = (req, res, next) => {
+  User.findOne({
+    where: {
+      idUSER: req.params.id,
+    },
+    raw: true,
+  })
+    .then((user) => {res.status(200).json({user, otherUser: true})})
+    .catch((error) => res.status(400).json({ error }));
+};
 
 exports.modifyPassword = (req, res, next) => {
-  console.log(req.body);
   User.findOne({
     where: {
       idUSER: res.locals.id,

@@ -34,7 +34,7 @@ export default function Navbar(props) {
         </Link>
       </div>
       <div className='nav__right-block'>
-        <Link className='user-link' to={`/user?id=${props.userData.idUSER}`}>
+        <Link className='user-link' to={`/user/${props.userData.idUSER}`}>
           <div className='user-insert'>
             <img src={props.userData.pictureUrl} alt='Photo de profil' />
             <p>{props.userData.nickname}</p>

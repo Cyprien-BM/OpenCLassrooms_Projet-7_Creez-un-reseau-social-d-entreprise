@@ -40,7 +40,7 @@ export default function Post() {
         <div className='post-header'>
           <div className='post-header-content'>
             <p className='post-created-info'>
-              Créer par {post.user.nickname} le
+              Créer par <Link className='user-link' to={`/user/${post.user.idUSER}`}>{post.user.nickname}</Link> le
               {' ' + moment(post.createdAt).format('Do MMMM YYYY, H:mm:ss')}
             </p>
             <h2>{post.title}</h2>

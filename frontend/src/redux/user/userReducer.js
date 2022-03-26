@@ -3,6 +3,7 @@ import axios from 'axios';
 const INITIAL_STATE = {
   state: '',
   userData: {},
+  otherUserData: {},
   error: '',
 };
 
@@ -23,11 +24,19 @@ function userReducer(state = INITIAL_STATE, action) {
       };
     }
     case 'GET-USER': {
-      return {
-        ...state,
-        userData: action.payload,
-        error: '',
-      };
+      if (action.payload.otherUser == true) {
+        return {
+          ...state,
+          otherUserData: action.payload.user,
+          error: '',
+        };
+      } else {
+        return {
+          ...state,
+          userData: action.payload,
+          error: '',
+        };
+      }
     }
     case 'USER-MODIFICATION': {
       return {
@@ -169,6 +178,40 @@ export const getUserFunction = () => async (dispatch) => {
         });
       }
     });
+};
+
+export const getUserFunctionById = (id) => async (dispatch) => {
+  await axios
+    .get(`${process.env.REACT_APP_API_URL}api/profile/user/${id}`, {
+      withCredentials: true,
+    })
+    .then((response) => {;
+    if (Object.keys(response.data).length === 0) {
+      dispatch({
+        type: 'USER-ERROR',
+        payload: 'empty user',
+      });
+    } else {
+      dispatch({
+        type: 'GET-USER',
+        payload: response.data,
+      });
+    }
+  })
+  .catch((e) => {
+    const error = e.response.data;
+    if (error.message) {
+      dispatch({
+        type: 'USER-ERROR',
+        payload: error.message,
+      });
+    } else {
+      dispatch({
+        type: 'USER-ERROR',
+        payload: error,
+      });
+    }
+  });
 };
 
 export const changeUserDataFunction = (user, file) => (dispatch) => {
