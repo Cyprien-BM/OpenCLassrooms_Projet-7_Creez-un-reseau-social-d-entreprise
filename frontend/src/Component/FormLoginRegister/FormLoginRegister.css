@@ -72,8 +72,15 @@
   height: 80px;
 }
 
-.form-log-reg__error {
+.form-error {
   color: red;
+  font-style: italic;
+  font-size: .8rem;
+  text-align: center;
+}
+
+.form-succes {
+  color: green;
   font-style: italic;
   font-size: .8rem;
   text-align: center;

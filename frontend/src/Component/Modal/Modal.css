@@ -6,7 +6,6 @@
   border: none;
   top: 190px;
   left: 138px;
-  /* background-color: #fd6c42; */
   background: rgb(255,205,195);
   background: linear-gradient(229deg, rgba(255,205,195,1) 0%, rgba(253,108,66,1) 100%); 
   color: #000520;
@@ -23,10 +22,10 @@
 
 .overlay {
   position: absolute;
-  top:-1px;
-  left: -1px;
-  bottom: -1px;
-  right: -1px;
+  top:0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
   background: rgba(49,49,49,0.8);
   border-radius: 20px;
   z-index: 2;
@@ -67,4 +66,48 @@
 
 .close-modal:hover {
   filter: brightness(140%);
+}
+
+/* ------ MODAL PASSWORD ------ */
+
+.overlay.password {
+  border-radius: 0;
+}
+
+.modal.password {
+  width: 500px;
+}
+
+.close-modal.password {
+  position: absolute;
+  left: 47.3%;
+  z-index: 2;
+  top: 2%;
+  width: 100px;
+  height: 2.5rem;
+}
+
+.modal-password-form {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.4;
+}
+
+.modal-password-form label {
+  margin: 1rem 0;
+}
+
+.modal-password-form input {
+  height: 2rem;
+  padding: 0 .5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.modal-password-error-container {
+  height: 3rem;
+}
+
+.modal-password-succes-container {
+  height: 3rem;
 }

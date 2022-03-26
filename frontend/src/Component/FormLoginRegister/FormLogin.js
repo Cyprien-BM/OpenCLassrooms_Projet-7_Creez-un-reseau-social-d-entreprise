@@ -75,7 +75,7 @@ export default function FormLogin() {
           className='form-log-reg__password__input'
         />
         <div className='form-log-reg__error-container'>
-          <p className='form-log-reg__error'>{error}</p>
+          <p className='form-error'>{error}</p>
         </div>
         <Button className='btn-component form-log-reg-button' txt='Connexion' />
       </form>

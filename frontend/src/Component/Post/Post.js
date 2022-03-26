@@ -32,7 +32,7 @@ export default function Post() {
     });
       navigate('/login');
     }
-  });
+  }, [allPosts.error]);
 
   return allPosts.posts.map((post) => {
     return (

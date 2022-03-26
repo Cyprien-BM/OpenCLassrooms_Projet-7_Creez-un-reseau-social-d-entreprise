@@ -1,37 +1,64 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../../Component/Navbar/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   getUserFunction,
   changeUserDataFunction,
+  resetStateFunction,
 } from '../../redux/user/userReducer';
 import './User.css';
 import Button from '../../Component/Button/Button';
+import PasswordModal from '../../Component/Modal/PasswordModal/PasswordModal';
 
 export default function User() {
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const ref = useRef();
 
   const userData = useSelector((state) => state.userReducer.userData);
   const userState = useSelector((state) => state.userReducer.state);
+  const userError = useSelector((state) => state.userReducer.error);
 
-  const [user, setUser] = useState(userData && userData);
+  const [modal, setModal] = useState(false);
+  const toggleModal = () => {
+    dispatch(resetStateFunction());
+    setModal(!modal);
+  };
 
+  const [user, setUser] = useState(userData ? userData : {});
+
+  //Checking if cookie exist/is valid (by requesting API to gather user). If not clear userReducer state and redirect to login page
+  useEffect(() => {
+    if (userError === '403: unauthorized request') {
+      dispatch(resetStateFunction());
+      navigate('/login');
+    };
+  }, [userError]);
+
+  //Get user after page loaded
   useEffect(() => {
     dispatch(getUserFunction());
   }, []);
 
+  // When userData hook change, set user state to userData
   useEffect(() => {
-    setUser(userData && userData);
+    const userStateCopy = { ...user };
+    const newUserState = Object.assign(userStateCopy, userData);
+    setUser(newUserState);
   }, [userData]);
 
+  //Get user after modification and reset userState
   useEffect(() => {
     if (userState == 'Profil modifié !') {
       dispatch(getUserFunction());
+      dispatch(resetStateFunction());
     }
   }, [userState]);
 
+  //Data binding beetween state user and form
   const handleInputs = (event) => {
     if (event.target.classList.contains('form-user_picture')) {
       const previewUrl = URL.createObjectURL(event.target.files[0]);
@@ -53,10 +80,10 @@ export default function User() {
 
   // Send data to reducer and try to request the API
   const submitForm = (event) => {
-    console.log('ha');
     event.preventDefault();
     dispatch(changeUserDataFunction(user, event.target[0].files[0]));
   };
+
 
   return (
     <div className='user-page'>
@@ -64,6 +91,14 @@ export default function User() {
         <Navbar userData={userData} />
       </header>
       <main>
+        {modal && (
+          <>
+            <PasswordModal />
+            <button onClick={toggleModal} className='close-modal password'>
+              Fermer
+            </button>
+          </>
+        )}
         <h1>Votre profil</h1>
         <form
           onSubmit={submitForm}
@@ -139,17 +174,16 @@ export default function User() {
               className='btn-component form-user-button'
               txt='Modifier le profil'
             />
-            <Button
-              onClick={() => console.log('hello')}
+            <button
+              onClick={toggleModal}
               type='button'
               className='btn-component form-user-button'
-              txt='Modifier le mot de passe'
-            />
-            <Button
-              type='button'
-              className='btn-component form-user-button'
-              txt='Supprimer le profil'
-            />
+            >
+              Modifier le mot de passe
+            </button>
+            <button type='button' className='btn-component form-user-button'>
+              Supprimer
+            </button>
           </div>
         </form>
       </main>

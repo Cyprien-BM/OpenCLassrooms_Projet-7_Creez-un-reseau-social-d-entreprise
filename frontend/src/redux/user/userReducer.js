@@ -36,6 +36,13 @@ function userReducer(state = INITIAL_STATE, action) {
         error: '',
       };
     }
+    case 'PASSWORD-MODIFICATION': {
+      return {
+        ...state,
+        state: action.payload,
+        error: '',
+      };
+    }
     case 'LOGOUT': {
       return {
         ...state,
@@ -47,6 +54,13 @@ function userReducer(state = INITIAL_STATE, action) {
     case 'USER-ERROR': {
       return {
         ...state,
+        error: action.payload,
+      };
+    }
+    case 'RESET-STATE': {
+      return {
+        ...state,
+        state: action.payload,
         error: action.payload,
       };
     }
@@ -141,8 +155,19 @@ export const getUserFunction = () => async (dispatch) => {
         });
       }
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((e) => {
+      const error = e.response.data;
+      if (error.message) {
+        dispatch({
+          type: 'USER-ERROR',
+          payload: error.message,
+        });
+      } else {
+        dispatch({
+          type: 'USER-ERROR',
+          payload: error,
+        });
+      }
     });
 };
 
@@ -165,4 +190,38 @@ export const changeUserDataFunction = (user, file) => (dispatch) => {
       });
     })
     .catch((error) => {});
+};
+
+export const resetStateFunction = () => (dispatch) => {
+  dispatch({
+    type: 'RESET-STATE',
+    payload: '',
+  });
+};
+
+export const changePasswordFunction = (password) => (dispatch) => {
+  axios
+    .put(`${process.env.REACT_APP_API_URL}api/profile/password`, password, {
+      withCredentials: true,
+    })
+    .then((response) => {
+      dispatch({
+        type: 'PASSWORD-MODIFICATION',
+        payload: response.data.message,
+      });
+    })
+    .catch((e) => {
+      const error = e.response.data.error;
+      if (error.errors) {
+        dispatch({
+          type: 'USER-ERROR',
+          payload: error.errors[0].message,
+        });
+      } else {
+        dispatch({
+          type: 'USER-ERROR',
+          payload: error,
+        });
+      }
+    });
 };
