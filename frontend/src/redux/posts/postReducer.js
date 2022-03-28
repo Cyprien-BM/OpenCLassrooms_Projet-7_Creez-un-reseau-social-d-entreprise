@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const INITIAL_STATE = {
   posts: [],
+  status: '',
   error: '',
 };
 
@@ -12,6 +13,12 @@ function postReducer(state = INITIAL_STATE, action) {
         ...state,
         posts: action.payload,
         error: '',
+      };
+    }
+    case 'CREATE-POST': {
+      return {
+        ...state,
+        status: action.payload,
       };
     }
     case 'POST-ERROR': {
@@ -29,7 +36,7 @@ function postReducer(state = INITIAL_STATE, action) {
 
 export default postReducer;
 
-export const getAllPosts = () => (dispatch) => {
+export const getAllPostsFunction = () => (dispatch) => {
   axios
     .get(`${process.env.REACT_APP_API_URL}api/post/all`, {
       withCredentials: true,
@@ -53,5 +60,36 @@ export const getAllPosts = () => (dispatch) => {
           payload: error,
         });
       }
+    });
+};
+
+export const createAPostFunction = (post) => (dispatch) => {
+  axios
+    .post(
+      `${process.env.REACT_APP_API_URL}api/post/create`,
+      {
+        title: post.title,
+        content: post.content,
+      },
+      {
+        withCredentials: true,
+      }
+    )
+    .then((response) => {
+      console.log(response);
+      dispatch({
+        type: 'CREATE-POST',
+        payload: response.data.message,
+      });
+    });
+};
+
+export const getOnePostFucntion = (id) => (dispatch) => {
+  axios
+    .get(`${process.env.REACT_APP_API_URL}api/post/${id}`, {
+      withCredentials: true,
+    })
+    .then((response) => {
+      console.log(response.data);
     });
 };

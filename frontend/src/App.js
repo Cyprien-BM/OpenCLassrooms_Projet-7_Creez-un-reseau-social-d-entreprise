@@ -4,6 +4,7 @@ import Login from './Containers/Login/Login';
 import Home from './Containers/Home/Home';
 import Register from './Containers/Register/Register';
 import User from './Containers/User/User';
+import Post from './Containers/PostPage/PostPage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/home' element={<Home />} />
         <Route path='/user/:id' element={<User />} />
+        <Route path='/post/:postId' element={<Post />} />
       </Routes>
     </>
   );

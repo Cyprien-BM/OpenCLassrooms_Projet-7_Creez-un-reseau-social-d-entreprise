@@ -92,3 +92,7 @@
   margin: 20px auto;
   border-radius: 20px;
 }
+
+.form-user-button::after {
+  border-radius: 20px;
+}

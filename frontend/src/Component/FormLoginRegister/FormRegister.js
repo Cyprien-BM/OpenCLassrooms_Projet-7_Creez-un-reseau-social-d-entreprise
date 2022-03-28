@@ -4,7 +4,7 @@ import './FormLoginRegister.css';
 import { Link } from 'react-router-dom';
 import { registerFunction } from '../../redux/user/userReducer';
 import { useNavigate } from 'react-router-dom';
-import ModalPassword from '../Modal/Modal';
+import ModalPassword from '../Modal/RegisterModal/RegisterModal';
 import Button from '../Button/Button';
 
 export default function FormLogin() {

@@ -1,3 +1,6 @@
+/* ------ MODAL GENERAL ------ */
+
+
 .toggle-modal {
   position: absolute;
   height: 20px;
@@ -44,6 +47,10 @@
 }
 
 .modal-content p {
+  position: relative;
+}
+
+.modal-content p {
   line-height: 1.4;
 }
 
@@ -68,7 +75,7 @@
   filter: brightness(140%);
 }
 
-/* ------ MODAL PASSWORD ------ */
+/* ------ MODAL PASSWORD MODIFICATION ------ */
 
 .overlay.password {
   border-radius: 0;
@@ -111,3 +118,4 @@
 .modal-password-succes-container {
   height: 3rem;
 }
+

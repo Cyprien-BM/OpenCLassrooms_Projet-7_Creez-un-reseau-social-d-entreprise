@@ -11,7 +11,7 @@ import {
 } from '../../redux/user/userReducer';
 import './User.css';
 import Button from '../../Component/Button/Button';
-import PasswordModal from '../../Component/Modal/PasswordModal/PasswordModal';
+import PasswordModal from '../../Component/Modal/PasswordModificationModal/PasswordModal';
 
 export default function User() {
   const navigate = useNavigate();

@@ -1,11 +1,23 @@
 .post {
-  max-width: 600px;
-  width: 100%;
   margin-bottom: 50px;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  padding: 10px;
+  padding: 20px;
+  transition: box-shadow 0.2s ease-in-out;
 }
+
+.post:hover {
+  cursor: pointer;
+  box-shadow: 0 0 30px rgba(231, 94, 3, 0.8);
+}
+
+.post-link {
+  text-decoration: none;
+  color: black;
+  max-width: 600px;
+  width: 100%;
+}
+
 
 .post-header {
   display: flex;
@@ -20,7 +32,7 @@
   font-style: italic;
 }
 
-.post-header h2 {
+.post-body h2 {
   margin-bottom: 1rem;
 }
 
@@ -28,6 +40,13 @@
   display: flex;
   justify-content: space-between;
   width: 80px;
-  position: relative;
-  bottom: 30px
+}
+
+.post-user-link {
+  text-decoration: none;
+  color: black;
+}
+
+.post-user-link:hover {
+  text-decoration: underline;
 }

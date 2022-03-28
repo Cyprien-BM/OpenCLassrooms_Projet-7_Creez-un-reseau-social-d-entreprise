@@ -13,3 +13,7 @@
   position: absolute;
   top: 40px;
 }
+
+textarea {
+  resize: none;
+}

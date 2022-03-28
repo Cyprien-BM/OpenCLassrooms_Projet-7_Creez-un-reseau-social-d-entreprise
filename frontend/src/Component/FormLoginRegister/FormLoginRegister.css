@@ -48,6 +48,10 @@
   margin: 0 auto;
 }
 
+.form-log-reg-button::after {
+  border-radius: 20px;
+}
+
 .form-log-reg-container__footer {
   position: absolute;
   bottom: 45px;

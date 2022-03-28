@@ -20,7 +20,6 @@
   top: 0;
   right: 0;
   bottom: 0;
-  border-radius: 20px;
   background: rgb(255,205,195);
   background: linear-gradient(189deg, rgba(255,205,195,1) 0%, rgba(253,108,66,1) 100%); 
   filter: brightness(140%);

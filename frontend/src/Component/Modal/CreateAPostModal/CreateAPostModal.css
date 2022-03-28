@@ -1,0 +1,54 @@
+.overlay.create-post {
+  border-radius: 0;
+}
+
+.form-create-post_close-button {
+  width: 70px;
+  height: 20px;
+  border-radius: 10px;
+  left: 88%;
+}
+
+.form-create-post_close-button::after {
+  border-radius: 10px;
+}
+
+.modal.create-post {
+  width: 100%;
+}
+
+.modal-create-a-post-form {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.4;
+}
+
+.modal-create-a-post-form label {
+  margin: 1rem 0;
+}
+
+.modal-create-a-post-form input {
+  height: 2rem;
+  padding: 0 .5rem;
+  margin-bottom: 1rem;
+}
+
+.modal-create-a-post-form textarea {
+  padding: .5rem .5rem;
+  margin-bottom: 1rem;
+  height: 200px;
+}
+
+.modal-password-error-container {
+  height: 3rem;
+}
+
+.modal-password-succes-container {
+  height: 3rem;
+}
+
+.modal-create-a-post-form input:focus,
+.modal-create-a-post-form textarea:focus {
+  outline: none;
+  border: 1px solid #fd6c42;
+}

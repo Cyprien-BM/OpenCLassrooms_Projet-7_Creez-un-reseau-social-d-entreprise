@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { getAllPosts} from '../../redux/posts/postReducer';
+import { getAllPostsFunction } from '../../redux/posts/postReducer';
 import moment from 'moment';
 import localization from 'moment/locale/fr';
 import arrowUp from '../../Assets/logo/arrow-up.svg';
@@ -15,35 +15,47 @@ export default function Post() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const allPosts = useSelector((state) => state.postReducer);
+  const postsState = useSelector((state) => state.postReducer);
 
   useEffect(() => {
-    if (allPosts.posts.length === 0) {
-      dispatch(getAllPosts());
+    if (postsState.posts.length === 0) {
+      dispatch(getAllPostsFunction());
     }
   }, []);
 
+  useEffect(() => {
+    if (postsState.status === 'Post créé') {
+      dispatch(getAllPostsFunction());
+    }
+  }, [postsState.status]);
+
   //Checking if cookie exist/is valid (by requesting API to gather all post). If not clear error from postReducer state and redirect to login page
   useEffect(() => {
-    if (allPosts.error === '403: unauthorized request') {
+    if (postsState.error === '403: unauthorized request') {
       dispatch({
         type: 'POST-ERROR',
         payload: '',
-    });
+      });
       navigate('/login');
     }
-  }, [allPosts.error]);
+  }, [postsState.error]);
 
-  return allPosts.posts.map((post) => {
+  console.log(postsState);
+
+  return postsState.posts.map((post) => {
     return (
-      <div className='post' key={uuidv4()}>
+    <Link className='post-link' to={`/post/${post.idPOSTS}`} key={uuidv4()}>
+      <div className='post'>
         <div className='post-header'>
           <div className='post-header-content'>
             <p className='post-created-info'>
-              Créer par <Link className='user-link' to={`/user/${post.user.idUSER}`}>{post.user.nickname}</Link> le
+              Créer par{' '}
+              <Link className='post-user-link' to={`/user/${post.user.idUSER}`}>
+                {post.user.nickname}
+              </Link>{' '}
+              le
               {' ' + moment(post.createdAt).format('Do MMMM YYYY, H:mm:ss')}
             </p>
-            <h2>{post.title}</h2>
           </div>
 
           <div className='post-likes'>
@@ -56,8 +68,14 @@ export default function Post() {
             />
           </div>
         </div>
+        <div className='post-body'>
+        <h2>{post.title}</h2>
         <p>{post.content}</p>
+        {post.imageUrl && 
+        <img src='post.imageUrl' alt='' />}
+        </div>
       </div>
+      </Link>
     );
   });
 }
