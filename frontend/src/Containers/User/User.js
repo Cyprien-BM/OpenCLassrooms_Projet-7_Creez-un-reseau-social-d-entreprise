@@ -7,6 +7,7 @@ import {
   changeUserDataFunction,
   resetStateFunction,
   getUserFunctionById,
+  deleteUserFunction,
 } from '../../redux/user/userReducer';
 import './User.css';
 import Button from '../../Component/Button/Button';
@@ -41,7 +42,7 @@ export default function User() {
     }
   }, []);
 
-  //Checking if cookie exist/is valid (by requesting API to gather user). If not clear userReducer state and redirect to login page
+  //Checking if cookie exist/is valid. If not clear userReducer state and redirect to login page
   useEffect(() => {
     if (userError === '403: unauthorized request') {
       dispatch(resetStateFunction());
@@ -61,6 +62,10 @@ export default function User() {
     if (userState == 'Profil modifié !') {
       dispatch(getUserFunction());
       dispatch(resetStateFunction());
+    }
+    if (userState == 'Utilisateur Supprimé') {
+
+      navigate('/login');
     }
   }, [userState]);
 
@@ -84,10 +89,19 @@ export default function User() {
     }
   };
 
-  // Send data to reducer and try to request the API
+  
   const submitForm = (event) => {
     event.preventDefault();
     dispatch(changeUserDataFunction(user, event.target[0].files[0]));
+  };
+
+  const deleteUser = () => {
+    const answer = window.confirm(
+      "Etes vous sûr de vouloir supprimer l'utilisateur ?"
+    );
+    if (answer) {
+      dispatch(deleteUserFunction(id));
+    }
   };
 
   return (
@@ -196,7 +210,7 @@ export default function User() {
                   Modifier le mot de passe
                 </button>
                 <button
-                  onCLick={deleteUser}
+                  onClick={deleteUser}
                   type='button'
                   className='btn-component form-user-button'
                 >
@@ -212,7 +226,7 @@ export default function User() {
             <h1>Profil de {otherUserData.nickname}</h1>
             <div className='user_container'>
               <div className='user_img-container'>
-              <img
+                <img
                   src={otherUserData.pictureUrl}
                   alt=''
                   className='user-img'
@@ -221,9 +235,17 @@ export default function User() {
               </div>
               <div className='user_data-container'>
                 <p className='user_data-title'>Prénom</p>
-                <p className='user_data-content'>{otherUserData.firstname ? otherUserData.firstname : 'Non renseigné'}</p>
+                <p className='user_data-content'>
+                  {otherUserData.firstname
+                    ? otherUserData.firstname
+                    : 'Non renseigné'}
+                </p>
                 <p className='user_data-title'>Nom</p>
-                <p className='user_data-content'>{otherUserData.lastname ? otherUserData.firstname : 'Non renseigné'}</p>
+                <p className='user_data-content'>
+                  {otherUserData.lastname
+                    ? otherUserData.firstname
+                    : 'Non renseigné'}
+                </p>
               </div>
             </div>
           </>

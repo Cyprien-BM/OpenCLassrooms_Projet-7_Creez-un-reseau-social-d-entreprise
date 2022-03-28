@@ -24,7 +24,7 @@ function userReducer(state = INITIAL_STATE, action) {
       };
     }
     case 'GET-USER': {
-      if (action.payload.otherUser == true) {
+      if (action.payload.otherUser === true) {
         return {
           ...state,
           otherUserData: action.payload.user,
@@ -59,6 +59,15 @@ function userReducer(state = INITIAL_STATE, action) {
         state: action.payload,
         error: '',
       };
+    }
+    case 'USER-DELETE': {
+      return {
+        ...state,
+        state: action.payload,
+        userData: {},
+        otherUserData: {},
+        error: '',
+      }
     }
     case 'USER-ERROR': {
       return {
@@ -268,3 +277,16 @@ export const changePasswordFunction = (password) => (dispatch) => {
       }
     });
 };
+
+export const deleteUserFunction = (id) => dispatch => {
+  axios
+  .delete(`${process.env.REACT_APP_API_URL}api/profile/delete/${id}`, {
+    withCredentials: true,
+  })
+  .then((response) => {
+    dispatch({
+      type: 'USER-DELETE',
+      payload: response.data.message,
+    });
+  })
+}
