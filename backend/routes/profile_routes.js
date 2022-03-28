@@ -7,7 +7,7 @@ const tokenAuth = require('../middleware/token_auth');
 
 router.get('/user', tokenAuth, profileController.getUser);
 router.get('/user/:id', tokenAuth, profileController.getUserById)
-router.delete('/delete', tokenAuth, profileController.deleteUser);
+router.delete('/delete/:id', tokenAuth, profileController.deleteUser);
 router.put('/password', tokenAuth, passwordValidator, profileController.modifyPassword)
 router.put('/modify', tokenAuth, multer, profileController.modifyUserInformation)
 

@@ -104,7 +104,7 @@ exports.modifyUserInformation = (req, res, next) => {
 exports.deleteUser = (req, res, next) => {
   User.findOne({
     where: {
-      idUSER: res.locals.id,
+      idUSER: req.params.id,
     },
   })
     .then(async (user) => {
@@ -114,12 +114,11 @@ exports.deleteUser = (req, res, next) => {
           error;
         });
       }
-      console.log(user.idUSER);
-
+      
       // Find all posts related to the user and delete all image file associated to them before cascade deletion
       await Post.findAll({
         where: {
-          userId: res.locals.id,
+          userId: req.params.id,
         },
       })
         .then((posts) => {
@@ -138,10 +137,13 @@ exports.deleteUser = (req, res, next) => {
       // Delete user
       User.destroy({
         where: {
-          idUSER: res.locals.id,
+          idUSER: req.params.id,
         },
       })
-        .then(() => res.status(201).json({ message: 'Utilisateur Supprimé' }))
+        .then(() => {
+          req.session.destroy();
+          res.clearCookie('connect.sid');
+          res.status(201).json({ message: 'Utilisateur Supprimé' })})
         .catch((error) => {
           console.log(error);
           res.status(500).json({ error });
