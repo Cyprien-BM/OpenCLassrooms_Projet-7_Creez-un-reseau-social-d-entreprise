@@ -14,13 +14,8 @@ export default function Home() {
   const [modal, setModal] = useState(false);
 
   const toggleModal = () => {
-    console.log("toggle");
     setModal(!modal);
   };
-
-  const hello = () => {
-    console.log('hello');
-  }
 
   useEffect(() => {
     dispatch(getUserFunction());

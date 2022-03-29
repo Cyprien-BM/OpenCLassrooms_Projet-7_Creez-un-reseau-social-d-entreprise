@@ -2,8 +2,10 @@
   margin-bottom: 50px;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  padding: 20px;
   transition: box-shadow 0.2s ease-in-out;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
 }
 
 .post:hover {
@@ -14,8 +16,6 @@
 .post-link {
   text-decoration: none;
   color: black;
-  max-width: 600px;
-  width: 100%;
 }
 
 
@@ -23,13 +23,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
+  position: absolute;
+  width: 100%;
+  padding: 0 20px;
+  top: 10px;
 }
 
 .post-created-info {
   font-size: .8rem;
-  margin-bottom: 1rem;
   font-style: italic;
+}
+
+.post-body {
+  padding: 40px 20px 20px;
 }
 
 .post-body h2 {
@@ -49,4 +55,12 @@
 
 .post-user-link:hover {
   text-decoration: underline;
+}
+
+.post-img {
+  margin-top: 1rem;
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  max-height: 500px;
 }

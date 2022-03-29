@@ -34,7 +34,7 @@ export default function User() {
 
   const [user, setUser] = useState(userData ? userData : {});
 
-  //Get user after page loaded
+  //Get user(s) data after page loaded
   useEffect(() => {
     dispatch(getUserFunction());
     if (id != userData.idUSER) {
@@ -50,7 +50,7 @@ export default function User() {
     }
   }, [userError]);
 
-  // When userData hook change, set user state to userData
+  // When userData from reducer change, set user state to userData
   useEffect(() => {
     const userStateCopy = { ...user };
     const newUserState = Object.assign(userStateCopy, userData);
@@ -64,7 +64,6 @@ export default function User() {
       dispatch(resetStateFunction());
     }
     if (userState == 'Utilisateur Supprimé') {
-
       navigate('/login');
     }
   }, [userState]);
@@ -152,7 +151,7 @@ export default function User() {
                 <input
                   onInput={handleInputs}
                   type='text'
-                  value={user.nickname}
+                  value={user.nickname ? user.nickname : ''}
                   id='user-nickname'
                   placeholder='Votre pseudo'
                   className='form-user_nickname'
@@ -161,7 +160,7 @@ export default function User() {
                 <input
                   onInput={handleInputs}
                   type='text'
-                  value={user.email}
+                  value={user.email ? user.email : ''}
                   id='user-email'
                   placeholder='Votre email'
                   className='form-user_email'

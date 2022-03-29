@@ -15,42 +15,54 @@ export default function Post() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const postsState = useSelector((state) => state.postReducer);
+  const postState = useSelector((state) => state.postReducer);
 
   useEffect(() => {
-    if (postsState.posts.length === 0) {
+    if (postState.posts.length === 0) {
       dispatch(getAllPostsFunction());
     }
   }, []);
 
   useEffect(() => {
-    if (postsState.status === 'Post créé') {
+    if (
+      (postState.status === 'Post créé' ||
+      postState.status === 'Post modifié !' ||
+      postState.status === 'Post supprimé')
+    ) {
       dispatch(getAllPostsFunction());
+      dispatch({type: 'CLEAN-STATUS'})
     }
-  }, [postsState.status]);
+  }, [postState.status]);
 
   //Checking if cookie exist/is valid (by requesting API to gather all post). If not clear error from postReducer state and redirect to login page
   useEffect(() => {
-    if (postsState.error === '403: unauthorized request') {
+    if (postState.error === '403: unauthorized request') {
       dispatch({
         type: 'POST-ERROR',
         payload: '',
       });
       navigate('/login');
     }
-  }, [postsState.error]);
+  }, [postState.error]);
 
-  console.log(postsState);
-
-  return postsState.posts.map((post) => {
+  return postState.posts.map((post) => {
     return (
-    <Link className='post-link' to={`/post/${post.idPOSTS}`} key={uuidv4()}>
-      <div className='post'>
+      <div
+        className='post'
+        key={uuidv4()}
+        onClick={(event) =>
+          navigate(`/post/${post.idPOSTS}/${post.user.idUSER}`)
+        }
+      >
         <div className='post-header'>
           <div className='post-header-content'>
             <p className='post-created-info'>
               Créer par{' '}
-              <Link className='post-user-link' to={`/user/${post.user.idUSER}`}>
+              <Link
+                className='post-user-link'
+                onClick={(event) => event.stopPropagation()}
+                to={`/user/${post.user.idUSER}`}
+              >
                 {post.user.nickname}
               </Link>{' '}
               le
@@ -69,13 +81,13 @@ export default function Post() {
           </div>
         </div>
         <div className='post-body'>
-        <h2>{post.title}</h2>
-        <p>{post.content}</p>
-        {post.imageUrl && 
-        <img src='post.imageUrl' alt='' />}
+          <h2>{post.title}</h2>
+          <p>{post.content}</p>
+          {post.imageUrl && (
+            <img src={post.imageUrl} alt='' className='post-img' />
+          )}
         </div>
       </div>
-      </Link>
     );
   });
 }

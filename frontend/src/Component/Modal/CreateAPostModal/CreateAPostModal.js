@@ -5,15 +5,14 @@ import './CreateAPostModal.css';
 import { createAPostFunction } from '../../../redux/posts/postReducer';
 
 export default function CreateAPostModal(props) {
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
-  
   const [post, setPost] = useState({
     title: '',
     content: '',
   });
 
-    //Data binding beetween state post and form
+  //Data binding beetween state post and form
   const handleInputs = (event) => {
     if (event.target.classList.contains('modal-post_title-input')) {
       const newPostState = { ...post, title: event.target.value };
@@ -28,15 +27,15 @@ export default function CreateAPostModal(props) {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(createAPostFunction(post))
-  }
+    dispatch(createAPostFunction(post));
+  };
 
   return (
     <>
       <div className='overlay create-post'>
         <div className='modal create-post'>
           <div className='modal-content create-post'>
-            <form  onSubmit={onSubmit} className='modal-create-a-post-form'>
+            <form onSubmit={onSubmit} className='modal-create-a-post-form'>
               <button
                 type='button'
                 className='btn-component form-create-post_close-button'
@@ -52,7 +51,6 @@ export default function CreateAPostModal(props) {
                 onInput={handleInputs}
                 value={post.title}
                 id='modal-post-title'
-                autoComplete='new-password'
                 placeholder='Titre du post'
                 className='modal-post_title-input'
               />

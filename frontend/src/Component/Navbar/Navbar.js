@@ -37,7 +37,9 @@ export default function Navbar(props) {
         <Link className='user-link' to={`/user/${props.userData.idUSER}`}>
           <div className='user-insert'>
             <img src={props.userData.pictureUrl} alt='Photo de profil' />
-            <p>{props.userData.nickname}</p>
+            <p>
+              {props.userData.nickname}
+            </p>
           </div>
         </Link>
         <button
