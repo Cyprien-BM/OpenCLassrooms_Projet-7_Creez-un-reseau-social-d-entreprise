@@ -6,8 +6,8 @@ const multer = require('../middleware/multer-post');
 
 router.get('/all', auth, postControllers.getAllPost);
 router.get('/:id', auth, postControllers.getOnePost);
-router.post('/create', auth, postControllers.createAPost);
-router.put('/:id', auth, postControllers.modifyAPost);
+router.post('/create', auth, multer, postControllers.createAPost);
+router.put('/:id', auth, multer, postControllers.modifyAPost);
 router.delete('/:id', auth, postControllers.deleteAPost);
 router.post('/like/:id', auth, postControllers.likeAPost)
 

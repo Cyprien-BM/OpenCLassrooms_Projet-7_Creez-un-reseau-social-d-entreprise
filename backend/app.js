@@ -6,6 +6,7 @@ const db = require('./models');
 const authRoutes = require('./routes/auth_routes');
 const profileRoutes = require('./routes/profile_routes');
 const postRoutes = require('./routes/post_routes');
+const commentRoutes = require('./routes/comment_routes');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
@@ -51,5 +52,6 @@ app.use('/image', express.static('image'));
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/post', postRoutes);
+app.use('api/comment', commentRoutes);
 
 module.exports = app;

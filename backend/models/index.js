@@ -40,6 +40,7 @@ db.Sequelize = Sequelize;
 db.users = require('./user_model')(sequelize, Sequelize);
 db.posts = require('./post_model')(sequelize, Sequelize);
 db.like = require('./like')(sequelize, Sequelize);
+db.comment = require('./comment')(sequelize, Sequelize);
 
 // Association one to many between user and post
 db.users.hasMany(db.posts, {
@@ -55,6 +56,7 @@ db.posts.belongsTo(db.users, {
     allowNull: false,
   }
 });
+// ----------------------------------------------//
 
 // Association many to many between like, user and post
 db.users.belongsToMany(db.posts, {
@@ -81,5 +83,31 @@ db.like.belongsTo(db.posts, {
   onDelete: 'CASCADE',
 });
 // ----------------------------------------------//
+
+// // Association many to many between like, user and comment
+// db.users.belongsToMany(db.posts, {
+//   through: db.comment,
+//   foreignKey: 'userId',
+//   otherKey: 'postId'
+// });
+
+// db.posts.belongsToMany(db.users, {
+//   through: db.comment,
+//   foreignKey: 'postId',
+//   otherKey: 'userId'
+// });
+
+// db.comment.belongsTo(db.users, {
+//   foreignKey: 'userId',
+//   as: 'user',
+//   onDelete: 'CASCADE',
+// });
+
+// db.comment.belongsTo(db.posts, {
+//   foreignKey: 'postId',
+//   as: 'post',
+//   onDelete: 'CASCADE',
+// });
+// // ----------------------------------------------//
 
 module.exports = db;

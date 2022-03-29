@@ -26,11 +26,11 @@ module.exports = {
       nickname: {
         allowNull: false,
         unique: true,
-        type: Sequelize.STRING(50),
+        type: Sequelize.STRING(30),
         validate: {
           len: {
-            args: [4,50],
-            msg: "Le pseudo doit faire entre 4 et 50 caractères"
+            args: [4,30],
+            msg: "Le pseudo doit faire entre 4 et 30 caractères"
         }
       },
       },
