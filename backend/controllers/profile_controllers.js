@@ -5,6 +5,7 @@ const fs = require('fs');
 
 const User = db.users;
 const Post = db.posts;
+const Like = db.like;
 
 exports.getUser = (req, res, next) => {
   User.findOne({
@@ -24,7 +25,23 @@ exports.getUserById = (req, res, next) => {
     },
     raw: true,
   })
-    .then((user) => {res.status(200).json({user, otherUser: true})})
+    .then((user) => {
+      res.status(200).json({ user, otherUser: true });
+    })
+    .catch((error) => res.status(400).json({ error }));
+};
+
+exports.getUserLike = (req, res, next) => {
+  Like.findAll({
+    attributes: ['likeValue', 'postId'],
+    where: {
+      userId: res.locals.id,
+    },
+    raw: true,
+  })
+    .then((like) => {
+      res.status(201).json(like);
+    })
     .catch((error) => res.status(400).json({ error }));
 };
 
@@ -114,7 +131,7 @@ exports.deleteUser = (req, res, next) => {
           error;
         });
       }
-      
+
       // Find all posts related to the user and delete all image file associated to them before cascade deletion
       await Post.findAll({
         where: {
@@ -143,7 +160,8 @@ exports.deleteUser = (req, res, next) => {
         .then(() => {
           req.session.destroy();
           res.clearCookie('connect.sid');
-          res.status(201).json({ message: 'Utilisateur Supprimé' })})
+          res.status(201).json({ message: 'Utilisateur Supprimé' });
+        })
         .catch((error) => {
           console.log(error);
           res.status(500).json({ error });

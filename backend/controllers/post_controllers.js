@@ -39,6 +39,7 @@ exports.getOnePost = (req, res, next) => {
 };
 
 exports.createAPost = (req, res, next) => {
+  console.log(req.body);
   let fileURL = null;
   if (req.file) {
     fileURL = `${req.protocol}://${req.get('host')}/image/posts/images/${
@@ -91,7 +92,8 @@ exports.modifyAPost = (req, res, next) => {
     })
     .catch((error) => {
       console.log(error);
-      res.status(500).json({ message: 'Post introuvable !' })});
+      res.status(500).json({ message: 'Post introuvable !' });
+    });
 };
 
 exports.deleteAPost = (req, res, next) => {
@@ -116,6 +118,7 @@ exports.deleteAPost = (req, res, next) => {
 };
 
 exports.likeAPost = (req, res, next) => {
+  console.log(req.body);
   asyncLib.waterfall(
     [
       function (callback) {
@@ -137,7 +140,7 @@ exports.likeAPost = (req, res, next) => {
         if (post) {
           User.findOne({
             where: {
-              idUSER: post.userId,
+              idUSER: res.locals.id,
             },
           })
             .then((user) => {
@@ -173,6 +176,7 @@ exports.likeAPost = (req, res, next) => {
         }
       },
       function (post, user, like, callback) {
+        console.log(req.body);
         if (!like && req.body.likeValue != 0) {
           Like.create({
             likeValue: req.body.likeValue,
@@ -187,24 +191,29 @@ exports.likeAPost = (req, res, next) => {
                 .status(500)
                 .json({ message: 'Impossible de creer le like ou dislike' });
             });
-        } else if (like && req.body.likeValue == 0) {
+        } else if (like && req.body.likeValue == like.likeValue) {
           like
             .destroy()
             .then(() => {
               callback(null, post);
             })
             .catch(() => {
-              return res
-                .status(500)
-                .json({
-                  message: 'Impossible de supprimer le like ou dislike',
-                });
+              return res.status(500).json({
+                message: 'Impossible de supprimer le like ou dislike',
+              });
             });
-        } else {
-          res
-            .status(409)
-            .json({ message: "Post déjà liké ou disliké par l'utilisateur" });
-        }
+        } else if (like && req.body.likeValue != like.likeValue) {
+          like
+            .update({likeValue: req.body.likeValue})
+            .then(() => {
+              callback(null, post);
+            })
+            .catch(() => {
+              return res.status(500).json({
+                message: 'Impossible de supprimer le like ou dislike',
+              });
+            });
+        } 
       },
       function (post, callback) {
         Like.count({
@@ -245,17 +254,15 @@ exports.likeAPost = (req, res, next) => {
             callback(post);
           })
           .catch(() => {
-            res
-              .status(500)
-              .json({
-                message: 'Impossible de mettre à jour les likes du post',
-              });
+            res.status(500).json({
+              message: 'Impossible de mettre à jour les likes du post',
+            });
           });
       },
     ],
     function (post) {
       if (post) {
-        return res.status(201).json(post);
+        return res.status(201).json({message: 'Like éffectué'});
       } else {
         return res
           .status(500)

@@ -65,16 +65,16 @@ db.users.belongsToMany(db.posts, {
   otherKey: 'postId'
 });
 
-db.posts.belongsToMany(db.users, {
-  through: db.like,
-  foreignKey: 'postId',
-  otherKey: 'userId'
-});
-
 db.like.belongsTo(db.users, {
   foreignKey: 'userId',
   as: 'user',
   onDelete: 'CASCADE',
+});
+
+db.posts.belongsToMany(db.users, {
+  through: db.like,
+  foreignKey: 'postId',
+  otherKey: 'userId'
 });
 
 db.like.belongsTo(db.posts, {
