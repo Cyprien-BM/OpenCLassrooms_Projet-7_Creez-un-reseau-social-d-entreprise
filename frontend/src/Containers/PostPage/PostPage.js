@@ -1,18 +1,26 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../../Component/Navbar/Navbar';
 import './PostPage.css';
-import { getUserFunction } from '../../redux/user/userReducer';
-import { getOnePostFunction, postModificationFunction, deletePostFunction } from '../../redux/posts/postReducer';
+import {
+  getUserFunction,
+  getUserFunctionById,
+} from '../../redux/user/userReducer';
+import {
+  getOnePostFunction,
+  postModificationFunction,
+  deletePostFunction,
+} from '../../redux/posts/postReducer';
 import Button from '../../Component/Button/Button';
 
 export default function PostPage() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const ref = useRef();
 
   const { postId } = useParams();
-  const { userId } = useParams();
+  const { postCreatorId } = useParams();
 
   const userData = useSelector((state) => state.userReducer.userData);
   const postState = useSelector((state) => state.postReducer);
@@ -24,9 +32,10 @@ export default function PostPage() {
   useEffect(() => {
     dispatch(getUserFunction());
     dispatch(getOnePostFunction(postId));
-    // if (id != userData.idUSER) {
-    //   dispatch(getUserFunctionById(id));
-    // }
+    if (postCreatorId != userData.idUSER) {
+      dispatch(getUserFunctionById(postCreatorId));
+    }
+    return () => dispatch({ type: 'CLEAN-POST' })
   }, []);
 
   // When postState.post from reducer change, set post state to postState.post
@@ -37,17 +46,17 @@ export default function PostPage() {
   }, [postState.post]);
 
   useEffect(() => {
-    if (post.status === 'Post modifié !') {
+    if (postState.status === 'Post modifié !') {
       dispatch(getOnePostFunction(postId));
-      console.log('ici');
+    } else if (postState.status === 'Post supprimé') {
+      navigate('/home');
     }
-  }, [post.status])
+  }, [postState.status]);
 
   //Data binding beetween state post and form
   const handleInputs = (event) => {
     if (event.target.classList.contains('post-page-form_input-media')) {
       const previewUrl = URL.createObjectURL(event.target.files[0]);
-      console.log(previewUrl);
       ref.current.src = previewUrl;
     } else if (event.target.classList.contains('post-page-form_input')) {
       const newPostState = { ...post, title: event.target.value };
@@ -62,17 +71,19 @@ export default function PostPage() {
 
   const submitForm = (event) => {
     event.preventDefault();
-    dispatch(postModificationFunction(post, event.target[0].files[0], postId))
-  }
+    dispatch(postModificationFunction(post, event.target[0].files[0], postId));
+  };
 
   const deletePost = () => {
     const answer = window.confirm(
-      "Etes vous sûr de vouloir supprimer ce post ?"
+      'Etes vous sûr de vouloir supprimer ce post ?'
     );
     if (answer) {
       dispatch(deletePostFunction(postId));
     }
-  }
+  };
+
+  console.log(postState.status);
 
   return (
     <>
@@ -80,11 +91,16 @@ export default function PostPage() {
         <Navbar userData={userData} />
       </header>
       <main className='post-page-body'>
-        {
+        {postCreatorId == userData.idUSER || userData.isAdmin === 1 ? (
           <form onSubmit={submitForm} className='post-page-form'>
             <div className='post-page-form_media-container'>
               <label htmlFor=''>Média</label>
-              <input type='file' onInput={handleInputs} accept='.jpeg, .jpg, .png, .gif' className='post-page-form_input-media' />
+              <input
+                type='file'
+                onInput={handleInputs}
+                accept='.jpeg, .jpg, .png, .gif'
+                className='post-page-form_input-media'
+              />
               <img
                 src={post.imageUrl}
                 alt=''
@@ -121,12 +137,25 @@ export default function PostPage() {
                 className='btn-component post-page-btn'
                 txt='Modifier le post'
               ></Button>
-              <button className='btn-component post-page-btn' type='button' onClick={deletePost}>
+              <button
+                className='btn-component post-page-btn'
+                type='button'
+                onClick={deletePost}
+              >
                 Supprimer le post
               </button>
+              {postState.status === 'Post modifié !' && <p>Post modifié !</p>}
             </div>
           </form>
-        }
+        ) : (
+          <>
+            <h1 className='post-page_title'>{post.title}</h1>
+            <div className='post-page_data-container'>
+              <p className='post-page_txt'>{post.content}</p>
+              <img src={post.imageUrl} alt=''/>
+            </div>
+          </>
+        )}
       </main>
     </>
   );

@@ -57,3 +57,25 @@
   border: 1px solid #fd6c42;
 }
 
+.modal-post_img-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 150px;
+}
+
+.modal-post_img-input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-post_img-preview {
+  max-width: 150px;
+  max-height: 150px;
+  object-fit: cover;
+}
+
+.modal-post_error-container {
+  margin-top: 1rem;
+  height: 40px;
+}

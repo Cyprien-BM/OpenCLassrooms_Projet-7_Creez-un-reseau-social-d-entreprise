@@ -64,3 +64,31 @@
   height: auto;
   max-height: 500px;
 }
+
+.post-like-number {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.post-like-number.green{
+  color: green
+}
+
+.post-like-number.red{
+  color: #A30000
+}
+
+.arrow {
+  width: 20px;
+  height: 20px;
+}
+
+.arrow.green{
+  border-radius: 50%;
+  background-color: rgba(0, 255, 42, 0.3);
+}
+
+.arrow.red{
+  border-radius: 50%;
+  background-color: rgba(255, 0, 0, 0.6);
+}

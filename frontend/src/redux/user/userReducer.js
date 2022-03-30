@@ -3,6 +3,7 @@ import axios from 'axios';
 const INITIAL_STATE = {
   state: '',
   userData: {},
+  userLike: [],
   otherUserData: {},
   error: '',
 };
@@ -38,6 +39,12 @@ function userReducer(state = INITIAL_STATE, action) {
         };
       }
     }
+    case 'GET-USER-LIKE': {
+      return {
+        ...state,
+        userLike: action.payload
+      }
+    }
     case 'USER-MODIFICATION': {
       return {
         ...state,
@@ -67,7 +74,7 @@ function userReducer(state = INITIAL_STATE, action) {
         userData: {},
         otherUserData: {},
         error: '',
-      }
+      };
     }
     case 'USER-ERROR': {
       return {
@@ -194,33 +201,33 @@ export const getUserFunctionById = (id) => async (dispatch) => {
     .get(`${process.env.REACT_APP_API_URL}api/profile/user/${id}`, {
       withCredentials: true,
     })
-    .then((response) => {;
-    if (Object.keys(response.data).length === 0) {
-      dispatch({
-        type: 'USER-ERROR',
-        payload: 'empty user',
-      });
-    } else {
-      dispatch({
-        type: 'GET-USER',
-        payload: response.data,
-      });
-    }
-  })
-  .catch((e) => {
-    const error = e.response.data;
-    if (error.message) {
-      dispatch({
-        type: 'USER-ERROR',
-        payload: error.message,
-      });
-    } else {
-      dispatch({
-        type: 'USER-ERROR',
-        payload: error,
-      });
-    }
-  });
+    .then((response) => {
+      if (Object.keys(response.data).length === 0) {
+        dispatch({
+          type: 'USER-ERROR',
+          payload: 'empty user',
+        });
+      } else {
+        dispatch({
+          type: 'GET-USER',
+          payload: response.data,
+        });
+      }
+    })
+    .catch((e) => {
+      const error = e.response.data;
+      if (error.message) {
+        dispatch({
+          type: 'USER-ERROR',
+          payload: error.message,
+        });
+      } else {
+        dispatch({
+          type: 'USER-ERROR',
+          payload: error,
+        });
+      }
+    });
 };
 
 export const changeUserDataFunction = (user, file) => (dispatch) => {
@@ -278,15 +285,30 @@ export const changePasswordFunction = (password) => (dispatch) => {
     });
 };
 
-export const deleteUserFunction = (id) => dispatch => {
+export const deleteUserFunction = (id) => (dispatch) => {
   axios
-  .delete(`${process.env.REACT_APP_API_URL}api/profile/delete/${id}`, {
-    withCredentials: true,
-  })
-  .then((response) => {
-    dispatch({
-      type: 'USER-DELETE',
-      payload: response.data.message,
+    .delete(`${process.env.REACT_APP_API_URL}api/profile/delete/${id}`, {
+      withCredentials: true,
+    })
+    .then((response) => {
+      dispatch({
+        type: 'USER-DELETE',
+        payload: response.data.message,
+      });
     });
-  })
-}
+};
+
+export const getUserLike = () => (dispatch) => {
+  axios
+    .get(`${process.env.REACT_APP_API_URL}api/profile/like`, {
+      withCredentials: true,
+    })
+    .then((response) => {
+      dispatch({
+        type: 'GET-USER-LIKE',
+        payload: response.data
+      })
+    });
+};
+
+

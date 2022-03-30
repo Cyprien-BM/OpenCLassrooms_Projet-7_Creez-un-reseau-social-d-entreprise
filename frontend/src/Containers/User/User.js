@@ -37,14 +37,14 @@ export default function User() {
   //Get user(s) data after page loaded
   useEffect(() => {
     dispatch(getUserFunction());
-    if (id != userData.idUSER) {
+    if (id !== userData.idUSER) {
       dispatch(getUserFunctionById(id));
     }
   }, []);
 
-  //Checking if cookie exist/is valid. If not clear userReducer state and redirect to login page
+  //Checking if cookie exist/is valid. If not : clear userReducer state and redirect to login page
   useEffect(() => {
-    if (userError === '403: unauthorized request') {
+    if (userError == '403: unauthorized request') {
       dispatch(resetStateFunction());
       navigate('/login');
     }

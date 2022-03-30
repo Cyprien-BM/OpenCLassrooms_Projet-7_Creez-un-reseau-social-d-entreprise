@@ -30,12 +30,6 @@
   align-items:
    center;
 }
-
-.arrow {
-  width: 20px;
-  height: auto;
-}
-
 .create-post-btn h1 {
   font-size: 1.5rem;
 }

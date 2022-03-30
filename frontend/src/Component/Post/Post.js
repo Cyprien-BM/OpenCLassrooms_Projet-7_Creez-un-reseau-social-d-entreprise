@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { getAllPostsFunction } from '../../redux/posts/postReducer';
+import { getAllPostsFunction, likeFunction } from '../../redux/posts/postReducer';
+import { getUserLike } from '../../redux/user/userReducer';
 import moment from 'moment';
 import localization from 'moment/locale/fr';
 import arrowUp from '../../Assets/logo/arrow-up.svg';
@@ -16,25 +17,42 @@ export default function Post() {
   const dispatch = useDispatch();
 
   const postState = useSelector((state) => state.postReducer);
+  const userState = useSelector((state) => state.userReducer);
 
   useEffect(() => {
     if (postState.posts.length === 0) {
       dispatch(getAllPostsFunction());
     }
+    dispatch(getUserLike())
   }, []);
 
+  console.log(userState.userLike);
+
+  // Checking post status, if any modification : clean it after recovering all post
   useEffect(() => {
     if (
-      (postState.status === 'Post créé' ||
+      postState.status === 'Post créé' ||
       postState.status === 'Post modifié !' ||
-      postState.status === 'Post supprimé')
+      postState.status === 'Post supprimé'
     ) {
       dispatch(getAllPostsFunction());
-      dispatch({type: 'CLEAN-STATUS'})
+      dispatch({ type: 'CLEAN-STATUS' });
     }
   }, [postState.status]);
 
-  //Checking if cookie exist/is valid (by requesting API to gather all post). If not clear error from postReducer state and redirect to login page
+  useEffect(() => {
+    if (
+      postState.status === 'Post créé' ||
+      postState.status === 'Post modifié !' ||
+      postState.status === 'Post supprimé' ||
+      postState.status === 'Like éffectué'
+    ) {
+      dispatch(getAllPostsFunction());
+      dispatch({ type: 'CLEAN-STATUS' });
+    }
+  }, [postState.status]);
+
+  //Checking if cookie exist/is valid. If not : redirect to login page
   useEffect(() => {
     if (postState.error === '403: unauthorized request') {
       dispatch({
@@ -45,7 +63,22 @@ export default function Post() {
     }
   }, [postState.error]);
 
+  const like = (likeValue, id) => dispatch(likeFunction(likeValue, id));
+
+  const isUserLikePost = (postId) => {
+    const likeFound = userState.userLike.find(post => post.postId == postId)
+    if (likeFound) {
+      return(likeFound.likeValue);
+    }
+    else {
+      return('non');
+    }
+  }
+  
+  isUserLikePost(3)
+
   return postState.posts.map((post) => {
+    
     return (
       <div
         className='post'
@@ -58,25 +91,39 @@ export default function Post() {
           <div className='post-header-content'>
             <p className='post-created-info'>
               Créer par{' '}
-              <Link
-                className='post-user-link'
-                onClick={(event) => event.stopPropagation()}
-                to={`/user/${post.user.idUSER}`}
-              >
-                {post.user.nickname}
-              </Link>{' '}
+              <strong>
+                <Link
+                  className='post-user-link'
+                  onClick={(event) => event.stopPropagation()}
+                  to={`/user/${post.user.idUSER}`}
+                >
+                  {post.user.nickname}
+                </Link>
+              </strong>{' '}
               le
               {' ' + moment(post.createdAt).format('Do MMMM YYYY, H:mm:ss')}
             </p>
           </div>
 
           <div className='post-likes'>
-            <img src={arrowUp} alt='Liker le post' className='arrow like' />
-            <p>{post.likes}</p>
+            <img
+              src={arrowUp}
+              alt='Liker le post'
+              className={'arrow ' + (isUserLikePost(post.idPOSTS) == 1 ? 'green' : '')}
+              onClick={(event) => {
+                event.stopPropagation();
+                like(1, post.idPOSTS);
+              }}
+            />
+            <p className={'post-like-number ' + (post.likes > 0 ? 'green' : post.likes < 0 ? 'red' : '')}>{post.likes}</p>
             <img
               src={arrowDown}
               alt='Disliker le post'
-              className='arrow dislike'
+              className={'arrow ' + (isUserLikePost(post.idPOSTS) == -1 ? 'red' : '')}
+              onClick={(event) => {
+                event.stopPropagation();
+                like(-1, post.idPOSTS);
+              }}
             />
           </div>
         </div>

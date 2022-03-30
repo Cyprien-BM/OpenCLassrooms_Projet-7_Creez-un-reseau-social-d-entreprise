@@ -43,6 +43,12 @@ function postReducer(state = INITIAL_STATE, action) {
         error: '',
       };
     }
+    case 'POST-LIKE': {
+      return {
+        ...state,
+        status: action.payload,
+      };
+    }
     case 'CLEAN-STATUS': {
       return {
         ...state,
@@ -52,9 +58,19 @@ function postReducer(state = INITIAL_STATE, action) {
     case 'POST-ERROR': {
       return {
         ...state,
-        posts: [],
-        status: '',
         error: action.payload,
+      };
+    }
+    case 'CLEAN-ERROR': {
+      return {
+        ...state,
+        error: '',
+      };
+    }
+    case 'CLEAN-POST': {
+      return {
+        ...state,
+        post: {},
       };
     }
     default:
@@ -65,7 +81,6 @@ function postReducer(state = INITIAL_STATE, action) {
 export default postReducer;
 
 export const getAllPostsFunction = () => (dispatch) => {
-  console.log('trigger');
   axios
     .get(`${process.env.REACT_APP_API_URL}api/post/all`, {
       withCredentials: true,
@@ -98,6 +113,10 @@ export const createAPostFunction = (post, file) => (dispatch) => {
   data.append('content', post.content);
   data.append('image', file);
 
+  for (let i of data) {
+    console.log(i);
+  }
+
   axios
     .post(`${process.env.REACT_APP_API_URL}api/post/create`, data, {
       withCredentials: true,
@@ -107,11 +126,20 @@ export const createAPostFunction = (post, file) => (dispatch) => {
         type: 'CREATE-POST',
         payload: response.data.message,
       });
-      getAllPostsFunction()
-      // dispatch({
-      //   type: 'GET-ALL-POST',
-      //   payload: response.data,
-      // });
+    })
+    .catch((e) => {
+      const error = e.response.data.error;
+      if (error.errors) {
+        dispatch({
+          type: 'POST-ERROR',
+          payload: error.errors[0].message,
+        });
+      } else {
+        dispatch({
+          type: 'POST-ERROR',
+          payload: error,
+        });
+      }
     });
 };
 
@@ -133,9 +161,6 @@ export const postModificationFunction = (post, file, id) => (dispatch) => {
   data.append('title', post.title);
   data.append('content', post.content);
   data.append('image', file);
-  for (let i of data) {
-    console.log(i);
-  }
   axios
     .put(`${process.env.REACT_APP_API_URL}api/post/${id}`, data, {
       withCredentials: true,
@@ -157,6 +182,23 @@ export const deletePostFunction = (id) => (dispatch) => {
     .then((response) => {
       dispatch({
         type: 'POST-DELETE',
+        payload: response.data.message,
+      });
+    });
+};
+
+export const likeFunction = (likeValue, id) => (dispatch) => {
+  axios
+    .post(
+      `${process.env.REACT_APP_API_URL}api/post/like/${id}`,
+      { likeValue },
+      {
+        withCredentials: true,
+      }
+    )
+    .then((response) => {
+      dispatch({
+        type: 'POST-LIKE',
         payload: response.data.message,
       });
     });
