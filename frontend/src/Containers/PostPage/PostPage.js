@@ -83,8 +83,6 @@ export default function PostPage() {
     }
   };
 
-  console.log(postState.status);
-
   return (
     <>
       <header className='post-page-header'>

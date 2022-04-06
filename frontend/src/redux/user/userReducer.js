@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const INITIAL_STATE = {
-  state: '',
+  status: '',
   userData: {},
   userLike: [],
   otherUserData: {},
@@ -13,14 +13,14 @@ function userReducer(state = INITIAL_STATE, action) {
     case 'LOGIN': {
       return {
         ...state,
-        state: action.payload,
+        status: action.payload,
         error: '',
       };
     }
     case 'REGISTER': {
       return {
         ...state,
-        state: action.payload,
+        status: action.payload,
         error: '',
       };
     }
@@ -48,14 +48,14 @@ function userReducer(state = INITIAL_STATE, action) {
     case 'USER-MODIFICATION': {
       return {
         ...state,
-        state: action.payload,
+        status: action.payload,
         error: '',
       };
     }
     case 'PASSWORD-MODIFICATION': {
       return {
         ...state,
-        state: action.payload,
+        status: action.payload,
         error: '',
       };
     }
@@ -63,14 +63,14 @@ function userReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         userData: {},
-        state: action.payload,
+        status: action.payload,
         error: '',
       };
     }
     case 'USER-DELETE': {
       return {
         ...state,
-        state: action.payload,
+        status: action.payload,
         userData: {},
         otherUserData: {},
         error: '',
@@ -85,7 +85,7 @@ function userReducer(state = INITIAL_STATE, action) {
     case 'RESET-STATE': {
       return {
         ...state,
-        state: action.payload,
+        status: action.payload,
         error: action.payload,
       };
     }

@@ -9,6 +9,7 @@ import {
   getUserFunctionById,
   deleteUserFunction,
 } from '../../redux/user/userReducer';
+import { getAllPostsFunction } from '../../redux/posts/postReducer';
 import './User.css';
 import Button from '../../Component/Button/Button';
 import PasswordModal from '../../Component/Modal/PasswordModificationModal/PasswordModal';
@@ -23,7 +24,7 @@ export default function User() {
 
   const userData = useSelector((state) => state.userReducer.userData);
   const otherUserData = useSelector((state) => state.userReducer.otherUserData);
-  const userState = useSelector((state) => state.userReducer.state);
+  const userState = useSelector((state) => state.userReducer.status);
   const userError = useSelector((state) => state.userReducer.error);
 
   const [modal, setModal] = useState(false);
@@ -61,10 +62,12 @@ export default function User() {
   useEffect(() => {
     if (userState == 'Profil modifié !') {
       dispatch(getUserFunction());
+      dispatch(getAllPostsFunction())
       dispatch(resetStateFunction());
     }
     if (userState == 'Utilisateur Supprimé') {
       navigate('/login');
+      window.location.reload(false);
     }
   }, [userState]);
 

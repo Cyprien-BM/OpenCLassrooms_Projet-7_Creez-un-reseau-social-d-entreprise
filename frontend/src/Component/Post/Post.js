@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { getAllPostsFunction, likeFunction } from '../../redux/posts/postReducer';
-import { getUserLike } from '../../redux/user/userReducer';
+import {
+  getAllPostsFunction,
+  likeFunction,
+} from '../../redux/posts/postReducer';
+import { getUserLike, resetStateFunction } from '../../redux/user/userReducer';
 import moment from 'moment';
 import localization from 'moment/locale/fr';
 import arrowUp from '../../Assets/logo/arrow-up.svg';
@@ -23,23 +26,10 @@ export default function Post() {
     if (postState.posts.length === 0) {
       dispatch(getAllPostsFunction());
     }
-    dispatch(getUserLike())
+    dispatch(getUserLike());
   }, []);
 
-  console.log(userState.userLike);
-
   // Checking post status, if any modification : clean it after recovering all post
-  useEffect(() => {
-    if (
-      postState.status === 'Post créé' ||
-      postState.status === 'Post modifié !' ||
-      postState.status === 'Post supprimé'
-    ) {
-      dispatch(getAllPostsFunction());
-      dispatch({ type: 'CLEAN-STATUS' });
-    }
-  }, [postState.status]);
-
   useEffect(() => {
     if (
       postState.status === 'Post créé' ||
@@ -49,6 +39,7 @@ export default function Post() {
     ) {
       dispatch(getAllPostsFunction());
       dispatch({ type: 'CLEAN-STATUS' });
+      dispatch(getUserLike());
     }
   }, [postState.status]);
 
@@ -66,19 +57,19 @@ export default function Post() {
   const like = (likeValue, id) => dispatch(likeFunction(likeValue, id));
 
   const isUserLikePost = (postId) => {
-    const likeFound = userState.userLike.find(post => post.postId == postId)
+    const likeFound = userState.userLike.find((post) => post.postId == postId);
     if (likeFound) {
-      return(likeFound.likeValue);
+      return likeFound.likeValue;
+    } else {
+      return 'non';
     }
-    else {
-      return('non');
-    }
-  }
-  
-  isUserLikePost(3)
+  };
 
   return postState.posts.map((post) => {
-    
+    let sumLike = 0;
+    post.Likes.map((like) => {
+      sumLike += like.likeValue;
+    })
     return (
       <div
         className='post'
@@ -109,17 +100,28 @@ export default function Post() {
             <img
               src={arrowUp}
               alt='Liker le post'
-              className={'arrow ' + (isUserLikePost(post.idPOSTS) == 1 ? 'green' : '')}
+              className={
+                'arrow ' + (isUserLikePost(post.idPOSTS) == 1 ? 'green' : '')
+              }
               onClick={(event) => {
                 event.stopPropagation();
                 like(1, post.idPOSTS);
               }}
             />
-            <p className={'post-like-number ' + (post.likes > 0 ? 'green' : post.likes < 0 ? 'red' : '')}>{post.likes}</p>
+            <p
+              className={
+                'post-like-number ' +
+                (sumLike > 0 ? 'green' : sumLike < 0 ? 'red' : '')
+              }
+            >
+              {sumLike}
+            </p>
             <img
               src={arrowDown}
               alt='Disliker le post'
-              className={'arrow ' + (isUserLikePost(post.idPOSTS) == -1 ? 'red' : '')}
+              className={
+                'arrow ' + (isUserLikePost(post.idPOSTS) == -1 ? 'red' : '')
+              }
               onClick={(event) => {
                 event.stopPropagation();
                 like(-1, post.idPOSTS);

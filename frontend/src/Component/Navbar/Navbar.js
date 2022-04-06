@@ -13,7 +13,7 @@ export default function Navbar(props) {
 
   const navigate = useNavigate();
 
-  const logState = useSelector((state) => state.userReducer.state);
+  const logState = useSelector((state) => state.userReducer.status);
 
   useEffect(() => {
     if (logState === 'Session terminée') {

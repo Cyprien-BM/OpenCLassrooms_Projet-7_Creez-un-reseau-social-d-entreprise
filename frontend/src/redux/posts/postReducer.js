@@ -67,12 +67,6 @@ function postReducer(state = INITIAL_STATE, action) {
         error: '',
       };
     }
-    case 'CLEAN-POST': {
-      return {
-        ...state,
-        post: {},
-      };
-    }
     default:
       return state;
   }
@@ -112,10 +106,6 @@ export const createAPostFunction = (post, file) => (dispatch) => {
   data.append('title', post.title);
   data.append('content', post.content);
   data.append('image', file);
-
-  for (let i of data) {
-    console.log(i);
-  }
 
   axios
     .post(`${process.env.REACT_APP_API_URL}api/post/create`, data, {
