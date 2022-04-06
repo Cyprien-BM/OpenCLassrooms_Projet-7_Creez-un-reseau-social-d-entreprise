@@ -1,6 +1,6 @@
 const db = require('../models');
 const bcrypt = require('bcrypt');
-const multer = require('../middleware/multer-profile');
+// const multer = require('../middleware/multer-profile');
 const fs = require('fs');
 
 const User = db.users;

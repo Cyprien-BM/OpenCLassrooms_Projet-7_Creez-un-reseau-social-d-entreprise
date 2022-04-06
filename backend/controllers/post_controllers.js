@@ -14,12 +14,15 @@ exports.getAllPost = (req, res, next) => {
         model: db.users,
         attributes: ['nickname', 'idUSER'],
       },
+      { model: db.like, attributes: ['likeValue'] },
     ],
   })
     .then((posts) => {
       res.status(200).json(posts);
     })
-    .catch(() => res.status(500).json({ message: 'Aucun post trouvé' }));
+    .catch((e) => {
+      console.log(e);
+      res.status(500).json({ message: 'Aucun post trouvé' })});
 };
 
 exports.getOnePost = (req, res, next) => {
@@ -118,7 +121,6 @@ exports.deleteAPost = (req, res, next) => {
 };
 
 exports.likeAPost = (req, res, next) => {
-  console.log(req.body);
   asyncLib.waterfall(
     [
       function (callback) {
@@ -204,7 +206,7 @@ exports.likeAPost = (req, res, next) => {
             });
         } else if (like && req.body.likeValue != like.likeValue) {
           like
-            .update({likeValue: req.body.likeValue})
+            .update({ likeValue: req.body.likeValue })
             .then(() => {
               callback(null, post);
             })
@@ -213,7 +215,7 @@ exports.likeAPost = (req, res, next) => {
                 message: 'Impossible de supprimer le like ou dislike',
               });
             });
-        } 
+        }
       },
       function (post, callback) {
         Like.count({
@@ -262,7 +264,7 @@ exports.likeAPost = (req, res, next) => {
     ],
     function (post) {
       if (post) {
-        return res.status(201).json({message: 'Like éffectué'});
+        return res.status(201).json({ message: 'Like éffectué' });
       } else {
         return res
           .status(500)

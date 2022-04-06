@@ -12,7 +12,12 @@ let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    config
+  );
 }
 try {
   sequelize.authenticate();
@@ -23,13 +28,16 @@ try {
 
 // add all models
 fs.readdirSync(__dirname)
-  .filter(file => file.indexOf('.') !== 0 && file !== 'index.js' && file.slice(-3) === '.js')
-  .forEach(file => {
+  .filter(
+    (file) =>
+      file.indexOf('.') !== 0 && file !== 'index.js' && file.slice(-3) === '.js'
+  )
+  .forEach((file) => {
     const model = require(path.join(__dirname, file));
     db[model.name] = model;
   });
 
-Object.keys(db).forEach(modelName => {
+Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
@@ -54,35 +62,33 @@ db.posts.belongsTo(db.users, {
   foreignKey: {
     name: 'userId',
     allowNull: false,
-  }
+  },
 });
 // ----------------------------------------------//
 
 // Association many to many between like, user and post
-db.users.belongsToMany(db.posts, {
-  through: db.like,
+
+db.users.hasMany(db.like, {
   foreignKey: 'userId',
-  otherKey: 'postId'
+  onDelete: 'CASCADE',
 });
 
 db.like.belongsTo(db.users, {
-  foreignKey: 'userId',
-  as: 'user',
-  onDelete: 'CASCADE',
+  foreignKey: {
+    name: 'userId',
+  },
 });
 
-db.posts.belongsToMany(db.users, {
-  through: db.like,
+db.posts.hasMany(db.like, {
   foreignKey: 'postId',
-  otherKey: 'userId'
+  onDelete: 'CASCADE',
 });
 
 db.like.belongsTo(db.posts, {
-  foreignKey: 'postId',
-  as: 'post',
-  onDelete: 'CASCADE',
+  foreignKey: {
+    name: 'postId',
+  },
 });
-// ----------------------------------------------//
 
 // // Association many to many between like, user and comment
 // db.users.belongsToMany(db.posts, {
