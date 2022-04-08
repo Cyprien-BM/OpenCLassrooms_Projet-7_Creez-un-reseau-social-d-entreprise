@@ -66,7 +66,7 @@ db.posts.belongsTo(db.users, {
 });
 // ----------------------------------------------//
 
-// Association many to many between like, user and post
+// Association between like, user and post
 
 db.users.hasMany(db.like, {
   foreignKey: 'userId',
@@ -89,31 +89,31 @@ db.like.belongsTo(db.posts, {
     name: 'postId',
   },
 });
+// ----------------------------------------------//
 
-// // Association many to many between like, user and comment
-// db.users.belongsToMany(db.posts, {
-//   through: db.comment,
-//   foreignKey: 'userId',
-//   otherKey: 'postId'
-// });
+// Association many to many between post, user and comment
 
-// db.posts.belongsToMany(db.users, {
-//   through: db.comment,
-//   foreignKey: 'postId',
-//   otherKey: 'userId'
-// });
+db.users.hasMany(db.comment, {
+  foreignKey: 'userId',
+  onDelete: 'CASCADE',
+});
 
-// db.comment.belongsTo(db.users, {
-//   foreignKey: 'userId',
-//   as: 'user',
-//   onDelete: 'CASCADE',
-// });
+db.comment.belongsTo(db.users, {
+  foreignKey: {
+    name: 'userId',
+  },
+});
 
-// db.comment.belongsTo(db.posts, {
-//   foreignKey: 'postId',
-//   as: 'post',
-//   onDelete: 'CASCADE',
-// });
-// // ----------------------------------------------//
+db.posts.hasMany(db.comment, {
+  foreignKey: 'postId',
+  onDelete: 'CASCADE',
+});
+
+db.comment.belongsTo(db.posts, {
+  foreignKey: {
+    name: 'postId',
+  },
+});
+// ----------------------------------------------//
 
 module.exports = db;

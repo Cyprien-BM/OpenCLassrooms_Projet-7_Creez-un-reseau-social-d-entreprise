@@ -12,7 +12,7 @@ exports.getAllPost = (req, res, next) => {
     include: [
       {
         model: db.users,
-        attributes: ['nickname', 'idUSER'],
+        attributes: ['nickname', 'idUSER', 'pictureUrl'],
       },
       { model: db.like, attributes: ['likeValue'] },
     ],
@@ -21,7 +21,6 @@ exports.getAllPost = (req, res, next) => {
       res.status(200).json(posts);
     })
     .catch((e) => {
-      console.log(e);
       res.status(500).json({ message: 'Aucun post trouvé' })});
 };
 
@@ -42,7 +41,6 @@ exports.getOnePost = (req, res, next) => {
 };
 
 exports.createAPost = (req, res, next) => {
-  console.log(req.body);
   let fileURL = null;
   if (req.file) {
     fileURL = `${req.protocol}://${req.get('host')}/image/posts/images/${
@@ -60,7 +58,6 @@ exports.createAPost = (req, res, next) => {
 };
 
 exports.modifyAPost = (req, res, next) => {
-  console.log(req.body);
   Post.findOne({
     where: {
       idPOSTS: req.params.id,
@@ -91,10 +88,9 @@ exports.modifyAPost = (req, res, next) => {
           imageUrl: fileURL,
         })
         .then(() => res.status(200).json({ message: 'Post modifié !' }))
-        .catch((error) => res.status(400).json({ error }));
+        .catch((error) => res.status(400).json({ message: 'Impossible de modifier le post' }));
     })
     .catch((error) => {
-      console.log(error);
       res.status(500).json({ message: 'Post introuvable !' });
     });
 };

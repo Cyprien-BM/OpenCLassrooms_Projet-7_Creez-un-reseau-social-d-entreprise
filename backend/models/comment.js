@@ -1,4 +1,19 @@
 'use strict';
+
+// Check if input contain forbiden char and/or string
+function inputValidator(input) {
+  if (
+    /<script>|<script\/>|SELECT|FROM|UPDATE|DELETE|SHOW|CREATE|ALTER|INSERT|DROP|=|;/g.test(
+      input
+    )
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+//----------------------------------------------------------//
+
 const {
   Model
 } = require('sequelize');
@@ -14,6 +29,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Comment.init({
+    commentId: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     postId: {
       allowNull: false,
       type: DataTypes.INTEGER,
@@ -38,7 +59,25 @@ module.exports = (sequelize, DataTypes) => {
     imageUrl: {
       type: DataTypes.STRING(500)
     },
-  }, {
+  }, 
+  {
+    sequelize,
+    validate: {
+      validateInput() {
+        if (!this.content && !this.imageUrl) {
+          throw new Error('Veuillez ajouter un texte ou ajouter une image');
+        } else if (
+          inputValidator(this.title) ||
+          inputValidator(this.content)
+        ) {
+          throw new Error(
+            "Veuillez remplir les champs d'input avec des caractères valides"
+          );
+        }
+      },
+    },
+  },
+  {
     sequelize,
     modelName: 'Comment',
   });
