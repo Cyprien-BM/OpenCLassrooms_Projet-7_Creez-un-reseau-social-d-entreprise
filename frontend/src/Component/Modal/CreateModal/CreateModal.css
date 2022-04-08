@@ -1,43 +1,43 @@
-.overlay.create-post {
+.overlay.create-post-and-comment {
   border-radius: 0;
   position: fixed;
   width: 100%;
   height: 100%;
 }
 
-.form-create-post_close-button {
+.form-create-post-and-comment_close-button {
   width: 70px;
   height: 20px;
   border-radius: 10px;
   left: 88%;
 }
 
-.form-create-post_close-button::after {
+.form-create-post-and-comment_close-button::after {
   border-radius: 10px;
 }
 
-.modal.create-post {
+.modal.create-post-and-comment {
   width: 100%;
   top: 45%
 }
 
-.modal-create-a-post-form {
+.modal-create-post-and-comment-form {
   display: flex;
   flex-direction: column;
   line-height: 1.4;
 }
 
-.modal-create-a-post-form label {
+.modal-create-post-and-comment-form label {
   margin: 1rem 0;
 }
 
-.modal-create-a-post-form input {
+.modal-create-post-and-comment-form input {
   height: 2rem;
   padding: 0 .5rem;
   margin-bottom: 1rem;
 }
 
-.modal-create-a-post-form textarea {
+.modal-create-post-and-comment-form textarea {
   padding: .5rem .5rem;
   margin-bottom: 1rem;
   height: 200px;
@@ -51,31 +51,31 @@
   height: 3rem;
 }
 
-.modal-create-a-post-form input:focus,
-.modal-create-a-post-form textarea:focus {
+.modal-create-post-and-comment-form input:focus,
+.modal-create-post-and-comment-form textarea:focus {
   outline: none;
   border: 1px solid #fd6c42;
 }
 
-.modal-post_img-container {
+.modal-post-and-comment_img-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 150px;
 }
 
-.modal-post_img-input-container {
+.modal-post-and-comment_img-input-container {
   display: flex;
   flex-direction: column;
 }
 
-.modal-post_img-preview {
+.modal-post-and-comment_img-preview {
   max-width: 150px;
   max-height: 150px;
   object-fit: cover;
 }
 
-.modal-post_error-container {
+.modal-post-and-comment_error-container {
   margin-top: 1rem;
   height: 40px;
 }

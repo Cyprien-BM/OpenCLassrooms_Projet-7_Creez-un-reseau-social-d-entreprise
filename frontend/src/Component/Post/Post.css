@@ -1,16 +1,23 @@
 .post {
-  margin-bottom: 50px;
-  border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  transition: box-shadow 0.2s ease-in-out;
+  border-radius: 10px;
   max-width: 600px;
   width: 100%;
-  position: relative;
+  margin-bottom: 50px;
 }
 
-.post:hover {
+.post-content {
+  border-radius: 10px 10px 0 0;
+  transition: box-shadow 0.2s ease-in-out;
+  width: 100%;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.post-content:hover {
   cursor: pointer;
-  box-shadow: 0 0 30px rgba(231, 94, 3, 0.8);
+  box-shadow: 0 -1px 20px rgba(231, 94, 3, 0.6);
+  border-radius: 10px;
 }
 
 .post-link {
@@ -26,6 +33,19 @@
   position: relative;
   width: 100%;
   padding: 10px 20px;
+}
+
+.post-header-content {
+  display: flex;
+  align-items: center;
+}
+
+.post-header-content img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: .5rem;
 }
 
 .post-created-info {

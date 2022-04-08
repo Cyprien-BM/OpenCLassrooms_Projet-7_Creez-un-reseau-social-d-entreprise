@@ -1,0 +1,126 @@
+.post-comments-container {
+  padding: 0px 40px 20px 20px;
+  position: relative;
+}
+
+.post-comments-container form {
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.comment-input {
+  resize: none;
+  overflow: hidden;
+  padding: 0.5rem 0.5rem;
+  min-height: 50px;
+  max-height: 300px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: .8rem;
+}
+
+.comment-input:focus {
+  outline: none;
+  border: 1px solid #fd6c42;
+}
+
+.post-comments_file-and-btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.post-comments_file-container {
+  width: 80%;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  align-items: center;
+}
+
+.post-comment {
+  margin-top: 1rem;
+  border: .5px solid lightgray;
+  padding: 10px 10px;
+  border-radius: 10px;
+}
+
+.post-comments-container textarea {
+  margin-bottom: .5rem;
+}
+
+.post-comments-container label {
+  margin-right: .5rem;
+  font-size: .8rem;
+  font-weight: bold;
+  width: 45%;
+}
+
+.post-comments-img_preview {
+  width: 60%;
+  height: auto;
+  max-height: 300px;
+  object-fit: cover;
+  margin-top: 1rem;
+}
+
+.comment-header,
+.comment-header-user-data {
+  display: flex;
+  align-items: center;
+}
+
+.comment-header {
+  width: 100%;
+  height: 40px;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
+
+.comment-profile-img{
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: .5rem;
+}
+
+.comment-created-info {
+  font-size: .8rem;
+  font-style: italic;
+}
+
+.edit-comment-img {
+  height: 15px;
+  width: 15px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.post-comment-button {
+  width: 60px;
+  border-radius: 10px;
+  font-size: .8rem;
+  height: 1.3rem;
+}
+
+.post-comment-button::after {
+  border-radius: 10px;
+}
+
+.comment-img {
+  width: 90%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+}
+

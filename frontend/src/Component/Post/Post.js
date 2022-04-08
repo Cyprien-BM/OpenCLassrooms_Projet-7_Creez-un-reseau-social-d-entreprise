@@ -12,22 +12,16 @@ import localization from 'moment/locale/fr';
 import arrowUp from '../../Assets/logo/arrow-up.svg';
 import arrowDown from '../../Assets/logo/arrow-down.svg';
 import './Post.css';
+import Comment from '../Comment/Comment';
 
 moment.updateLocale('fr', localization);
 
-export default function Post() {
+export default function Post(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const postState = useSelector((state) => state.postReducer);
   const userState = useSelector((state) => state.userReducer);
-
-  useEffect(() => {
-    if (postState.posts.length === 0) {
-      dispatch(getAllPostsFunction());
-    }
-    dispatch(getUserLike());
-  }, []);
 
   // Checking post status, if any modification : clean it after recovering all post
   useEffect(() => {
@@ -69,74 +63,79 @@ export default function Post() {
     let sumLike = 0;
     post.Likes.map((like) => {
       sumLike += like.likeValue;
-    })
+    });
     return (
-      <div
-        className='post'
-        key={uuidv4()}
-        onClick={(event) =>
-          navigate(`/post/${post.idPOSTS}/${post.user.idUSER}`)
-        }
-      >
-        <div className='post-header'>
-          <div className='post-header-content'>
-            <p className='post-created-info'>
-              Créer par{' '}
-              <strong>
-                <Link
-                  className='post-user-link'
-                  onClick={(event) => event.stopPropagation()}
-                  to={`/user/${post.user.idUSER}`}
+      <article key={uuidv4()} className='post'>
+        <div>
+          <div
+            className='post-content'
+            onClick={(event) =>
+              navigate(`/post/${post.idPOSTS}/${post.user.idUSER}`)
+            }
+          >
+            <div className='post-header'>
+              <div className='post-header-content'>
+                <img src={post.user.pictureUrl} alt='Photo de profil du créateur du post'/>
+                <p className='post-created-info'>
+                  Créer par{' '}
+                  <strong>
+                    <Link
+                      className='post-user-link'
+                      onClick={(event) => event.stopPropagation()}
+                      to={`/user/${post.user.idUSER}`}
+                    >
+                      {post.user.nickname}
+                    </Link>
+                  </strong>{' '}
+                  le
+                  {' ' + moment(post.createdAt).format('Do MMMM YYYY, H:mm:ss')}
+                </p>
+              </div>
+              <div className='post-likes'>
+                <img
+                  src={arrowUp}
+                  alt='Liker le post'
+                  className={
+                    'arrow ' +
+                    (isUserLikePost(post.idPOSTS) == 1 ? 'green' : '')
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    like(1, post.idPOSTS);
+                  }}
+                />
+                <p
+                  className={
+                    'post-like-number ' +
+                    (sumLike > 0 ? 'green' : sumLike < 0 ? 'red' : '')
+                  }
                 >
-                  {post.user.nickname}
-                </Link>
-              </strong>{' '}
-              le
-              {' ' + moment(post.createdAt).format('Do MMMM YYYY, H:mm:ss')}
-            </p>
+                  {sumLike}
+                </p>
+                <img
+                  src={arrowDown}
+                  alt='Disliker le post'
+                  className={
+                    'arrow ' + (isUserLikePost(post.idPOSTS) == -1 ? 'red' : '')
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    like(-1, post.idPOSTS);
+                  }}
+                />
+              </div>
+            </div>
+            <div className='post-body'>
+              <h2>{post.title}</h2>
+              <p>{post.content}</p>
+              {post.imageUrl && (
+                <img src={post.imageUrl} alt='' className='post-img' />
+              )}
+            </div>
           </div>
-
-          <div className='post-likes'>
-            <img
-              src={arrowUp}
-              alt='Liker le post'
-              className={
-                'arrow ' + (isUserLikePost(post.idPOSTS) == 1 ? 'green' : '')
-              }
-              onClick={(event) => {
-                event.stopPropagation();
-                like(1, post.idPOSTS);
-              }}
-            />
-            <p
-              className={
-                'post-like-number ' +
-                (sumLike > 0 ? 'green' : sumLike < 0 ? 'red' : '')
-              }
-            >
-              {sumLike}
-            </p>
-            <img
-              src={arrowDown}
-              alt='Disliker le post'
-              className={
-                'arrow ' + (isUserLikePost(post.idPOSTS) == -1 ? 'red' : '')
-              }
-              onClick={(event) => {
-                event.stopPropagation();
-                like(-1, post.idPOSTS);
-              }}
-            />
-          </div>
+          <Comment postId={post.idPOSTS} toggleCommentModal={props.toggleCommentModal}  />
         </div>
-        <div className='post-body'>
-          <h2>{post.title}</h2>
-          <p>{post.content}</p>
-          {post.imageUrl && (
-            <img src={post.imageUrl} alt='' className='post-img' />
-          )}
-        </div>
-      </div>
+      </article>
     );
   });
 }

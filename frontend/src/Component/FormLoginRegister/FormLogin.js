@@ -24,7 +24,7 @@ export default function FormLogin() {
   //Checking if we received user data from API, if yes : redirect to page /home
   useEffect(() => {
     if (
-      loginState.state == 'Utilisateur connecté'
+      loginState.status == 'Utilisateur connecté'
     ) {
       setError();
       navigate('/home')

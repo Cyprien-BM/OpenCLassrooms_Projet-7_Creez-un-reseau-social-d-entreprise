@@ -33,7 +33,7 @@ export default function FormLogin() {
   //Checking if we received user data from API, if yes : redirect to page /login
   useEffect(() => {
     if (
-      registerState.state.message === 'Utilisateur créé'
+      registerState.status.message === 'Utilisateur créé'
     ) {
       setError();
       navigate('/login')
