@@ -4,7 +4,7 @@ import '../Modal.css';
 import Button from '../../Button/Button';
 import { changePasswordFunction } from '../../../redux/user/userReducer';
 
-export default function Modal() {
+export default function Modal(props) {
   const dispatch = useDispatch();
 
   const passwordState = useSelector((state) => state.userReducer);
@@ -16,9 +16,9 @@ export default function Modal() {
   const [password, setPassword] = useState({password: ''});
 
   useEffect(() => {
-    if (passwordState.state === 'Mots de passe modifié !') {
+    if (passwordState.status === 'Mots de passe modifié !') {
       setError();
-      setSucces(passwordState.state)
+      setSucces(passwordState.status)
     } else if (passwordState.error) {
       setError(passwordState.error);
     }
@@ -33,8 +33,10 @@ export default function Modal() {
 
   const submitForm = (event) => {
     event.preventDefault();
-    dispatch(changePasswordFunction(password));
+    dispatch(changePasswordFunction(password, props.id));
   };
+
+  console.log(succes);
 
   return (
     <>

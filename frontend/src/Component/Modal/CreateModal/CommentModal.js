@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { modifyAComment } from '../../../redux/comments/commentsReducer';
+import {
+  modifyAComment,
+  deleteCommentImageFunction,
+} from '../../../redux/comments/commentsReducer';
 import Button from '../../Button/Button';
 
 export default function CommentModal(props) {
@@ -29,13 +32,16 @@ export default function CommentModal(props) {
   };
   //---------------------------------//
 
-    // Clean postState status and close modal after post creation
-    useEffect(() => {
-      if (commentState.status === 'Commentaire modifié !') {
-        props.toggleCommentModal();
-      }
-    }, [commentState.status]);
-    //---------------------------------//
+  // Clean postState status and close modal after post creation
+  useEffect(() => {
+    if (
+      commentState.status === 'Commentaire modifié !' ||
+      commentState.status === 'Image supprimé'
+    ) {
+      props.toggleCommentModal();
+    }
+  }, [commentState.status]);
+  //---------------------------------//
 
   const onSubmit = (event) => {
     console.log(event.target);
@@ -44,6 +50,15 @@ export default function CommentModal(props) {
       dispatch(modifyAComment(comment, event.target[2].files[0]));
     } else {
       dispatch(modifyAComment(comment, null));
+    }
+  };
+
+  const deleteImage = () => {
+    const answer = window.confirm(
+      "Etes vous sûr de vouloir supprimer l'image de ce commentaire ?"
+    );
+    if (answer) {
+      dispatch(deleteCommentImageFunction(comment.commentId));
     }
   };
 
@@ -100,10 +115,19 @@ export default function CommentModal(props) {
                 />
               </div>
               <div className='modal-post-and-comment_error-container'>
-              <p className='form-error'>{commentState.error}</p>
+                <p className='form-error'>{commentState.error}</p>
               </div>
+              {comment.imageUrl && (
+                <button
+                  className='btn-component form-comment-button'
+                  type='button'
+                  onClick={deleteImage}
+                >
+                  Supprimer l'image
+                </button>
+              )}
               <Button
-                className='btn-component form-user-button'
+                className='btn-component form-comment-button'
                 txt='Modifier le commentaire'
               />
             </form>

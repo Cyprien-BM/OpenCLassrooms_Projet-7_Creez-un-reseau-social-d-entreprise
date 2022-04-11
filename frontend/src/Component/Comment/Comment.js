@@ -79,7 +79,8 @@ export default function Comment(props) {
     if (
       commentState.status === 'Commentaire créé' ||
       commentState.status === 'Commentaire modifié !' ||
-      commentState.status === 'Commentaire supprimé'
+      commentState.status === 'Commentaire supprimé' ||
+      commentState.status === 'Image supprimé'
     ) {
       dispatch(getAllComments());
       dispatch({ type: 'CLEAN-COMMENT-STATUS' });

@@ -8,6 +8,7 @@ import {
   resetStateFunction,
   getUserFunctionById,
   deleteUserFunction,
+  deleteUserImageFunction,
 } from '../../redux/user/userReducer';
 import { getAllPostsFunction } from '../../redux/posts/postReducer';
 import './User.css';
@@ -60,12 +61,12 @@ export default function User() {
 
   //Get user after modification and reset userState
   useEffect(() => {
-    if (userState == 'Profil modifié !') {
+    if (userState === 'Profil modifié !' || userState === 'Image supprimé') {
       dispatch(getUserFunction());
       dispatch(getAllPostsFunction())
       dispatch(resetStateFunction());
     }
-    if (userState == 'Utilisateur Supprimé') {
+    if (userState === 'Utilisateur Supprimé') {
       navigate('/login');
       window.location.reload(false);
     }
@@ -94,7 +95,7 @@ export default function User() {
   
   const submitForm = (event) => {
     event.preventDefault();
-    dispatch(changeUserDataFunction(user, event.target[0].files[0]));
+    dispatch(changeUserDataFunction(user, event.target[0].files[0], id));
   };
 
   const deleteUser = () => {
@@ -105,6 +106,15 @@ export default function User() {
       dispatch(deleteUserFunction(id));
     }
   };
+
+  const deleteImage = () => {
+    const answer = window.confirm(
+      "Etes vous sûr de vouloir supprimer la photo de profil ?"
+    );
+    if (answer) {
+      dispatch(deleteUserImageFunction(id));
+    }
+  }
 
   return (
     <div className='user-page'>
@@ -118,7 +128,7 @@ export default function User() {
           <>
             {modal && (
               <>
-                <PasswordModal />
+                <PasswordModal id={id} />
                 <button onClick={toggleModal} className='close-modal password'>
                   Fermer
                 </button>
@@ -148,6 +158,13 @@ export default function User() {
                   className='user-img'
                   ref={ref}
                 />
+                <button
+                  onClick={deleteImage}
+                  type='button'
+                  className='btn-component form-user-button'
+                >
+                  Supprimer la photo
+                </button>
               </div>
               <div className='user_data-container'>
                 <label htmlFor='user-nickname'>Pseudo</label>

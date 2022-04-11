@@ -194,7 +194,7 @@ export const likeFunction = (likeValue, id) => (dispatch) => {
     });
 };
 
-export const deleteImageFunction = (id) => (dispatch) => {
+export const deletePostImageFunction = (id) => (dispatch) => {
   axios
     .delete(`${process.env.REACT_APP_API_URL}api/post/image/${id}`, {
       withCredentials: true,

@@ -129,8 +129,6 @@ export const modifyAComment = (comment, file) => (dispatch) => {
   data.append('content', comment.content);
   data.append('image', file);
 
-  console.log(file);
-
   axios
     .put(
       `${process.env.REACT_APP_API_URL}api/comment/${comment.commentId}`,
@@ -161,3 +159,19 @@ export const modifyAComment = (comment, file) => (dispatch) => {
       }
     });
 };
+
+export const deleteCommentImageFunction = (id) => (dispatch) => {
+  axios
+    .delete(`${process.env.REACT_APP_API_URL}api/comment/image/${id}`, {
+      withCredentials: true,
+    })
+    .then((response) => {
+      dispatch({
+        type: 'DELETE-A-COMMENT',
+        payload: response.data.message,
+      });
+    })
+    .catch((error) => {
+      console.log(error.response.data);
+    });
+}

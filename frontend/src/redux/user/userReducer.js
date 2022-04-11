@@ -230,7 +230,7 @@ export const getUserFunctionById = (id) => async (dispatch) => {
     });
 };
 
-export const changeUserDataFunction = (user, file) => (dispatch) => {
+export const changeUserDataFunction = (user, file, id) => (dispatch) => {
   const data = new FormData();
   data.append('email', user.email);
   data.append('nickname', user.nickname);
@@ -239,7 +239,7 @@ export const changeUserDataFunction = (user, file) => (dispatch) => {
   data.append('image', file);
 
   axios
-    .put(`${process.env.REACT_APP_API_URL}api/profile/modify`, data, {
+    .put(`${process.env.REACT_APP_API_URL}api/profile/modify/${id}`, data, {
       withCredentials: true,
     })
     .then((response) => {
@@ -258,9 +258,9 @@ export const resetStateFunction = () => (dispatch) => {
   });
 };
 
-export const changePasswordFunction = (password) => (dispatch) => {
+export const changePasswordFunction = (password, id) => (dispatch) => {
   axios
-    .put(`${process.env.REACT_APP_API_URL}api/profile/password`, password, {
+    .put(`${process.env.REACT_APP_API_URL}api/profile/password/${id}`, password, {
       withCredentials: true,
     })
     .then((response) => {
@@ -311,4 +311,16 @@ export const getUserLike = () => (dispatch) => {
     });
 };
 
+export const deleteUserImageFunction = (id) => (dispatch) => {
+  axios
+  .delete(`${process.env.REACT_APP_API_URL}api/profile/delete/image/${id}`, {
+    withCredentials: true,
+  })
+  .then((response) => {
+    dispatch({
+      type: 'USER-DELETE',
+      payload: response.data.message,
+    });
+  });
+}
 

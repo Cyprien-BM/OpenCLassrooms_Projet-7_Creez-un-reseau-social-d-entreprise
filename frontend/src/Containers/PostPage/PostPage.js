@@ -11,7 +11,7 @@ import {
   getOnePostFunction,
   postModificationFunction,
   deletePostFunction,
-  deleteImageFunction,
+  deletePostImageFunction,
 } from '../../redux/posts/postReducer';
 import Button from '../../Component/Button/Button';
 
@@ -89,7 +89,7 @@ export default function PostPage() {
       'Etes vous sûr de vouloir supprimer l\'image de ce post ?'
     );
     if (answer) {
-      dispatch(deleteImageFunction(postId));
+      dispatch(deletePostImageFunction(postId));
     }
   };
 
@@ -115,9 +115,9 @@ export default function PostPage() {
                 className='post-page-img_preview'
                 ref={ref}
               />
-              <button className='btn-component post-page-btn'
+              {post.imageUrl && <button className='btn-component post-page-btn'
                 type='button'
-                onClick={deleteImage}>Supprimer l'image</button>
+                onClick={deleteImage}>Supprimer l'image</button>}
             </div>
             <div className='post-page-form_data-container'>
               <label htmlFor='post-page-form-title'>

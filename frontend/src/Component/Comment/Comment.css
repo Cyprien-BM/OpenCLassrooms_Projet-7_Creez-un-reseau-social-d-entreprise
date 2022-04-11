@@ -122,5 +122,17 @@
   height: auto;
   max-height: 400px;
   object-fit: cover;
+  margin-top: 1rem;
 }
 
+.form-comment-button {
+  width: 50%;
+  min-width: 250px;
+  height: 40px;
+  margin: 10px auto;
+  border-radius: 20px;
+}
+
+.form-comment-button::after {
+  border-radius: 20px;
+}
