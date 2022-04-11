@@ -48,7 +48,7 @@ exports.getUserLike = (req, res, next) => {
 exports.modifyPassword = (req, res, next) => {
   User.findOne({
     where: {
-      idUSER: res.locals.id,
+      idUSER: req.params.id,
     },
   })
     .then((user) => {
@@ -70,12 +70,9 @@ exports.modifyPassword = (req, res, next) => {
 };
 
 exports.modifyUserInformation = (req, res, next) => {
-  console.log('ici');
-  console.log(req.body);
-  console.log(req.file);
   User.findOne({
     where: {
-      idUSER: res.locals.id,
+      idUSER: req.params.id,
     },
     raw: true,
   })
@@ -168,4 +165,31 @@ exports.deleteUser = (req, res, next) => {
         });
     })
     .catch((error) => res.status(502).json({ error }));
+};
+
+exports.deleteImageUser = (req, res, next) => {
+  User.findOne({
+    where: {
+      idUSER: req.params.id,
+    },
+  })
+    .then(async (user) => {
+      const fileName = user.pictureUrl.split('/images/')[1];
+      if (fileName != 'Default.png') {
+        fs.unlink(`image/profile/images/${fileName}`, (error) => {
+          error;
+        });
+      }
+      user
+        .update({
+          pictureUrl: `${req.protocol}://${req.get(
+            'host'
+          )}/image/profile/images/Default.png`,
+        })
+        .then(() => res.status(200).json({ message: 'Image supprimé' }))
+        .catch((error) =>
+          res.status(400).json({ message: 'Impossible de supprimer l\'image' })
+        );
+    })
+    .catch(() => res.status(500).json({ message: 'Utilisateur introuvable' }));
 };

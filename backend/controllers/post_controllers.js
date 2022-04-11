@@ -21,7 +21,8 @@ exports.getAllPost = (req, res, next) => {
       res.status(200).json(posts);
     })
     .catch((e) => {
-      res.status(500).json({ message: 'Aucun post trouvé' })});
+      res.status(500).json({ message: 'Aucun post trouvé' });
+    });
 };
 
 exports.getOnePost = (req, res, next) => {
@@ -88,7 +89,9 @@ exports.modifyAPost = (req, res, next) => {
           imageUrl: fileURL,
         })
         .then(() => res.status(200).json({ message: 'Post modifié !' }))
-        .catch((error) => res.status(400).json({ message: 'Impossible de modifier le post' }));
+        .catch((error) =>
+          res.status(400).json({ message: 'Impossible de modifier le post' })
+        );
     })
     .catch((error) => {
       res.status(500).json({ message: 'Post introuvable !' });
@@ -288,7 +291,9 @@ exports.deletePostImage = (req, res, next) => {
           imageUrl: '',
         })
         .then(() => res.status(200).json({ message: 'Image supprimé' }))
-        .catch((error) => res.status(400).json({message: 'Impossible de supprimer l\image' }));
+        .catch((error) =>
+          res.status(400).json({ message: 'Impossible de supprimer l\'image' })
+        );
     })
     .catch(() => res.status(500).json({ message: 'Post introuvable' }));
-}
+};
