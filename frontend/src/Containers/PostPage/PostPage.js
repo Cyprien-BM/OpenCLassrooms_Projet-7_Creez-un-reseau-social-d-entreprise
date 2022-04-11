@@ -14,6 +14,8 @@ import {
   deletePostImageFunction,
 } from '../../redux/posts/postReducer';
 import Button from '../../Component/Button/Button';
+import Comment from '../../Component/Comment/Comment';
+import CommentModal from '../../Component/Modal/CreateModal/CommentModal';
 
 export default function PostPage() {
   const navigate = useNavigate();
@@ -93,6 +95,19 @@ export default function PostPage() {
     }
   };
 
+  const [commentModal, setCommentModal] = useState({
+    commentId: 0,
+    status: false});
+
+  const toggleCommentModal = (id) => {
+    const newCommentModalState = {
+      commentId: id,
+      status: !commentModal.status
+    }
+    dispatch({ type: 'COMMENT-CLEAN-ERROR' });
+    setCommentModal(newCommentModalState);
+  };
+
   return (
     <>
       <header className='post-page-header'>
@@ -167,6 +182,8 @@ export default function PostPage() {
             </div>
           </>
         )}
+        <Comment postId={post.idPOSTS} toggleCommentModal={toggleCommentModal}  />
+        {commentModal.status && <CommentModal toggleCommentModal={toggleCommentModal} commentId={commentModal.commentId}/>}
       </main>
     </>
   );
