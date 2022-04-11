@@ -269,3 +269,25 @@ exports.likeAPost = (req, res, next) => {
     }
   );
 };
+
+exports.deletePostImage = (req, res, next) => {
+  Post.findOne({
+    where: {
+      idPOSTS: req.params.id,
+    },
+  })
+    .then((post) => {
+      if (post.imageUrl != null) {
+        const fileName = post.imageUrl.split('/images/')[1];
+        fs.unlink(`image/posts/images/${fileName}`, (error) => {
+          error;
+        });
+      }
+      post
+        .update({
+          imageUrl: '',
+        })
+      res.status(200).json({ message: 'Image supprimé' })
+    })
+    .catch(() => res.status(500).json({ message: 'Impossible de supprimer l\image' }));
+}
