@@ -8,5 +8,6 @@ router.get('/', auth, commentControllers.getCommentsFromAPost);
 router.post('/create/:id', auth, multer, commentControllers.createComment);
 router.put('/:id', auth, multer, commentControllers.modifyComment);
 router.delete('/:id', auth, commentControllers.deleteComment);
+router.delete('/image/:id', auth, commentControllers.deleteImageComment);
 
 module.exports = router;

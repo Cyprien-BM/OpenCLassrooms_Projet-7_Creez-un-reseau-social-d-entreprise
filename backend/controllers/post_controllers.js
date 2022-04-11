@@ -287,7 +287,8 @@ exports.deletePostImage = (req, res, next) => {
         .update({
           imageUrl: '',
         })
-      res.status(200).json({ message: 'Image supprimé' })
+        .then(() => res.status(200).json({ message: 'Image supprimé' }))
+        .catch((error) => res.status(400).json({message: 'Impossible de supprimer l\image' }));
     })
-    .catch(() => res.status(500).json({ message: 'Impossible de supprimer l\image' }));
+    .catch(() => res.status(500).json({ message: 'Post introuvable' }));
 }

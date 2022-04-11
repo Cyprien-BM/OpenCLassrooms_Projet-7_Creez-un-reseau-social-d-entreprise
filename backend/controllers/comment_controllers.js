@@ -97,3 +97,26 @@ exports.deleteComment = (req, res, next) => {
   })
   .catch(() => res.status(500).json({ message: 'Commentaire introuvable !' }));
 }
+
+exports.deleteImageComment = (req, res, next) => {
+  Comment.findOne({
+    where: {
+      commentId: req.params.id,
+    }
+  })
+  .then((comment) => {
+    if (comment.imageUrl != null) {
+      const fileName = comment.imageUrl.split('/images/')[1];
+      fs.unlink(`image/posts/images/${fileName}`, (error) => {
+        error;
+      });
+    }
+    comment
+    .update({
+      imageUrl: '',
+    })
+      .then(() => res.status(200).json({ message: 'Image supprimé' }))
+      .catch((error) => res.status(400).json({ message: 'Impossible de supprimer l\'image du commentaire' }));
+  })
+  .catch(() => res.status(500).json({ message: 'Commentaire introuvable !' }));
+}
