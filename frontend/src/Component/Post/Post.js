@@ -29,8 +29,8 @@ export default function Post(props) {
       postState.status === 'Post créé' ||
       postState.status === 'Post modifié !' ||
       postState.status === 'Post supprimé' ||
-      postState.status === 'Like éffectué'
-    ) {
+      postState.status === 'Like éffectué' ||
+      postState.status === 'Image supprimé') {
       dispatch(getAllPostsFunction());
       dispatch({ type: 'CLEAN-STATUS' });
       dispatch(getUserLike());

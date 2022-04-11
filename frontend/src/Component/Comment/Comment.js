@@ -19,6 +19,7 @@ export default function Comment(props) {
   const dispatch = useDispatch();
 
   const commentState = useSelector((state) => state.commentsReducer);
+  const userState = useSelector((state) => state.userReducer);
 
   const [comment, setComment] = useState({
     content: '',
@@ -85,7 +86,6 @@ export default function Comment(props) {
     }
   }, [commentState.status]);
 
-
   // Create each comment for a post
   const renderComment = () => {
     let postComment = commentState.comments.filter(
@@ -117,20 +117,25 @@ export default function Comment(props) {
                   moment(comment.createdAt).format('Do MMMM YYYY, H:mm:ss')}
               </p>
             </div>
-            <div className='edit-comment-container'>
-              <img
-                src={editCommentLogo}
-                alt='Editer le post'
-                className='edit-comment-img'
-                onClick={() => props.toggleCommentModal(comment.commentId)}
-              />
-              <img
-                src={deleteCommentLogo}
-                alt='Supprimer le post'
-                className='edit-comment-img'
-                onClick={() => deleteComment(comment.commentId)}
-              />
-            </div>
+            {userState.userData.idUSER == comment.userId ||
+            userState.userData.isAdmin === 1 ? (
+              <div className='edit-comment-container'>
+                <img
+                  src={editCommentLogo}
+                  alt='Editer le post'
+                  className='edit-comment-img'
+                  onClick={() => props.toggleCommentModal(comment.commentId)}
+                />
+                <img
+                  src={deleteCommentLogo}
+                  alt='Supprimer le post'
+                  className='edit-comment-img'
+                  onClick={() => deleteComment(comment.commentId)}
+                />
+              </div>
+            ) : (
+              ''
+            )}
           </div>
           <p>{comment.content}</p>
           {comment.imageUrl && (
