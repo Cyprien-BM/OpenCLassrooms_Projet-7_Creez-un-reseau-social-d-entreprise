@@ -1,5 +1,5 @@
 nav {
-  background-color: #FD6C42;
+  background-color: #fd6c42;
   height: 100px;
   width: 100%;
   justify-content: space-between;
@@ -8,14 +8,17 @@ nav {
   z-index: 3;
 }
 
-nav, .nav__left-block, .user-insert, .nav__right-block {
+nav,
+.nav__left-block,
+.user-insert,
+.nav__right-block {
   display: flex;
   align-items: center;
 }
 
 .nav-logo {
-  height: auto;
-  width: 280px;
+  height: 45px;
+  width: auto;
 }
 
 .nav-home-btn {
@@ -38,7 +41,7 @@ nav, .nav__left-block, .user-insert, .nav__right-block {
   height: 60px;
   width: 100%;
   padding-right: 1rem;
-  border-radius: 30px ;
+  border-radius: 30px;
   transition: 0.15s ease-in-out;
   font-weight: bold;
   font-size: 1.3rem;
@@ -60,7 +63,7 @@ nav, .nav__left-block, .user-insert, .nav__right-block {
 }
 
 .user-insert:hover {
-  background-color: rgb(255,205,195);
+  background-color: rgb(255, 205, 195);
   cursor: pointer;
 }
 
@@ -83,5 +86,29 @@ nav, .nav__left-block, .user-insert, .nav__right-block {
 }
 
 .Logout-btn:hover {
-  background-color: rgb(255,205,195);
+  background-color: rgb(255, 205, 195);
+}
+
+@media all and (max-width: 767px) {
+nav {
+  justify-content:space-around
+}
+
+  .user-insert {
+    padding: 0;
+    height: 60px;
+    width: 60px;
+  }
+
+  .user-insert img {
+    margin: 0;
+  }
+
+  .Logout-btn {
+    margin-left: 2rem;
+  }
+
+  .nav-home-btn{
+    margin: 0 2rem;
+  }
 }

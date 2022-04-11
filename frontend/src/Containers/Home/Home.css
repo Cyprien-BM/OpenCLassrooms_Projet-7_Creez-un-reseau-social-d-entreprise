@@ -33,3 +33,13 @@
 .create-post-btn h1 {
   font-size: 1.5rem;
 }
+
+@media all and (max-width: 767px) {
+  .create-post-btn {
+    width: 90%;
+  }
+
+  .create-post-btn h1 {
+    font-size: 1.3rem;
+  }
+}

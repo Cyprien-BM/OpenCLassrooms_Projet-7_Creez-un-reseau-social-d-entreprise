@@ -116,3 +116,9 @@
   border-radius: 50%;
   background-color: rgba(255, 0, 0, 0.6);
 }
+
+@media all and (max-width: 767px) {
+.post {
+  max-width: 95%;
+}
+}

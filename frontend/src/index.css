@@ -11,3 +11,9 @@ body{
 html {
   font-size: 100%;
 }
+
+@media all and (max-width: 767px) {
+  html {
+    font-size: 90%;
+  }
+}
