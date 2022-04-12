@@ -6,16 +6,20 @@ import './PostPage.css';
 import {
   getUserFunction,
   getUserFunctionById,
+  getUserLike,
 } from '../../redux/user/userReducer';
 import {
   getOnePostFunction,
   postModificationFunction,
   deletePostFunction,
   deletePostImageFunction,
+  likeFunction,
 } from '../../redux/posts/postReducer';
 import Button from '../../Component/Button/Button';
 import Comment from '../../Component/Comment/Comment';
 import CommentModal from '../../Component/Modal/CreateModal/CommentModal';
+import arrowUp from '../../Assets/logo/arrow-up.svg';
+import arrowDown from '../../Assets/logo/arrow-down.svg';
 
 export default function PostPage() {
   const navigate = useNavigate();
@@ -26,6 +30,7 @@ export default function PostPage() {
   const { postCreatorId } = useParams();
 
   const userData = useSelector((state) => state.userReducer.userData);
+  const userState = useSelector((state) => state.userReducer);
   const postState = useSelector((state) => state.postReducer);
 
   const [user, setUser] = useState(userData ? userData : {});
@@ -38,7 +43,7 @@ export default function PostPage() {
     if (postCreatorId != userData.idUSER) {
       dispatch(getUserFunctionById(postCreatorId));
     }
-    return () => dispatch({ type: 'CLEAN-POST' })
+    return () => dispatch({ type: 'CLEAN-POST' });
   }, []);
 
   // When postState.post from reducer change, set post state to postState.post
@@ -49,8 +54,14 @@ export default function PostPage() {
   }, [postState.post]);
 
   useEffect(() => {
-    if (postState.status === 'Post modifié !' || postState.status === 'Image supprimé') {
+    if (
+      postState.status === 'Post modifié !' ||
+      postState.status === 'Image supprimé' ||
+      postState.status === 'Like éffectué'
+    ) {
       dispatch(getOnePostFunction(postId));
+      dispatch(getUserLike());
+      dispatch({ type: 'CLEAN-STATUS' });
     } else if (postState.status === 'Post supprimé') {
       navigate('/home');
     }
@@ -86,9 +97,9 @@ export default function PostPage() {
     }
   };
 
-  const deleteImage= () => {
+  const deleteImage = () => {
     const answer = window.confirm(
-      'Etes vous sûr de vouloir supprimer l\'image de ce post ?'
+      "Etes vous sûr de vouloir supprimer l'image de ce post ?"
     );
     if (answer) {
       dispatch(deletePostImageFunction(postId));
@@ -97,16 +108,31 @@ export default function PostPage() {
 
   const [commentModal, setCommentModal] = useState({
     commentId: 0,
-    status: false});
+    status: false,
+  });
 
   const toggleCommentModal = (id) => {
     const newCommentModalState = {
       commentId: id,
-      status: !commentModal.status
-    }
+      status: !commentModal.status,
+    };
     dispatch({ type: 'COMMENT-CLEAN-ERROR' });
     setCommentModal(newCommentModalState);
   };
+
+  const isUserLikePost = (postId) => {
+    if (userState.userLike.length === 0) {
+      dispatch(getUserLike());
+    }
+    const likeFound = userState.userLike.find((post) => post.postId == postId);
+    if (likeFound) {
+      return likeFound.likeValue;
+    } else {
+      return 'non';
+    }
+  };
+
+  const like = (likeValue, id) => dispatch(likeFunction(likeValue, id));
 
   return (
     <>
@@ -130,9 +156,15 @@ export default function PostPage() {
                 className='post-page-img_preview'
                 ref={ref}
               />
-              {post.imageUrl && <button className='btn-component post-page-btn'
-                type='button'
-                onClick={deleteImage}>Supprimer l'image</button>}
+              {post.imageUrl && (
+                <button
+                  className='btn-component post-page-btn'
+                  type='button'
+                  onClick={deleteImage}
+                >
+                  Supprimer l'image
+                </button>
+              )}
             </div>
             <div className='post-page-form_data-container'>
               <label htmlFor='post-page-form-title'>
@@ -171,19 +203,102 @@ export default function PostPage() {
                 Supprimer le post
               </button>
               {postState.status === 'Post modifié !' && <p>Post modifié !</p>}
+              <div className='post-page-likes'>
+                <img
+                  src={arrowUp}
+                  alt='Liker le post'
+                  className={
+                    'arrow ' +
+                    (isUserLikePost(post.idPOSTS) == 1 ? 'green' : '')
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    like(1, post.idPOSTS);
+                  }}
+                />
+                <p
+                  className={
+                    'post-like-number ' +
+                    (post.likes > 0 ? 'green' : post.likes < 0 ? 'red' : '')
+                  }
+                >
+                  {post.likes}
+                </p>
+                <img
+                  src={arrowDown}
+                  alt='Disliker le post'
+                  className={
+                    'arrow ' + (isUserLikePost(post.idPOSTS) == -1 ? 'red' : '')
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    like(-1, post.idPOSTS);
+                  }}
+                />
+              </div>
             </div>
           </form>
         ) : (
           <>
             <h1 className='post-page_title'>{post.title}</h1>
             <div className='post-page_data-container'>
-              <p className='post-page_txt'>{post.content}</p>
-              <img src={post.imageUrl} alt=''/>
+              <div className='post-page_data'>
+                <p className='post-page_txt'>{post.content}</p>
+                <a
+                  href={post.imageUrl}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                  }}
+                >
+                  <img className='post-page_image' src={post.imageUrl} alt='' />
+                </a>
+              </div>
+              <div className='post-page-likes'>
+                <img
+                  src={arrowUp}
+                  alt='Liker le post'
+                  className={
+                    'arrow ' +
+                    (isUserLikePost(post.idPOSTS) == 1 ? 'green' : '')
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    like(1, post.idPOSTS);
+                  }}
+                />
+                <p
+                  className={
+                    'post-like-number ' +
+                    (post.likes > 0 ? 'green' : post.likes < 0 ? 'red' : '')
+                  }
+                >
+                  {post.likes}
+                </p>
+                <img
+                  src={arrowDown}
+                  alt='Disliker le post'
+                  className={
+                    'arrow ' + (isUserLikePost(post.idPOSTS) == -1 ? 'red' : '')
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    like(-1, post.idPOSTS);
+                  }}
+                />
+              </div>
             </div>
           </>
         )}
-        <Comment postId={post.idPOSTS} toggleCommentModal={toggleCommentModal}  />
-        {commentModal.status && <CommentModal toggleCommentModal={toggleCommentModal} commentId={commentModal.commentId}/>}
+        <Comment
+          postId={post.idPOSTS}
+          toggleCommentModal={toggleCommentModal}
+        />
+        {commentModal.status && (
+          <CommentModal
+            toggleCommentModal={toggleCommentModal}
+            commentId={commentModal.commentId}
+          />
+        )}
       </main>
     </>
   );

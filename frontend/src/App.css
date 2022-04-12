@@ -17,3 +17,10 @@
 textarea {
   resize: none;
 }
+
+@media all and (max-width: 767px) {
+  .login-page img, .register-page img {
+    width: 300px;
+  }
+  }
+  

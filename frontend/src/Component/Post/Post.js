@@ -30,7 +30,8 @@ export default function Post(props) {
       postState.status === 'Post modifié !' ||
       postState.status === 'Post supprimé' ||
       postState.status === 'Like éffectué' ||
-      postState.status === 'Image supprimé') {
+      postState.status === 'Image supprimé'
+    ) {
       dispatch(getAllPostsFunction());
       dispatch({ type: 'CLEAN-STATUS' });
       dispatch(getUserLike());
@@ -75,7 +76,10 @@ export default function Post(props) {
           >
             <div className='post-header'>
               <div className='post-header-content'>
-                <img src={post.user.pictureUrl} alt='Photo de profil du créateur du post'/>
+                <img
+                  src={post.user.pictureUrl}
+                  alt='Photo de profil du créateur du post'
+                />
                 <p className='post-created-info'>
                   Créer par{' '}
                   <strong>
@@ -127,13 +131,16 @@ export default function Post(props) {
             </div>
             <div className='post-body'>
               <h2>{post.title}</h2>
-              <p>{post.content}</p>
+              <p className='post-txt'>{post.content}</p>
               {post.imageUrl && (
                 <img src={post.imageUrl} alt='' className='post-img' />
               )}
             </div>
           </div>
-          <Comment postId={post.idPOSTS} toggleCommentModal={props.toggleCommentModal}  />
+          <Comment
+            postId={post.idPOSTS}
+            toggleCommentModal={props.toggleCommentModal}
+          />
         </div>
       </article>
     );

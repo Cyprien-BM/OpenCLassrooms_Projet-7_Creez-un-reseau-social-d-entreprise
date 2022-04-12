@@ -79,8 +79,10 @@ export default function FormLogin() {
         </div>
         <Button className='btn-component form-log-reg-button' txt='Connexion' />
       </form>
-      <p className='form-log-reg-container__footer'>Pas de encore de compte ?</p>
-      <Link to='/register'>Inscription</Link>
+      <div className='form-log-reg-container_footer-container'>
+        <p className='form-log-reg-container__footer'>Pas de encore de compte ?</p>
+        <Link to='/register'>Inscription</Link>
+      </div>
     </main>
   );
 }

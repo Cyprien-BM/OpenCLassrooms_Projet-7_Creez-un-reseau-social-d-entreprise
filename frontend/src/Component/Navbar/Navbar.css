@@ -110,5 +110,7 @@ nav {
 
   .nav-home-btn{
     margin: 0 2rem;
+    height: 25px;
+    width: auto;
   }
 }

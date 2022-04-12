@@ -75,6 +75,13 @@
   filter: brightness(140%);
 }
 
+@media all and (max-width: 767px) {
+  .toggle-modal {
+    top: 172px;
+    left: 125px;
+  }
+  }
+
 /* ------ MODAL PASSWORD MODIFICATION ------ */
 
 .overlay.password {

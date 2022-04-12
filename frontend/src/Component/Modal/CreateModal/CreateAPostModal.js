@@ -19,7 +19,7 @@ export default function CreateAPostModal(props) {
   useEffect(() => {
     if (postState.status === 'Post créé') {
       dispatch({ type: 'CLEAN-STATUS' });
-      props.toggleModal();
+      props.togglePostModal();
     }
   }, [postState.status]);
   //---------------------------------//

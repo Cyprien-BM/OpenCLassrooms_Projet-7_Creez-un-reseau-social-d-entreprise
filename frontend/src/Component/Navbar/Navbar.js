@@ -16,15 +16,19 @@ export default function Navbar(props) {
 
   const logState = useSelector((state) => state.userReducer.status);
 
-  const [windowWidth, setWindowWidth] = useState(0)
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const handleWindowWidth = () => {
-    setWindowWidth(window.innerWidth)
-  }
+    setWindowWidth(window.innerWidth);
+  };
 
-  window.addEventListener('resize', handleWindowWidth)
-
-  console.log(windowWidth);
+  useEffect(() => {
+    window.addEventListener('resize', handleWindowWidth);
+    return () => {
+      window.removeEventListener('resize', handleWindowWidth);
+    }
+  }, [setWindowWidth])
+  
 
   useEffect(() => {
     if (logState === 'Session terminée') {
@@ -32,17 +36,20 @@ export default function Navbar(props) {
     }
   }, [logState]);
 
-  console.log(window.innerWidth);
-
   return (
     <nav>
       <div className='nav__left-block'>
-        <img src={windowWidth > 767 ? logoFull : logoOnly} alt='Logo groupomania' className='nav-logo' />
+        <img
+          src={windowWidth > 767 ? logoFull : logoOnly}
+          alt='Logo groupomania'
+          className='nav-logo'
+        />
         <Link to='/home'>
           <img
             src={houseLogo}
             alt='Bouton retour acceuil'
             className='nav-home-btn'
+            title='Acceuil'
           />
         </Link>
       </div>
@@ -50,10 +57,7 @@ export default function Navbar(props) {
         <Link className='user-link' to={`/user/${props.userData.idUSER}`}>
           <div className='user-insert'>
             <img src={props.userData.pictureUrl} alt='Photo de profil' />
-            {windowWidth > 767 &&
-              <p>
-              {props.userData.nickname}
-            </p>}
+            {windowWidth > 767 && <p>{props.userData.nickname}</p>}
           </div>
         </Link>
         <button

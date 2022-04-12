@@ -136,3 +136,18 @@
 .form-comment-button::after {
   border-radius: 20px;
 }
+
+@media all and (max-width: 767px) {
+  .post-comments-container {
+    padding: 10px 10px;
+  }
+
+  .edit-comment-img {
+    height: 12px;
+    width: 12px;
+  }
+
+  .post-comment-button {
+    width: 55px;
+  }
+}

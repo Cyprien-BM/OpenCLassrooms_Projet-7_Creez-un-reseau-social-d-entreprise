@@ -61,6 +61,11 @@
   margin-bottom: 1rem;
 }
 
+.post-txt {
+  line-height: 1.3rem;
+  text-align: justify;
+}
+
 .post-likes {
   display: flex;
   justify-content: space-between;
@@ -120,5 +125,15 @@
 @media all and (max-width: 767px) {
 .post {
   max-width: 95%;
+}
+
+.post-likes {
+  left: calc(95% - 10px)
+}
+
+.post-created-info {
+  font-size: .8rem;
+  font-style: italic;
+  width: 80%;
 }
 }
