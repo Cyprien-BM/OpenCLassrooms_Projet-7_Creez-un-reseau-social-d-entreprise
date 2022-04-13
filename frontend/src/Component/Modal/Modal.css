@@ -1,6 +1,5 @@
 /* ------ MODAL GENERAL ------ */
 
-
 .toggle-modal {
   position: absolute;
   height: 20px;
@@ -8,9 +7,13 @@
   border-radius: 50%;
   border: none;
   top: 190px;
-  left: 138px;
-  background: rgb(255,205,195);
-  background: linear-gradient(229deg, rgba(255,205,195,1) 0%, rgba(253,108,66,1) 100%); 
+  left: 145px;
+  background: rgb(255, 205, 195);
+  background: linear-gradient(
+    229deg,
+    rgba(255, 205, 195, 1) 0%,
+    rgba(253, 108, 66, 1) 100%
+  );
   color: #000520;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
@@ -25,11 +28,11 @@
 
 .overlay {
   position: absolute;
-  top:0px;
+  top: 0px;
   left: 0px;
   bottom: 0px;
   right: 0px;
-  background: rgba(49,49,49,0.8);
+  background: rgba(49, 49, 49, 0.8);
   border-radius: 20px;
   z-index: 4;
 }
@@ -54,10 +57,13 @@
   line-height: 1.4;
 }
 
-
 .close-modal {
-  background: rgb(255,205,195);
-  background: linear-gradient(189deg, rgba(255,205,195,1) 0%, rgba(253,108,66,1) 100%); 
+  background: rgb(255, 205, 195);
+  background: linear-gradient(
+    189deg,
+    rgba(255, 205, 195, 1) 0%,
+    rgba(253, 108, 66, 1) 100%
+  );
   color: #000520;
   border: none;
   margin-top: 20px;
@@ -80,7 +86,7 @@
     top: 172px;
     left: 125px;
   }
-  }
+}
 
 /* ------ MODAL PASSWORD MODIFICATION ------ */
 
@@ -113,7 +119,7 @@
 
 .modal-password-form input {
   height: 2rem;
-  padding: 0 .5rem;
+  padding: 0 0.5rem;
   text-align: center;
   margin-bottom: 1rem;
 }
@@ -125,4 +131,3 @@
 .modal-password-succes-container {
   height: 3rem;
 }
-

@@ -23,7 +23,7 @@
   border-radius: 5px;
   border: 1px solid lightgray;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 .comment-input:focus {
@@ -49,18 +49,18 @@
 
 .post-comment {
   margin-top: 1rem;
-  border: .5px solid lightgray;
+  border: 0.5px solid lightgray;
   padding: 10px 10px;
   border-radius: 10px;
 }
 
 .post-comments-container textarea {
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 .post-comments-container label {
-  margin-right: .5rem;
-  font-size: .8rem;
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
   font-weight: bold;
   width: 45%;
 }
@@ -86,16 +86,16 @@
   justify-content: space-between;
 }
 
-.comment-profile-img{
+.comment-profile-img {
   width: 30px;
   height: 30px;
   object-fit: cover;
   border-radius: 50%;
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 }
 
 .comment-created-info {
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-style: italic;
 }
 
@@ -109,7 +109,7 @@
 .post-comment-button {
   width: 60px;
   border-radius: 10px;
-  font-size: .8rem;
+  font-size: 0.8rem;
   height: 1.3rem;
 }
 

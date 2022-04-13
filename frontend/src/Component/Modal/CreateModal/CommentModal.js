@@ -12,13 +12,15 @@ export default function CommentModal(props) {
 
   const commentState = useSelector((state) => state.commentsReducer);
 
+  // Find the actual comment
   let actualComment = commentState.comments.find(
     (comment) => comment.commentId == props.commentId
   );
 
   const [comment, setComment] = useState(actualComment);
+  //---------------------------------------------//
 
-  //Data binding beetween state comment and form
+  //Data binding beetween comment state and form
   const handleInputs = (event) => {
     if (event.target.classList.contains('modal-post-and-comment_img-input')) {
       const previewUrl = URL.createObjectURL(event.target.files[0]);
@@ -30,7 +32,7 @@ export default function CommentModal(props) {
       setComment(newCommentState);
     }
   };
-  //---------------------------------//
+  //---------------------------------------------//
 
   // Clean postState status and close modal after post creation
   useEffect(() => {
@@ -41,8 +43,9 @@ export default function CommentModal(props) {
       props.toggleCommentModal();
     }
   }, [commentState.status]);
-  //---------------------------------//
+  //---------------------------------------------//
 
+  //Modify comment
   const onSubmit = (event) => {
     console.log(event.target);
     event.preventDefault();
@@ -61,6 +64,7 @@ export default function CommentModal(props) {
       dispatch(deleteCommentImageFunction(comment.commentId));
     }
   };
+  //---------------------------------------------//
 
   return (
     <>

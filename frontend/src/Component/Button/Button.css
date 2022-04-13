@@ -1,7 +1,11 @@
 .btn-component {
   position: relative;
-  background: rgb(255,205,195);
-  background: linear-gradient(189deg, rgba(255,205,195,1) 0%, rgba(253,108,66,1) 100%);  
+  background: rgb(255, 205, 195);
+  background: linear-gradient(
+    189deg,
+    rgba(255, 205, 195, 1) 0%,
+    rgba(253, 108, 66, 1) 100%
+  );
   color: #000520;
   border: none;
   cursor: pointer;
@@ -20,8 +24,12 @@
   top: 0;
   right: 0;
   bottom: 0;
-  background: rgb(255,205,195);
-  background: linear-gradient(189deg, rgba(255,205,195,1) 0%, rgba(253,108,66,1) 100%); 
+  background: rgb(255, 205, 195);
+  background: linear-gradient(
+    189deg,
+    rgba(255, 205, 195, 1) 0%,
+    rgba(253, 108, 66, 1) 100%
+  );
   filter: brightness(140%);
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
@@ -35,4 +43,3 @@
 .btn-component:hover::after {
   opacity: 1;
 }
-

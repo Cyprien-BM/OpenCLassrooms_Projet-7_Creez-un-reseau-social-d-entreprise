@@ -22,7 +22,7 @@ export default function CreateAPostModal(props) {
       props.togglePostModal();
     }
   }, [postState.status]);
-  //---------------------------------//
+  //---------------------------------------------//
 
   //Data binding beetween state post and form
   const handleInputs = (event) => {
@@ -37,7 +37,9 @@ export default function CreateAPostModal(props) {
       setPost(newPostState);
     }
   };
+  //---------------------------------------------//
 
+  // Create a post
   const onSubmit = (event) => {
     event.preventDefault();
     if (event.target.files != undefined) {
@@ -46,13 +48,17 @@ export default function CreateAPostModal(props) {
       dispatch(createAPostFunction(post, null));
     }
   };
+  //---------------------------------------------//
 
   return (
     <>
       <div className='overlay create-post-and-comment'>
         <div className='modal create-post-and-comment'>
           <div className='modal-content create-post-and-comment'>
-            <form onSubmit={onSubmit} className='modal-create-post-and-comment-form'>
+            <form
+              onSubmit={onSubmit}
+              className='modal-create-post-and-comment-form'
+            >
               <button
                 type='button'
                 className='btn-component form-create-post-and-comment_close-button'
@@ -89,7 +95,9 @@ export default function CreateAPostModal(props) {
               ></textarea>
               <div className='modal-post-and-comment_img-container'>
                 <div className='modal-post-and-comment_img-input-container'>
-                  <label htmlFor='modal-post-and-comment_img'>Ajouter une photo ?</label>
+                  <label htmlFor='modal-post-and-comment_img'>
+                    Ajouter une photo ?
+                  </label>
                   <input
                     onInput={handleInputs}
                     type='file'

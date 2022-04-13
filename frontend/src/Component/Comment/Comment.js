@@ -42,7 +42,7 @@ export default function Comment(props) {
       setComment(newCommentState);
     }
   };
-  //---------------------------------//
+  //---------------------------------------------//
 
   // Resize text-area
   function autoGrow(e) {
@@ -59,8 +59,9 @@ export default function Comment(props) {
       contentRef.current.value = '';
     }
   }
-  //---------------------------------//
+  //---------------------------------------------//
 
+  //Create / Delete comment
   const submitForm = (event) => {
     event.preventDefault();
     dispatch(postAComment(comment, event.target[1].files[0], props.postId));
@@ -74,7 +75,9 @@ export default function Comment(props) {
       dispatch(deleteCommentFunction(id));
     }
   };
+  //---------------------------------------------//
 
+  //Update comment state after any creation or modification
   useEffect(() => {
     if (
       commentState.status === 'Commentaire créé' ||
@@ -86,6 +89,7 @@ export default function Comment(props) {
       dispatch({ type: 'CLEAN-COMMENT-STATUS' });
     }
   }, [commentState.status]);
+  //---------------------------------------------//
 
   // Create each comment for a post
   const renderComment = () => {
@@ -147,7 +151,7 @@ export default function Comment(props) {
     });
     return commentArray;
   };
-  //---------------------------------//
+  //---------------------------------------------//
 
   return (
     <div className='post-comments-container'>

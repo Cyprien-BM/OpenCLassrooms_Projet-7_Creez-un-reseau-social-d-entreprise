@@ -11,11 +11,11 @@ import offline from '../../Assets/logo/offline-button.png';
 
 export default function Navbar(props) {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
-  const logState = useSelector((state) => state.userReducer.status);
+  const userState = useSelector((state) => state.userReducer);
 
+  // Window width tracking for responsive
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const handleWindowWidth = () => {
@@ -26,19 +26,21 @@ export default function Navbar(props) {
     window.addEventListener('resize', handleWindowWidth);
     return () => {
       window.removeEventListener('resize', handleWindowWidth);
-    }
-  }, [setWindowWidth])
-  
+    };
+  }, [setWindowWidth]);
+  //--------------------------------------------//
 
+  // Redirect to login when user disconnect
   useEffect(() => {
-    if (logState === 'Session terminée') {
+    if (userState.status === 'Session terminée') {
       navigate('/login');
     }
-  }, [logState]);
+  }, [userState.status]);
+  //--------------------------------------------//
 
   return (
     <nav>
-      <div className='nav__left-block'>
+      <div className='nav_left-block'>
         <img
           src={windowWidth > 767 ? logoFull : logoOnly}
           alt='Logo groupomania'
@@ -53,7 +55,7 @@ export default function Navbar(props) {
           />
         </Link>
       </div>
-      <div className='nav__right-block'>
+      <div className='nav_right-block'>
         <Link className='user-link' to={`/user/${props.userData.idUSER}`}>
           <div className='user-insert'>
             <img src={props.userData.pictureUrl} alt='Photo de profil' />

@@ -5,8 +5,8 @@ import RegisterComp from '../../Component/FormLoginRegister/FormRegister';
 export default function Register() {
   return (
     <div className='register-page'>
-      <img src={imgLogoWhite} alt='Logo groupomania'/>
+      <img src={imgLogoWhite} alt='Logo groupomania' />
       <RegisterComp />
     </div>
-  )
+  );
 }

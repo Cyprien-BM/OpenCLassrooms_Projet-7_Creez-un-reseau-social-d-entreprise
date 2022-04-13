@@ -1,4 +1,6 @@
-.login-page, .register-page {
+.login-page,
+.register-page,
+.notFound {
   background-image: url('./Assets/Background.svg');
   background-repeat: no-repeat;
   background-size: cover;
@@ -9,7 +11,14 @@
   align-items: center;
 }
 
-.login-page img, .register-page img {
+.notFound {
+  justify-content: center;
+  font-size: 2rem;
+  padding: 20px;
+}
+
+.login-page img,
+.register-page img {
   position: absolute;
   top: 40px;
 }
@@ -19,8 +28,12 @@ textarea {
 }
 
 @media all and (max-width: 767px) {
-  .login-page img, .register-page img {
+  .login-page img,
+  .register-page img {
     width: 300px;
   }
+  .notFound {
+    font-size: 1rem;
+    text-align: center;
   }
-  
+}

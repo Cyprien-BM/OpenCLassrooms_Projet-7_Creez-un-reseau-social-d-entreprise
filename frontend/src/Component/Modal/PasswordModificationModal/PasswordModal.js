@@ -10,40 +10,42 @@ export default function Modal(props) {
   const passwordState = useSelector((state) => state.userReducer);
 
   const [error, setError] = useState();
-
   const [succes, setSucces] = useState();
 
-  const [password, setPassword] = useState({password: ''});
+  const [password, setPassword] = useState({ password: '' });
 
+  // Check password modification response and update corresponding state
   useEffect(() => {
     if (passwordState.status === 'Mots de passe modifié !') {
       setError();
-      setSucces(passwordState.status)
+      setSucces(passwordState.status);
     } else if (passwordState.error) {
       setError(passwordState.error);
     }
   }, [passwordState]);
+  //---------------------------------------------//
 
+  //Data binding beetween password state and form
   const handleInputs = (event) => {
     if (event.target.classList.contains('modal-password_input')) {
-      const newPassword = {...password, password: event.target.value}
+      const newPassword = { ...password, password: event.target.value };
       setPassword(newPassword);
     }
   };
+  //---------------------------------------------//
 
+  //Modify password
   const submitForm = (event) => {
     event.preventDefault();
     dispatch(changePasswordFunction(password, props.id));
   };
-
-  console.log(succes);
+  //---------------------------------------------//
 
   return (
     <>
       <div className='overlay password'>
         <div className='modal password'>
           <div className='modal-content password'>
-            
             <form className='modal-password-form' onSubmit={submitForm}>
               <label htmlFor='modal-password'>Nouveau mot de passe</label>
               <input
@@ -62,8 +64,8 @@ export default function Modal(props) {
                 txt='Modifier le mot de passe'
               />
               <div className='modal-password-succes-container'>
-            <p className='form-succes'>{succes}</p>
-            </div>
+                <p className='form-succes'>{succes}</p>
+              </div>
             </form>
           </div>
         </div>

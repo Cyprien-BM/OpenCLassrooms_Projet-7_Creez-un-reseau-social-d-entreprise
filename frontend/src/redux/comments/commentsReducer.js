@@ -174,4 +174,4 @@ export const deleteCommentImageFunction = (id) => (dispatch) => {
     .catch((error) => {
       console.log(error.response.data);
     });
-}
+};

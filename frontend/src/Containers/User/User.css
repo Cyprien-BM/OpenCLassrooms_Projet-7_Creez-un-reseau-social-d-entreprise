@@ -40,7 +40,7 @@
 .user_data-container {
   display: flex;
   flex-direction: column;
-  align-items:center;
+  align-items: center;
   justify-content: center;
   text-align: center;
   width: 100%;
@@ -57,7 +57,7 @@
 }
 
 .user_container label {
-  margin-bottom: .6rem;
+  margin-bottom: 0.6rem;
 }
 
 .label-user-input-file {
@@ -68,7 +68,7 @@
   height: 2rem;
   margin-bottom: 1rem;
   width: 20rem;
-  padding: 0 .5rem;
+  padding: 0 0.5rem;
 }
 
 .user_container input:focus {

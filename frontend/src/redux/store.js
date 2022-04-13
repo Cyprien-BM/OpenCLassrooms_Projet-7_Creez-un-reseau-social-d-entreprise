@@ -4,7 +4,6 @@ import postReducer from './posts/postReducer';
 import commentsReducer from './comments/commentsReducer';
 import thunk from 'redux-thunk';
 
-
 const rootReducer = combineReducers({
   userReducer,
   postReducer,

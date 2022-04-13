@@ -205,4 +205,4 @@ export const deletePostImageFunction = (id) => (dispatch) => {
         payload: response.data.message,
       });
     });
-}
+};

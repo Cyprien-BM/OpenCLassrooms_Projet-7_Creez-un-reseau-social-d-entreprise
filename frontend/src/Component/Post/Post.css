@@ -25,7 +25,6 @@
   color: black;
 }
 
-
 .post-header {
   display: flex;
   justify-content: space-between;
@@ -45,11 +44,11 @@
   height: 30px;
   object-fit: cover;
   border-radius: 50%;
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 }
 
 .post-created-info {
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-style: italic;
 }
 
@@ -74,7 +73,7 @@
   height: 70px;
   position: absolute;
   left: 95%;
-  top: 30%
+  top: 30%;
 }
 
 .post-user-link {
@@ -99,12 +98,12 @@
   font-size: 0.9rem;
 }
 
-.post-like-number.green{
-  color: green
+.post-like-number.green {
+  color: green;
 }
 
-.post-like-number.red{
-  color: #A30000
+.post-like-number.red {
+  color: #a30000;
 }
 
 .arrow {
@@ -112,28 +111,28 @@
   height: 20px;
 }
 
-.arrow.green{
+.arrow.green {
   border-radius: 50%;
   background-color: rgba(0, 255, 42, 0.3);
 }
 
-.arrow.red{
+.arrow.red {
   border-radius: 50%;
   background-color: rgba(255, 0, 0, 0.6);
 }
 
 @media all and (max-width: 767px) {
-.post {
-  max-width: 95%;
-}
+  .post {
+    max-width: 95%;
+  }
 
-.post-likes {
-  left: calc(95% - 10px)
-}
+  .post-likes {
+    left: calc(95% - 10px);
+  }
 
-.post-created-info {
-  font-size: .8rem;
-  font-style: italic;
-  width: 80%;
-}
+  .post-created-info {
+    font-size: 0.8rem;
+    font-style: italic;
+    width: 80%;
+  }
 }

@@ -42,8 +42,8 @@ function userReducer(state = INITIAL_STATE, action) {
     case 'GET-USER-LIKE': {
       return {
         ...state,
-        userLike: action.payload
-      }
+        userLike: action.payload,
+      };
     }
     case 'USER-MODIFICATION': {
       return {
@@ -260,9 +260,13 @@ export const resetStateFunction = () => (dispatch) => {
 
 export const changePasswordFunction = (password, id) => (dispatch) => {
   axios
-    .put(`${process.env.REACT_APP_API_URL}api/profile/password/${id}`, password, {
-      withCredentials: true,
-    })
+    .put(
+      `${process.env.REACT_APP_API_URL}api/profile/password/${id}`,
+      password,
+      {
+        withCredentials: true,
+      }
+    )
     .then((response) => {
       dispatch({
         type: 'PASSWORD-MODIFICATION',
@@ -306,21 +310,20 @@ export const getUserLike = () => (dispatch) => {
     .then((response) => {
       dispatch({
         type: 'GET-USER-LIKE',
-        payload: response.data
-      })
+        payload: response.data,
+      });
     });
 };
 
 export const deleteUserImageFunction = (id) => (dispatch) => {
   axios
-  .delete(`${process.env.REACT_APP_API_URL}api/profile/delete/image/${id}`, {
-    withCredentials: true,
-  })
-  .then((response) => {
-    dispatch({
-      type: 'USER-DELETE',
-      payload: response.data.message,
+    .delete(`${process.env.REACT_APP_API_URL}api/profile/delete/image/${id}`, {
+      withCredentials: true,
+    })
+    .then((response) => {
+      dispatch({
+        type: 'USER-DELETE',
+        payload: response.data.message,
+      });
     });
-  });
-}
-
+};

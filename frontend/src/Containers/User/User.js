@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../../Component/Navbar/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   getUserFunction,
   changeUserDataFunction,
@@ -36,13 +36,14 @@ export default function User() {
 
   const [user, setUser] = useState(userData ? userData : {});
 
-  //Get user(s) data after page loaded
+  //Get user(s) data after page load
   useEffect(() => {
     dispatch(getUserFunction());
     if (id !== userData.idUSER) {
       dispatch(getUserFunctionById(id));
     }
   }, []);
+  //----------------------------------------------//
 
   //Checking if cookie exist/is valid. If not : clear userReducer state and redirect to login page
   useEffect(() => {
@@ -51,6 +52,7 @@ export default function User() {
       navigate('/login');
     }
   }, [userError]);
+  //----------------------------------------------//
 
   // When userData from reducer change, set user state to userData
   useEffect(() => {
@@ -58,12 +60,13 @@ export default function User() {
     const newUserState = Object.assign(userStateCopy, userData);
     setUser(newUserState);
   }, [userData]);
+  //----------------------------------------------//
 
-  //Get user after modification and reset userState
+  //Update userState after modification, navigate to login if user deleted
   useEffect(() => {
     if (userState === 'Profil modifié !' || userState === 'Image supprimé') {
       dispatch(getUserFunction());
-      dispatch(getAllPostsFunction())
+      dispatch(getAllPostsFunction());
       dispatch(resetStateFunction());
     }
     if (userState === 'Utilisateur Supprimé') {
@@ -71,6 +74,15 @@ export default function User() {
       window.location.reload(false);
     }
   }, [userState]);
+  //----------------------------------------------//
+
+  // Navigate to login if connection/cookie lost
+  useEffect(() => {
+    if (userState.error === '403: unauthorized request') {
+      navigate('/login');
+    }
+  }, [userState.error]);
+  //----------------------------------------------//
 
   //Data binding beetween state user and form
   const handleInputs = (event) => {
@@ -91,8 +103,9 @@ export default function User() {
       setUser(newUserState);
     }
   };
+  //----------------------------------------------//
 
-  
+  // Modify / Delete user
   const submitForm = (event) => {
     event.preventDefault();
     dispatch(changeUserDataFunction(user, event.target[0].files[0], id));
@@ -109,12 +122,13 @@ export default function User() {
 
   const deleteImage = () => {
     const answer = window.confirm(
-      "Etes vous sûr de vouloir supprimer la photo de profil ?"
+      'Etes vous sûr de vouloir supprimer la photo de profil ?'
     );
     if (answer) {
       dispatch(deleteUserImageFunction(id));
     }
-  }
+  };
+  //----------------------------------------------//
 
   return (
     <div className='user-page'>

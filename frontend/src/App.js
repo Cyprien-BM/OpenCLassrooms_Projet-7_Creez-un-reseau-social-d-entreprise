@@ -5,6 +5,7 @@ import Home from './Containers/Home/Home';
 import Register from './Containers/Register/Register';
 import User from './Containers/User/User';
 import Post from './Containers/PostPage/PostPage';
+import NotFound from './Containers/NotFound/NotFound';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path='/home' element={<Home />} />
         <Route path='/user/:id' element={<User />} />
         <Route path='/post/:postId/:postCreatorId' element={<Post />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </>
   );

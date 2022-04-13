@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,7 +6,7 @@ import {
   getAllPostsFunction,
   likeFunction,
 } from '../../redux/posts/postReducer';
-import { getUserLike, resetStateFunction } from '../../redux/user/userReducer';
+import { getUserLike } from '../../redux/user/userReducer';
 import moment from 'moment';
 import localization from 'moment/locale/fr';
 import arrowUp from '../../Assets/logo/arrow-up.svg';
@@ -23,7 +23,7 @@ export default function Post(props) {
   const postState = useSelector((state) => state.postReducer);
   const userState = useSelector((state) => state.userReducer);
 
-  // Checking post status, if any modification : clean it after recovering all post
+  // Checking post status, if any modification : clean it after recovering all post and likes
   useEffect(() => {
     if (
       postState.status === 'Post créé' ||
@@ -38,7 +38,7 @@ export default function Post(props) {
     }
   }, [postState.status]);
 
-  //Checking if cookie exist/is valid. If not : redirect to login page
+  //Checking if cookie exist/is valid with postState => If not : redirect to login page
   useEffect(() => {
     if (postState.error === '403: unauthorized request') {
       dispatch({
@@ -48,17 +48,18 @@ export default function Post(props) {
       navigate('/login');
     }
   }, [postState.error]);
+  //-----------------------------------------------------------------//
 
+  //Get user likes for btn styles
   const like = (likeValue, id) => dispatch(likeFunction(likeValue, id));
 
   const isUserLikePost = (postId) => {
     const likeFound = userState.userLike.find((post) => post.postId == postId);
     if (likeFound) {
       return likeFound.likeValue;
-    } else {
-      return 'non';
     }
   };
+  //-----------------------------------------------------------------//
 
   return postState.posts.map((post) => {
     let sumLike = 0;

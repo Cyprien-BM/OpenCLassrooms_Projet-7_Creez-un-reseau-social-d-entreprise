@@ -36,7 +36,7 @@ export default function PostPage() {
   const [user, setUser] = useState(userData ? userData : {});
   const [post, setPost] = useState(postState.post ? postState.post : {});
 
-  //Get user after page loaded
+  //Get user after page loaded (visitor and eventualy user visited if they are different)
   useEffect(() => {
     dispatch(getUserFunction());
     dispatch(getOnePostFunction(postId));
@@ -45,14 +45,17 @@ export default function PostPage() {
     }
     return () => dispatch({ type: 'CLEAN-POST' });
   }, []);
+  //----------------------------------------------//
 
-  // When postState.post from reducer change, set post state to postState.post
+  // Update state post when postState from reducer change
   useEffect(() => {
     const postCopy = { ...post };
     const newPostState = Object.assign(postCopy, postState.post);
     setPost(newPostState);
   }, [postState.post]);
+  //----------------------------------------------//
 
+  // Update postState and LikeState when a post is modified, deleted or liked
   useEffect(() => {
     if (
       postState.status === 'Post modifié !' ||
@@ -66,6 +69,15 @@ export default function PostPage() {
       navigate('/home');
     }
   }, [postState.status]);
+  //----------------------------------------------//
+
+  // Navigate to login if connection/cookie lost
+  useEffect(() => {
+    if (userState.error === '403: unauthorized request') {
+      navigate('/login');
+    }
+  }, [userState.error]);
+  //----------------------------------------------//
 
   //Data binding beetween state post and form
   const handleInputs = (event) => {
@@ -82,7 +94,9 @@ export default function PostPage() {
       }
     }
   };
+  //----------------------------------------------//
 
+  // Modify / Delete a post
   const submitForm = (event) => {
     event.preventDefault();
     dispatch(postModificationFunction(post, event.target[0].files[0], postId));
@@ -105,7 +119,9 @@ export default function PostPage() {
       dispatch(deletePostImageFunction(postId));
     }
   };
+  //----------------------------------------------//
 
+  // Comment modal
   const [commentModal, setCommentModal] = useState({
     commentId: 0,
     status: false,
@@ -119,7 +135,9 @@ export default function PostPage() {
     dispatch({ type: 'COMMENT-CLEAN-ERROR' });
     setCommentModal(newCommentModalState);
   };
+  //----------------------------------------------//
 
+  //Get user likes for btn styles
   const isUserLikePost = (postId) => {
     if (userState.userLike.length === 0) {
       dispatch(getUserLike());
@@ -133,6 +151,7 @@ export default function PostPage() {
   };
 
   const like = (likeValue, id) => dispatch(likeFunction(likeValue, id));
+  //----------------------------------------------//
 
   return (
     <>
