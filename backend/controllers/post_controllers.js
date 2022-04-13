@@ -55,7 +55,12 @@ exports.createAPost = (req, res, next) => {
     imageUrl: fileURL,
   })
     .then(() => res.status(201).json({ message: 'Post créé' }))
-    .catch((error) => res.status(400).json({ error }));
+    .catch((error) => {
+      fs.unlink(
+        `/image/posts/images/${req.file.filename}`,
+        res.status(500).json({ error })
+      );
+    });
 };
 
 exports.modifyAPost = (req, res, next) => {
@@ -292,7 +297,7 @@ exports.deletePostImage = (req, res, next) => {
         })
         .then(() => res.status(200).json({ message: 'Image supprimé' }))
         .catch((error) =>
-          res.status(400).json({ message: 'Impossible de supprimer l\'image' })
+          res.status(400).json({ message: "Impossible de supprimer l'image" })
         );
     })
     .catch(() => res.status(500).json({ message: 'Post introuvable' }));

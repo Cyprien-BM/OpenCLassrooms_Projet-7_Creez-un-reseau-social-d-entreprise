@@ -36,8 +36,12 @@ exports.createComment = (req, res, next) => {
     imageUrl: fileURL,
   })
   .then(() => res.status(201).json({message: 'Commentaire créé'}))
-  .catch((error) =>
-    res.status(500).json({error}))
+  .catch((error) => {
+    fs.unlink(
+      `/image/posts/images/${req.file.filename}`,
+      res.status(500).json({ error })
+    );
+  });
 }
 
 exports.modifyComment = (req, res, next) => {
