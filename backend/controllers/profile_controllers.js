@@ -184,7 +184,7 @@ exports.deleteImageUser = (req, res, next) => {
         .update({
           pictureUrl: `${req.protocol}://${req.get(
             'host'
-          )}/image/profile/images/Default.png`,
+          )}/image/profile/Default.png`,
         })
         .then(() => res.status(200).json({ message: 'Image supprimé' }))
         .catch((error) =>

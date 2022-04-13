@@ -17,7 +17,7 @@ exports.signeUp = (req, res, next) => {
         nickname: req.body.nickname,
         pictureUrl: `${req.protocol}://${req.get(
           'host'
-        )}/image/profile/images/Default.png`,
+        )}/image/profile/Default.png`,
       })
         .then(() => res.status(201).json({ message: 'Utilisateur créé' }))
         .catch((error) => res.status(400).json({ error }));
