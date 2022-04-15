@@ -14,7 +14,7 @@ export default function CommentModal(props) {
 
   // Find the actual comment
   let actualComment = commentState.comments.find(
-    (comment) => comment.commentId == props.commentId
+    (comment) => comment.commentId === props.commentId
   );
 
   const [comment, setComment] = useState(actualComment);
@@ -42,14 +42,13 @@ export default function CommentModal(props) {
     ) {
       props.toggleCommentModal();
     }
-  }, [commentState.status]);
+  }, [commentState.status, props]);
   //---------------------------------------------//
 
   //Modify comment
   const onSubmit = (event) => {
-    console.log(event.target);
     event.preventDefault();
-    if (event.target[2].files != undefined) {
+    if (event.target[2].files !== undefined) {
       dispatch(modifyAComment(comment, event.target[2].files[0]));
     } else {
       dispatch(modifyAComment(comment, null));

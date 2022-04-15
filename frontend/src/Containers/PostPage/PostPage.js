@@ -33,14 +33,13 @@ export default function PostPage() {
   const userState = useSelector((state) => state.userReducer);
   const postState = useSelector((state) => state.postReducer);
 
-  const [user, setUser] = useState(userData ? userData : {});
   const [post, setPost] = useState(postState.post ? postState.post : {});
 
   //Get user after page loaded (visitor and eventualy user visited if they are different)
   useEffect(() => {
     dispatch(getUserFunction());
     dispatch(getOnePostFunction(postId));
-    if (postCreatorId != userData.idUSER) {
+    if (postCreatorId !== userData.idUSER) {
       dispatch(getUserFunctionById(postCreatorId));
     }
     return () => dispatch({ type: 'CLEAN-POST' });
@@ -68,7 +67,7 @@ export default function PostPage() {
     } else if (postState.status === 'Post supprimé') {
       navigate('/home');
     }
-  }, [postState.status]);
+  }, [postState.status, dispatch, navigate]);
   //----------------------------------------------//
 
   // Navigate to login if connection/cookie lost
@@ -76,7 +75,7 @@ export default function PostPage() {
     if (userState.error === '403: unauthorized request') {
       navigate('/login');
     }
-  }, [userState.error]);
+  }, [userState.error, navigate]);
   //----------------------------------------------//
 
   //Data binding beetween state post and form
@@ -88,10 +87,8 @@ export default function PostPage() {
       const newPostState = { ...post, title: event.target.value };
       setPost(newPostState);
     } else if (event.target.classList.contains('post-page-form_textarea')) {
-      {
-        const newPostState = { ...post, content: event.target.value };
-        setPost(newPostState);
-      }
+      const newPostState = { ...post, content: event.target.value };
+      setPost(newPostState);
     }
   };
   //----------------------------------------------//
@@ -142,7 +139,7 @@ export default function PostPage() {
     if (userState.userLike.length === 0) {
       dispatch(getUserLike());
     }
-    const likeFound = userState.userLike.find((post) => post.postId == postId);
+    const likeFound = userState.userLike.find((post) => post.postId === postId);
     if (likeFound) {
       return likeFound.likeValue;
     } else {
@@ -159,7 +156,7 @@ export default function PostPage() {
         <Navbar userData={userData} />
       </header>
       <main className='post-page-body'>
-        {postCreatorId == userData.idUSER || userData.isAdmin === 1 ? (
+        {postCreatorId === userData.idUSER || userData.isAdmin === 1 ? (
           <form onSubmit={submitForm} className='post-page-form'>
             <div className='post-page-form_media-container'>
               <label htmlFor=''>Média</label>
@@ -228,7 +225,7 @@ export default function PostPage() {
                   alt='Liker le post'
                   className={
                     'arrow ' +
-                    (isUserLikePost(post.idPOSTS) == 1 ? 'green' : '')
+                    (isUserLikePost(post.idPOSTS) === 1 ? 'green' : '')
                   }
                   onClick={(event) => {
                     event.stopPropagation();
@@ -247,7 +244,7 @@ export default function PostPage() {
                   src={arrowDown}
                   alt='Disliker le post'
                   className={
-                    'arrow ' + (isUserLikePost(post.idPOSTS) == -1 ? 'red' : '')
+                    'arrow ' + (isUserLikePost(post.idPOSTS) === -1 ? 'red' : '')
                   }
                   onClick={(event) => {
                     event.stopPropagation();
@@ -278,7 +275,7 @@ export default function PostPage() {
                   alt='Liker le post'
                   className={
                     'arrow ' +
-                    (isUserLikePost(post.idPOSTS) == 1 ? 'green' : '')
+                    (isUserLikePost(post.idPOSTS) === 1 ? 'green' : '')
                   }
                   onClick={(event) => {
                     event.stopPropagation();
@@ -297,7 +294,7 @@ export default function PostPage() {
                   src={arrowDown}
                   alt='Disliker le post'
                   className={
-                    'arrow ' + (isUserLikePost(post.idPOSTS) == -1 ? 'red' : '')
+                    'arrow ' + (isUserLikePost(post.idPOSTS) === -1 ? 'red' : '')
                   }
                   onClick={(event) => {
                     event.stopPropagation();

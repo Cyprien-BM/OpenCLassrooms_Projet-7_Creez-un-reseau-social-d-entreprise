@@ -21,7 +21,7 @@ export default function CreateAPostModal(props) {
       dispatch({ type: 'CLEAN-STATUS' });
       props.togglePostModal();
     }
-  }, [postState.status]);
+  }, [postState.status, dispatch, props]);
   //---------------------------------------------//
 
   //Data binding beetween state post and form
@@ -42,7 +42,7 @@ export default function CreateAPostModal(props) {
   // Create a post
   const onSubmit = (event) => {
     event.preventDefault();
-    if (event.target[3].files != undefined) {
+    if (event.target[3].files !== undefined) {
       dispatch(createAPostFunction(post, event.target[3].files[0]));
     } else {
       dispatch(createAPostFunction(post, null));

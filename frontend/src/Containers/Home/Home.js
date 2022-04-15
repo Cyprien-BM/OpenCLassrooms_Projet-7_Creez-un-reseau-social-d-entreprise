@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { getUserFunction, getUserLike } from '../../redux/user/userReducer';
 import { getAllPostsFunction } from '../../redux/posts/postReducer';
 import { getAllComments } from '../../redux/comments/commentsReducer';
@@ -11,7 +10,6 @@ import CommentModal from '../../Component/Modal/CreateModal/CommentModal';
 import './Home.css';
 
 export default function Home() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const userState = useSelector((state) => state.userReducer);

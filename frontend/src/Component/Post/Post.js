@@ -36,7 +36,7 @@ export default function Post(props) {
       dispatch({ type: 'CLEAN-STATUS' });
       dispatch(getUserLike());
     }
-  }, [postState.status]);
+  }, [postState.status, dispatch]);
 
   //Checking if cookie exist/is valid with postState => If not : redirect to login page
   useEffect(() => {
@@ -47,14 +47,14 @@ export default function Post(props) {
       });
       navigate('/login');
     }
-  }, [postState.error]);
+  }, [postState.error, dispatch, navigate]);
   //-----------------------------------------------------------------//
 
   //Get user likes for btn styles
   const like = (likeValue, id) => dispatch(likeFunction(likeValue, id));
 
   const isUserLikePost = (postId) => {
-    const likeFound = userState.userLike.find((post) => post.postId == postId);
+    const likeFound = userState.userLike.find((post) => post.postId === postId);
     if (likeFound) {
       return likeFound.likeValue;
     }
@@ -102,7 +102,7 @@ export default function Post(props) {
                   alt='Liker le post'
                   className={
                     'arrow ' +
-                    (isUserLikePost(post.idPOSTS) == 1 ? 'green' : '')
+                    (isUserLikePost(post.idPOSTS) === 1 ? 'green' : '')
                   }
                   onClick={(event) => {
                     event.stopPropagation();
@@ -121,7 +121,7 @@ export default function Post(props) {
                   src={arrowDown}
                   alt='Disliker le post'
                   className={
-                    'arrow ' + (isUserLikePost(post.idPOSTS) == -1 ? 'red' : '')
+                    'arrow ' + (isUserLikePost(post.idPOSTS) === -1 ? 'red' : '')
                   }
                   onClick={(event) => {
                     event.stopPropagation();

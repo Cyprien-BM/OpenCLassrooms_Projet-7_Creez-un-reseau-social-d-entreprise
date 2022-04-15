@@ -21,13 +21,13 @@ export default function FormLogin() {
 
   //Checking if we received user data from API, if yes : redirect to page /home
   useEffect(() => {
-    if (loginState.status == 'Utilisateur connecté') {
+    if (loginState.status === 'Utilisateur connecté') {
       setError();
       navigate('/home');
     } else if (loginState.error) {
       setError(loginState.error);
     }
-  }, [loginState]);
+  }, [loginState, navigate]);
 
   //Data binding beetween state user and form
   const handleInputs = (event) => {

@@ -47,11 +47,11 @@ export default function User() {
 
   //Checking if cookie exist/is valid. If not : clear userReducer state and redirect to login page
   useEffect(() => {
-    if (userError == '403: unauthorized request') {
+    if (userError === '403: unauthorized request') {
       dispatch(resetStateFunction());
       navigate('/login');
     }
-  }, [userError]);
+  }, [userError, dispatch, navigate]);
   //----------------------------------------------//
 
   // When userData from reducer change, set user state to userData
@@ -73,7 +73,7 @@ export default function User() {
       navigate('/login');
       window.location.reload(false);
     }
-  }, [userState]);
+  }, [userState, dispatch, navigate]);
   //----------------------------------------------//
 
   // Navigate to login if connection/cookie lost
@@ -81,7 +81,7 @@ export default function User() {
     if (userState.error === '403: unauthorized request') {
       navigate('/login');
     }
-  }, [userState.error]);
+  }, [userState.error, navigate]);
   //----------------------------------------------//
 
   //Data binding beetween state user and form
@@ -138,7 +138,7 @@ export default function User() {
       <main>
         {/* IF USER VISITE HIS PROFILE OR IF HE IS ADMIN */}
 
-        {id == userData.idUSER || userData.isAdmin == 1 ? (
+        {id === userData.idUSER || userData.isAdmin === 1 ? (
           <>
             {modal && (
               <>
@@ -206,7 +206,7 @@ export default function User() {
                   value={
                     !user.firstname
                       ? ''
-                      : user.firstname == 'null'
+                      : user.firstname === 'null'
                       ? ''
                       : user.firstname
                   }
@@ -221,7 +221,7 @@ export default function User() {
                   value={
                     !user.lastname
                       ? ''
-                      : user.lastname == 'null'
+                      : user.lastname === 'null'
                       ? ''
                       : user.lastname
                   }

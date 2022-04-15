@@ -43,7 +43,7 @@ export default function FormLogin() {
     } else if (registerState.error) {
       setError(registerState.error);
     }
-  }, [registerState]);
+  }, [registerState, navigate]);
 
   //Data binding beetween state user and form
   const handleInputs = (event) => {

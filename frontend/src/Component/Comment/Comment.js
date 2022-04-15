@@ -5,7 +5,7 @@ import {
   postAComment,
   deleteCommentFunction,
 } from '../../redux/comments/commentsReducer';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -26,13 +26,7 @@ export default function Comment(props) {
     imageUrl: '',
   });
 
-  const [modal, setModal] = useState(false);
-
-  const toggleModal = () => {
-    setModal(!modal);
-  };
-
-  //Data binding beetween state comment and form
+   //Data binding beetween state comment and form
   const handleInputs = (event) => {
     if (event.target.classList.contains('post-comments_form-img-input')) {
       const previewUrl = URL.createObjectURL(event.target.files[0]);
@@ -88,13 +82,13 @@ export default function Comment(props) {
       dispatch(getAllComments());
       dispatch({ type: 'CLEAN-COMMENT-STATUS' });
     }
-  }, [commentState.status]);
+  }, [commentState.status, dispatch]);
   //---------------------------------------------//
 
   // Create each comment for a post
   const renderComment = () => {
     let postComment = commentState.comments.filter(
-      (comment) => comment.postId == props.postId
+      (comment) => comment.postId === props.postId
     );
     let commentArray = [];
     postComment.forEach((comment) => {
@@ -122,7 +116,7 @@ export default function Comment(props) {
                   moment(comment.createdAt).format('Do MMMM YYYY, H:mm:ss')}
               </p>
             </div>
-            {userState.userData.idUSER == comment.userId ||
+            {userState.userData.idUSER === comment.userId ||
             userState.userData.isAdmin === 1 ? (
               <div className='edit-comment-container'>
                 <img
@@ -144,7 +138,7 @@ export default function Comment(props) {
           </div>
           <p>{comment.content}</p>
           {comment.imageUrl && (
-            <img className='comment-img' src={comment.imageUrl} />
+            <img className='comment-img' src={comment.imageUrl} alt='Image du commentaire' />
           )}
         </div>
       );

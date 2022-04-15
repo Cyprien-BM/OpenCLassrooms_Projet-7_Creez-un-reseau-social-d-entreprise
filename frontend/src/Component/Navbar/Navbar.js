@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { getUserFunction } from '../../redux/user/userReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutFunction } from '../../redux/user/userReducer';
 import logoFull from '../../Assets/logo/icon-left-font-monochrome-black.png';
@@ -35,7 +34,7 @@ export default function Navbar(props) {
     if (userState.status === 'Session terminée') {
       navigate('/login');
     }
-  }, [userState.status]);
+  }, [userState.status, navigate]);
   //--------------------------------------------//
 
   return (
