@@ -8,7 +8,7 @@
   * Node.js
   * MySQL 
 
-* Cloner ce repository dans un dossier source vide
+* Clonez ce repository dans un dossier source vide
 
 ```bash
 git clone https://github.com/Cyprien-BM/P7---Groupomania-reseau-social-d-entreprise.git
@@ -64,10 +64,12 @@ DB_USER = xxxx
 DB_PASSWORD = xxxx
 TOKEN = xxxx
 ```
-où :
+* où :
   * DB_USER : le nom d'utilisateur de votre instance MySQL
   * DB_PASSWORD : le mot de passe de votre instance MySQL
   * TOKEN : Un token sécurisé à généré par vos soin (exemple : =y0kTR|{0iD?h3#r~nEkhuS4`k)d)
+
+
 
 * Toujours dans le dossier backend, créez un fichier config.json dans le dossier config
 ```bash
@@ -100,9 +102,11 @@ touch config/config.json
   }
 }
 ```
-où :
+* où :
   * username : le nom d'utilisateur de votre instance MySQL
   * password : le mot de passe de votre instance MySQL
+
+
 
 
 * Mettre en place la base de données :
