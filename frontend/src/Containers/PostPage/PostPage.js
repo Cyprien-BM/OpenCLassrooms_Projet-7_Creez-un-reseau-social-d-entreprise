@@ -57,13 +57,12 @@ export default function PostPage() {
   // Update postState and LikeState when a post is modified, deleted or liked
   useEffect(() => {
     if (
-      postState.status === 'Post modifié !' ||
+      postState.status === 'Post modifié' ||
       postState.status === 'Image supprimé' ||
       postState.status === 'Like éffectué'
     ) {
       dispatch(getOnePostFunction(postId));
       dispatch(getUserLike());
-      dispatch({ type: 'CLEAN-STATUS' });
     } else if (postState.status === 'Post supprimé') {
       navigate('/home');
     }
@@ -218,7 +217,7 @@ export default function PostPage() {
               >
                 Supprimer le post
               </button>
-              {postState.status === 'Post modifié !' && <p>Post modifié !</p>}
+              {postState.status === 'Post modifié' && <p>Post modifié !</p>}
               <div className='post-page-likes'>
                 <img
                   src={arrowUp}

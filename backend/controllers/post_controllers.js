@@ -93,7 +93,7 @@ exports.modifyAPost = (req, res, next) => {
           content: req.body.content,
           imageUrl: fileURL,
         })
-        .then(() => res.status(200).json({ message: 'Post modifié !' }))
+        .then(() => res.status(200).json({ message: 'Post modifié' }))
         .catch((error) =>
           res.status(400).json({ message: 'Impossible de modifier le post' })
         );

@@ -27,7 +27,7 @@ export default function Post(props) {
   useEffect(() => {
     if (
       postState.status === 'Post créé' ||
-      postState.status === 'Post modifié !' ||
+      postState.status === 'Post modifié' ||
       postState.status === 'Post supprimé' ||
       postState.status === 'Like éffectué' ||
       postState.status === 'Image supprimé'
