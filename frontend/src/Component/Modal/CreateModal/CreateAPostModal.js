@@ -42,8 +42,8 @@ export default function CreateAPostModal(props) {
   // Create a post
   const onSubmit = (event) => {
     event.preventDefault();
-    if (event.target.files != undefined) {
-      dispatch(createAPostFunction(post, event.target[0].files[0]));
+    if (event.target[3].files != undefined) {
+      dispatch(createAPostFunction(post, event.target[3].files[0]));
     } else {
       dispatch(createAPostFunction(post, null));
     }

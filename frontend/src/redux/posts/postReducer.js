@@ -107,6 +107,9 @@ export const createAPostFunction = (post, file) => (dispatch) => {
   data.append('content', post.content);
   data.append('image', file);
 
+  console.log(post);
+  console.log(file);
+
   axios
     .post(`${process.env.REACT_APP_API_URL}api/post/create`, data, {
       withCredentials: true,
