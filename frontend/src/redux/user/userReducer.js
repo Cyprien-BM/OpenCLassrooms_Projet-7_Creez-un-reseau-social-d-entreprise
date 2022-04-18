@@ -62,8 +62,10 @@ function userReducer(state = INITIAL_STATE, action) {
     case 'LOGOUT': {
       return {
         ...state,
-        userData: {},
         status: action.payload,
+        userData: {},
+        userLike: [],
+        otherUserData: {},
         error: '',
       };
     }

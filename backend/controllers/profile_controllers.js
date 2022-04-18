@@ -77,7 +77,6 @@ exports.modifyUserInformation = (req, res, next) => {
     raw: true,
   })
     .then((user) => {
-      console.log(user.pictureUrl);
       let imgUrl;
       if (req.file) {
         const fileName = user.pictureUrl.split('/images/')[1];
@@ -110,7 +109,6 @@ exports.modifyUserInformation = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
     })
     .catch((error) => {
-      console.log(error);
       res.status(500).json({ error });
     });
 };
@@ -137,7 +135,6 @@ exports.deleteUser = (req, res, next) => {
       })
         .then((posts) => {
           for (const post of posts) {
-            console.log('pendant');
             if (post.imageUrl != null) {
               const fileName = post.imageUrl.split('/images/')[1];
               fs.unlinkSync(`image/profile/images/${fileName}`, (error) => {
@@ -160,7 +157,6 @@ exports.deleteUser = (req, res, next) => {
           res.status(201).json({ message: 'Utilisateur Supprimé' });
         })
         .catch((error) => {
-          console.log(error);
           res.status(500).json({ error });
         });
     })

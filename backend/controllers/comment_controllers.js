@@ -18,7 +18,6 @@ exports.getCommentsFromAPost = (req, res, next) => {
   })
   .then((comments) => res.status(200).json(comments))
   .catch((error) => {
-    console.log(error);
     res.status(500).json({ message: 'Aucun commentaire trouvé' })});
 };
 

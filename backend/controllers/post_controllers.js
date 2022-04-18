@@ -282,13 +282,14 @@ exports.deletePostImage = (req, res, next) => {
     },
   })
     .then((post) => {
+      let oldImageUrl = post.imageUrl
       post
         .update({
           imageUrl: '',
         })
         .then(() => {
-          if (post.imageUrl != null) {
-            const fileName = post.imageUrl.split('/images/')[1];
+          if (oldImageUrl != null) {
+            const fileName = oldImageUrl.split('/images/')[1];
             fs.unlink(`image/posts/images/${fileName}`, (error) => {
               error;
             });
