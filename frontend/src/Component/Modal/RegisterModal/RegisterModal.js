@@ -10,7 +10,7 @@ export default function Modal() {
 
   return (
     <>
-      <button onClick={toggleModal} className='toggle-modal'>
+      <button type='button' onClick={toggleModal} className='toggle-modal'>
         ?
       </button>
       {modal && (

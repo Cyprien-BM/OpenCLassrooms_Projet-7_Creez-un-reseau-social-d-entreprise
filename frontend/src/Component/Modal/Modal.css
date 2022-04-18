@@ -82,6 +82,10 @@
 }
 
 @media all and (max-width: 767px) {
+  .overlay {
+    border-radius: 20px 20px 0 0;
+  }
+
   .toggle-modal {
     top: 172px;
     left: 125px;

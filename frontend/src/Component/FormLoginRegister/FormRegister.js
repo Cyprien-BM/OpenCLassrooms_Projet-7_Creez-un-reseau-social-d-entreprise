@@ -10,7 +10,7 @@ import Button from '../Button/Button';
 export default function FormLogin() {
   const navigate = useNavigate();
 
-  const registerState = useSelector(state => state.userReducer);
+  const registerState = useSelector((state) => state.userReducer);
 
   const [user, setUser] = useState({
     email: '',
@@ -27,41 +27,35 @@ export default function FormLogin() {
     event.preventDefault();
     if (user.email && user.password && user.nickname) {
       dispatch(registerFunction(user));
-    }
-    else (
-      setError('Veuillez remplir tous les champs')
-    )
+    } else setError('Veuillez remplir tous les champs');
   };
+  //-------------------------------------------------------//
 
   //Checking if we received user data from API, if yes : redirect to page /login
   useEffect(() => {
-    if (
-      registerState.status.message === 'Utilisateur créé'
-    ) {
-      setError();
-      navigate('/login')
+    if (registerState.status === 'Utilisateur créé') {
+      dispatch({ type: 'RESET-STATE' });
+      navigate('/login');
     } else if (registerState.error) {
       setError(registerState.error);
     }
   }, [registerState, navigate]);
+  //-------------------------------------------------------//
 
   //Data binding beetween state user and form
   const handleInputs = (event) => {
     if (event.target.classList.contains('form-log-reg_email-input')) {
       const newUserState = { ...user, email: event.target.value };
       setUser(newUserState);
-    } else if (
-      event.target.classList.contains('form-log-reg_password-input')
-    ) {
+    } else if (event.target.classList.contains('form-log-reg_password-input')) {
       const newUserState = { ...user, password: event.target.value };
       setUser(newUserState);
-    } else if (
-      event.target.classList.contains('form-log-reg_nickname-input')
-    ) {
+    } else if (event.target.classList.contains('form-log-reg_nickname-input')) {
       const newUserState = { ...user, nickname: event.target.value };
       setUser(newUserState);
     }
   };
+  //-------------------------------------------------------//
 
   return (
     <main className='form-container register'>
@@ -101,7 +95,10 @@ export default function FormLogin() {
         <div className='form-log-reg_error-container'>
           <p className='form-error'>{error}</p>
         </div>
-        <Button className='btn-component form-log-reg-button' txt='Inscription' />
+        <Button
+          className='btn-component form-log-reg-button'
+          txt='Inscription'
+        />
       </form>
       <div className='form-log-reg-container_footer-container'>
         <p className='form-log-reg-container_footer'>Déjà inscrit ?</p>

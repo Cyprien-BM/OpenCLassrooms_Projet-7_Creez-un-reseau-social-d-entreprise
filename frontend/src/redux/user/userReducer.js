@@ -143,7 +143,7 @@ export const registerFunction = (user) => (dispatch) => {
     .then((response) => {
       dispatch({
         type: 'REGISTER',
-        payload: response.data,
+        payload: response.data.message,
       });
     })
     .catch((e) => {
