@@ -165,7 +165,20 @@ export const postModificationFunction = (post, file, id) => (dispatch) => {
         payload: response.data.message,
       });
     })
-    .catch((error) => {});
+    .catch((e) => {
+      const error = e.response.data;
+      if (error.errors) {
+        dispatch({
+          type: 'POST-ERROR',
+          payload: error.errors[0].message,
+        });
+      } else {
+        dispatch({
+          type: 'POST-ERROR',
+          payload: error,
+        });
+      }
+    });
 };
 
 export const deletePostFunction = (id) => (dispatch) => {
@@ -208,5 +221,21 @@ export const deletePostImageFunction = (id) => (dispatch) => {
         type: 'POST-DELETE',
         payload: response.data.message,
       });
+    })
+    .catch((e) => {
+      const error = e.response.data;
+      if (error.errors) {
+        if (error.errors[0].message === 'Veuillez ajouter un texte ou ajouter une image') {
+          dispatch({
+            type: 'POST-ERROR',
+            payload: 'Impossible de supprimer l\'image sans ajouter de texte au préalable',
+          });
+        }
+      } else {
+        dispatch({
+          type: 'POST-ERROR',
+          payload: error,
+        });
+      }
     });
 };

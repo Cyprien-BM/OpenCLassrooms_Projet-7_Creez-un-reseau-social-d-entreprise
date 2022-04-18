@@ -132,6 +132,21 @@
 .arrow {
   cursor: pointer;
 }
+
+.post-modification_status,
+.post-modification_error {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.post-modification_status {
+  color: green;
+}
+
+.post-modification_error {
+  color: red;
+}
+
 @media all and (max-width: 992px) {
   .post-page-body {
     padding-top: 20px;

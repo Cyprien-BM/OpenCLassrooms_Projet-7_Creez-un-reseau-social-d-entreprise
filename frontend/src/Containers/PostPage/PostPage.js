@@ -57,13 +57,14 @@ export default function PostPage() {
   // Update postState and LikeState when a post is modified, deleted or liked
   useEffect(() => {
     if (
-      postState.status === 'Post modifié' ||
-      postState.status === 'Image supprimé' ||
       postState.status === 'Like éffectué'
     ) {
       dispatch(getOnePostFunction(postId));
       dispatch(getUserLike());
       dispatch({ type: 'CLEAN-STATUS' });
+    } else if (postState.status === 'Post modifié' || postState.status === 'Image supprimé') {
+      dispatch({ type: 'CLEAN-ERROR' });
+      dispatch(getOnePostFunction(postId));
     } else if (postState.status === 'Post supprimé') {
       navigate('/home');
     }
@@ -151,7 +152,7 @@ export default function PostPage() {
         <Navbar userData={userData} />
       </header>
       <main className='post-page-body'>
-        {postCreatorId === userData.idUSER || userData.isAdmin === 1 ? (
+        {parseInt(postCreatorId) === userData.idUSER || userData.isAdmin === 1 ? (
           <form onSubmit={submitForm} className='post-page-form'>
             <div className='post-page-form_media-container'>
               <label htmlFor=''>Média</label>
@@ -213,7 +214,7 @@ export default function PostPage() {
               >
                 Supprimer le post
               </button>
-              {postState.status === 'Post modifié' && <p>Post modifié !</p>}
+              {postState.error ? <p className='post-modification_error'>{postState.error}</p> : postState.status === 'Post modifié' && <p className='post-modification_status'>Post modifié !</p>}
               <div className='post-page-likes'>
                 <img
                   src={arrowUp}

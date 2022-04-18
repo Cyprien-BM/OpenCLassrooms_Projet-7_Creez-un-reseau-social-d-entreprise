@@ -138,7 +138,7 @@ export default function User() {
       <main>
         {/* IF USER VISITE HIS PROFILE OR IF HE IS ADMIN */}
 
-        {id === userData.idUSER || userData.isAdmin === 1 ? (
+        {parseInt(id) === userData.idUSER || userData.isAdmin === 1 ? (
           <>
             {modal && (
               <>

@@ -94,9 +94,7 @@ exports.modifyAPost = (req, res, next) => {
           imageUrl: fileURL,
         })
         .then(() => res.status(200).json({ message: 'Post modifié' }))
-        .catch((error) =>
-          res.status(400).json({ message: 'Impossible de modifier le post' })
-        );
+        .catch((error) => res.status(400).json(error));
     })
     .catch((error) => {
       res.status(500).json({ message: 'Post introuvable !' });
@@ -182,7 +180,6 @@ exports.likeAPost = (req, res, next) => {
         }
       },
       function (post, user, like, callback) {
-        console.log(req.body);
         if (!like && req.body.likeValue != 0) {
           Like.create({
             likeValue: req.body.likeValue,
@@ -285,20 +282,22 @@ exports.deletePostImage = (req, res, next) => {
     },
   })
     .then((post) => {
-      if (post.imageUrl != null) {
-        const fileName = post.imageUrl.split('/images/')[1];
-        fs.unlink(`image/posts/images/${fileName}`, (error) => {
-          error;
-        });
-      }
       post
         .update({
           imageUrl: '',
         })
-        .then(() => res.status(200).json({ message: 'Image supprimé' }))
-        .catch((error) =>
-          res.status(400).json({ message: "Impossible de supprimer l'image" })
-        );
+        .then(() => {
+          if (post.imageUrl != null) {
+            const fileName = post.imageUrl.split('/images/')[1];
+            fs.unlink(`image/posts/images/${fileName}`, (error) => {
+              error;
+            });
+          }
+          res.status(200).json({ message: 'Image supprimé' });
+        })
+        .catch((error) => {
+          res.status(400).json(error);
+        });
     })
     .catch(() => res.status(500).json({ message: 'Post introuvable' }));
 };
