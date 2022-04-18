@@ -16,6 +16,7 @@ import editCommentLogo from '../../Assets/logo/pen.png';
 export default function Comment(props) {
   const contentRef = useRef();
   const imgRef = useRef();
+  const inputRef = useRef();
   const dispatch = useDispatch();
 
   const commentState = useSelector((state) => state.commentsReducer);
@@ -26,7 +27,7 @@ export default function Comment(props) {
     imageUrl: '',
   });
 
-   //Data binding beetween state comment and form
+  //Data binding beetween state comment and form
   const handleInputs = (event) => {
     if (event.target.classList.contains('post-comments_form-img-input')) {
       const previewUrl = URL.createObjectURL(event.target.files[0]);
@@ -71,7 +72,7 @@ export default function Comment(props) {
   };
   //---------------------------------------------//
 
-  //Update comment state after any creation or modification
+  //Update comment state after any creation or modification and clean image preview
   useEffect(() => {
     if (
       commentState.status === 'Commentaire créé' ||
@@ -81,6 +82,10 @@ export default function Comment(props) {
     ) {
       dispatch(getAllComments());
       dispatch({ type: 'CLEAN-COMMENT-STATUS' });
+      imgRef.current.src = '';
+      inputRef.current.value = '';
+      const newCommentState = { ...comment, content: '' };
+      setComment(newCommentState);
     }
   }, [commentState.status, dispatch]);
   //---------------------------------------------//
@@ -138,7 +143,11 @@ export default function Comment(props) {
           </div>
           <p>{comment.content}</p>
           {comment.imageUrl && (
-            <img className='comment-img' src={comment.imageUrl} alt='Image du commentaire' />
+            <img
+              className='comment-img'
+              src={comment.imageUrl}
+              alt='Image du commentaire'
+            />
           )}
         </div>
       );
@@ -156,6 +165,7 @@ export default function Comment(props) {
           onBlur={loseFocus}
           className='comment-input'
           placeholder='Envie de commenter ?'
+          value={comment.content}
         ></textarea>
         <div className='post-comments_file-and-btn-container'>
           <div className='post-comments_file-container'>
@@ -167,6 +177,7 @@ export default function Comment(props) {
               className='post-comments_form-img-input'
               accept='.jpeg, .jpg, .png, .gif'
               name='image'
+              ref={inputRef}
             />
           </div>
           <button className='btn-component post-comment-button'>Envoi</button>

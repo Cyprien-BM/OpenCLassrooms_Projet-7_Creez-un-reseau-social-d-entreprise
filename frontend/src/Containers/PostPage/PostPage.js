@@ -15,6 +15,7 @@ import {
   deletePostImageFunction,
   likeFunction,
 } from '../../redux/posts/postReducer';
+import { getAllComments } from '../../redux/comments/commentsReducer';
 import Button from '../../Component/Button/Button';
 import Comment from '../../Component/Comment/Comment';
 import CommentModal from '../../Component/Modal/CreateModal/CommentModal';
@@ -39,6 +40,7 @@ export default function PostPage() {
   useEffect(() => {
     dispatch(getUserFunction());
     dispatch(getOnePostFunction(postId));
+    dispatch(getAllComments());
     if (postCreatorId !== userData.idUSER) {
       dispatch(getUserFunctionById(postCreatorId));
     }
@@ -56,13 +58,13 @@ export default function PostPage() {
 
   // Update postState and LikeState when a post is modified, deleted or liked
   useEffect(() => {
-    if (
-      postState.status === 'Like éffectué'
-    ) {
+    if (postState.status === 'Like éffectué') {
       dispatch(getOnePostFunction(postId));
       dispatch(getUserLike());
-      dispatch({ type: 'CLEAN-STATUS' });
-    } else if (postState.status === 'Post modifié' || postState.status === 'Image supprimé') {
+    } else if (
+      postState.status === 'Post modifié' ||
+      postState.status === 'Image supprimé'
+    ) {
       dispatch({ type: 'CLEAN-ERROR' });
       dispatch(getOnePostFunction(postId));
     } else if (postState.status === 'Post supprimé') {
@@ -152,7 +154,8 @@ export default function PostPage() {
         <Navbar userData={userData} />
       </header>
       <main className='post-page-body'>
-        {parseInt(postCreatorId) === userData.idUSER || userData.isAdmin === 1 ? (
+        {parseInt(postCreatorId) === userData.idUSER ||
+        userData.isAdmin === 1 ? (
           <form onSubmit={submitForm} className='post-page-form'>
             <div className='post-page-form_media-container'>
               <label htmlFor=''>Média</label>
@@ -214,7 +217,13 @@ export default function PostPage() {
               >
                 Supprimer le post
               </button>
-              {postState.error ? <p className='post-modification_error'>{postState.error}</p> : postState.status === 'Post modifié' && <p className='post-modification_status'>Post modifié !</p>}
+              {postState.error ? (
+                <p className='post-modification_error'>{postState.error}</p>
+              ) : (
+                postState.status === 'Post modifié' && (
+                  <p className='post-modification_status'>Post modifié !</p>
+                )
+              )}
               <div className='post-page-likes'>
                 <img
                   src={arrowUp}
@@ -240,7 +249,8 @@ export default function PostPage() {
                   src={arrowDown}
                   alt='Disliker le post'
                   className={
-                    'arrow ' + (isUserLikePost(post.idPOSTS) === -1 ? 'red' : '')
+                    'arrow ' +
+                    (isUserLikePost(post.idPOSTS) === -1 ? 'red' : '')
                   }
                   onClick={(event) => {
                     event.stopPropagation();
@@ -290,7 +300,8 @@ export default function PostPage() {
                   src={arrowDown}
                   alt='Disliker le post'
                   className={
-                    'arrow ' + (isUserLikePost(post.idPOSTS) === -1 ? 'red' : '')
+                    'arrow ' +
+                    (isUserLikePost(post.idPOSTS) === -1 ? 'red' : '')
                   }
                   onClick={(event) => {
                     event.stopPropagation();
