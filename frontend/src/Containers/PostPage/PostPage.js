@@ -63,6 +63,7 @@ export default function PostPage() {
     ) {
       dispatch(getOnePostFunction(postId));
       dispatch(getUserLike());
+      dispatch({ type: 'CLEAN-STATUS' });
     } else if (postState.status === 'Post supprimé') {
       navigate('/home');
     }
@@ -135,14 +136,9 @@ export default function PostPage() {
 
   //Get user likes for btn styles
   const isUserLikePost = (postId) => {
-    if (userState.userLike.length === 0) {
-      dispatch(getUserLike());
-    }
     const likeFound = userState.userLike.find((post) => post.postId === postId);
     if (likeFound) {
       return likeFound.likeValue;
-    } else {
-      return 'non';
     }
   };
 
