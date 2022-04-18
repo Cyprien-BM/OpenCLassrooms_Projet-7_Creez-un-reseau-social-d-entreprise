@@ -19,6 +19,12 @@ export default function FormLogin() {
 
   const dispatch = useDispatch();
 
+  // Clear user-error on page load
+  useEffect(() => {
+    dispatch({ type: 'USER-ERROR' });
+  }, []);
+  //-------------------------------------------------------//
+
   //Checking if we received user data from API, if yes : redirect to page /home
   useEffect(() => {
     if (loginState.status === 'Utilisateur connecté') {
@@ -28,6 +34,7 @@ export default function FormLogin() {
       setError(loginState.error);
     }
   }, [loginState, navigate]);
+  //-------------------------------------------------------//
 
   //Data binding beetween state user and form
   const handleInputs = (event) => {
@@ -39,14 +46,16 @@ export default function FormLogin() {
       setUser(newUserState);
     }
   };
+  //-------------------------------------------------------//
 
   // Connection
   const submitForm = (event) => {
     event.preventDefault();
     if (user.email && user.password) {
       dispatch(loginFunction(user));
-    }
+    } else setError('Veuillez remplir tous les champs');
   };
+  //-------------------------------------------------------//
 
   return (
     <main className='form-container login'>

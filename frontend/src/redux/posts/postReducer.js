@@ -103,7 +103,11 @@ export const getAllPostsFunction = () => (dispatch) => {
 
 export const createAPostFunction = (post, file) => (dispatch) => {
   const data = new FormData();
-  data.append('title', post.title);
+  if (!post.title) {
+    data.append('title', null);
+  } else {
+    data.append('title', post.title);
+  }
   data.append('content', post.content);
   data.append('image', file);
 

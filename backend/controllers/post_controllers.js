@@ -56,10 +56,10 @@ exports.createAPost = (req, res, next) => {
   })
     .then(() => res.status(201).json({ message: 'Post créé' }))
     .catch((error) => {
-      fs.unlink(
-        `/image/posts/images/${req.file.filename}`,
-        res.status(500).json({ error })
-      );
+      if (req.file) {
+        fs.unlink(`/image/posts/images/${req.file.filename}`);
+      }
+      res.status(500).json({ error });
     });
 };
 
