@@ -120,7 +120,10 @@ export const deleteCommentFunction = (id) => (dispatch) => {
       });
     })
     .catch((error) => {
-      console.log(error.response.data);
+      dispatch({
+        type: 'COMMENT-ERROR',
+        payload: error,
+      });
     });
 };
 

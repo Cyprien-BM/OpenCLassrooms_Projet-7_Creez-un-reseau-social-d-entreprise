@@ -57,7 +57,9 @@ exports.createAPost = (req, res, next) => {
     .then(() => res.status(201).json({ message: 'Post créé' }))
     .catch((error) => {
       if (req.file) {
-        fs.unlink(`/image/posts/images/${req.file.filename}`);
+        fs.unlink(`image/posts/images/${req.file.filename}`, (error) => {
+          error;
+        });
       }
       res.status(500).json({ error });
     });
@@ -282,7 +284,7 @@ exports.deletePostImage = (req, res, next) => {
     },
   })
     .then((post) => {
-      let oldImageUrl = post.imageUrl
+      let oldImageUrl = post.imageUrl;
       post
         .update({
           imageUrl: '',

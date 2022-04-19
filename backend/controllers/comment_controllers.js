@@ -1,10 +1,6 @@
 const db = require('../models');
-const asyncLib = require('async');
 const fs = require('fs');
 
-const Post = db.posts;
-const User = db.users;
-const Like = db.like;
 const Comment = db.comment;
 
 exports.getCommentsFromAPost = (req, res, next) => {
@@ -38,7 +34,9 @@ exports.createComment = (req, res, next) => {
     .then(() => res.status(201).json({ message: 'Commentaire créé' }))
     .catch((error) => {
       if (req.file) {
-        fs.unlink(`/image/posts/images/${req.file.filename}`);
+        fs.unlink(`image/posts/images/${req.file.filename}`, (error) => {
+          error;
+        });
       }
       res.status(500).json({ error });
     });

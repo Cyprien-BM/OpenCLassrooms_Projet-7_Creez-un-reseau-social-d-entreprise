@@ -62,6 +62,7 @@ export default function PostPage() {
     if (postState.status === 'Like éffectué') {
       dispatch(getOnePostFunction(postId));
       dispatch(getUserLike());
+      dispatch({ type: 'CLEAN-STATUS' });
     } else if (
       postState.status === 'Post modifié' ||
       postState.status === 'Image supprimé'

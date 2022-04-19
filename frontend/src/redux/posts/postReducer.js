@@ -225,10 +225,14 @@ export const deletePostImageFunction = (id) => (dispatch) => {
     .catch((e) => {
       const error = e.response.data;
       if (error.errors) {
-        if (error.errors[0].message === 'Veuillez ajouter un texte ou ajouter une image') {
+        if (
+          error.errors[0].message ===
+          'Veuillez ajouter un texte ou ajouter une image'
+        ) {
           dispatch({
             type: 'POST-ERROR',
-            payload: 'Impossible de supprimer l\'image sans ajouter de texte au préalable',
+            payload:
+              "Impossible de supprimer l'image sans ajouter de texte au préalable",
           });
         }
       } else {

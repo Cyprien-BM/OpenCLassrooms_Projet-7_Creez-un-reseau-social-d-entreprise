@@ -35,6 +35,7 @@
   border-radius: 50%;
   border: 1px black solid;
   object-fit: cover;
+  margin-bottom: 1rem;
 }
 
 .user_data-container {
@@ -95,6 +96,14 @@
 
 .form-user-button::after {
   border-radius: 20px;
+}
+
+.user-modification_error {
+  color: red;
+}
+
+.users-link {
+  width: 100%;
 }
 
 @media all and (max-width: 992px) {

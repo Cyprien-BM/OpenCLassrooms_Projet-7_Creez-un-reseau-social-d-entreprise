@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../../Component/Navbar/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import {
   getUserFunction,
   changeUserDataFunction,
@@ -34,16 +34,25 @@ export default function User() {
     setModal(!modal);
   };
 
-  const [user, setUser] = useState(userData ? userData : {});
+  const [user, setUser] = useState({});
 
   //Get user(s) data after page load
   useEffect(() => {
     dispatch(getUserFunction());
     if (id !== userData.idUSER) {
       dispatch(getUserFunctionById(id));
+    } else {
+      const newUserState = { ...user, ...userData };
+      setUser(newUserState);
     }
   }, []);
   //----------------------------------------------//
+
+  // Get correct user data when admin visit user page
+  useEffect(() => {
+    const newUserState = { ...user, ...otherUserData };
+    setUser(newUserState);
+  }, [otherUserData]);
 
   //Checking if cookie exist/is valid. If not : clear userReducer state and redirect to login page
   useEffect(() => {
@@ -54,24 +63,25 @@ export default function User() {
   }, [userError, dispatch, navigate]);
   //----------------------------------------------//
 
-  // When userData from reducer change, set user state to userData
-  useEffect(() => {
-    const userStateCopy = { ...user };
-    const newUserState = Object.assign(userStateCopy, userData);
-    setUser(newUserState);
-  }, [userData]);
-  //----------------------------------------------//
-
   //Update userState after modification, navigate to login if user deleted
   useEffect(() => {
     if (userState === 'Profil modifié !' || userState === 'Image supprimé') {
-      dispatch(getUserFunction());
+      if (parseInt(id) !== userData.idUSER) {
+        dispatch(getUserFunctionById(id));
+      } else {
+        dispatch(getUserFunction());
+      }
       dispatch(getAllPostsFunction());
       dispatch(resetStateFunction());
     }
     if (userState === 'Utilisateur Supprimé') {
-      navigate('/login');
-      window.location.reload(false);
+      dispatch({ type: 'RESET-STATE', payload: '' });
+      if (userData.isAdmin === 1) {
+        dispatch(getAllPostsFunction());
+        navigate('/home');
+      } else {
+        navigate('/login');
+      }
     }
   }, [userState, dispatch, navigate]);
   //----------------------------------------------//
@@ -116,7 +126,7 @@ export default function User() {
       "Etes vous sûr de vouloir supprimer l'utilisateur ?"
     );
     if (answer) {
-      dispatch(deleteUserFunction(id));
+      dispatch(deleteUserFunction(id, userData.isAdmin));
     }
   };
 
@@ -231,6 +241,11 @@ export default function User() {
                 />
               </div>
               <div className='user-form_btn-container'>
+                {userError ? (
+                  <p className='user-modification_error'>{userError}</p>
+                ) : (
+                  ''
+                )}
                 <Button
                   className='btn-component form-user-button'
                   txt='Modifier le profil'
@@ -249,6 +264,16 @@ export default function User() {
                 >
                   Supprimer
                 </button>
+                {userData.isAdmin === 1 && (
+                  <Link className='users-link' to={`/users`}>
+                    <button
+                      type='button'
+                      className='btn-component form-user-button'
+                    >
+                      Liste d'utilisateurs
+                    </button>
+                  </Link>
+                )}
               </div>
             </form>
 
@@ -276,7 +301,7 @@ export default function User() {
                 <p className='user_data-title'>Nom</p>
                 <p className='user_data-content'>
                   {otherUserData.lastname
-                    ? otherUserData.firstname
+                    ? otherUserData.lastname
                     : 'Non renseigné'}
                 </p>
               </div>

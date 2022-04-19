@@ -10,7 +10,6 @@ router.post('/create', auth, multer, postControllers.createAPost);
 router.put('/:id', auth, multer, postControllers.modifyAPost);
 router.delete('/:id', auth, postControllers.deleteAPost);
 router.delete('/image/:id', auth, postControllers.deletePostImage);
-router.post('/like/:id', auth, postControllers.likeAPost)
-
+router.post('/like/:id', auth, postControllers.likeAPost);
 
 module.exports = router;

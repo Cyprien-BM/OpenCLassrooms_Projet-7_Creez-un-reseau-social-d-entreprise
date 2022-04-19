@@ -3,6 +3,7 @@ import axios from 'axios';
 const INITIAL_STATE = {
   status: '',
   userData: {},
+  usersList: [],
   userLike: [],
   otherUserData: {},
   error: '',
@@ -39,6 +40,12 @@ function userReducer(state = INITIAL_STATE, action) {
         };
       }
     }
+    case 'GET-ALL-USERS': {
+      return {
+        ...state,
+        usersList: action.payload,
+      };
+    }
     case 'GET-USER-LIKE': {
       return {
         ...state,
@@ -69,11 +76,26 @@ function userReducer(state = INITIAL_STATE, action) {
         error: '',
       };
     }
+    case 'USER-IMAGE-DELETE': {
+      return {
+        ...state,
+        status: action.payload,
+        error: '',
+      };
+    }
     case 'USER-DELETE': {
       return {
         ...state,
         status: action.payload,
         userData: {},
+        otherUserData: {},
+        error: '',
+      };
+    }
+    case 'USER-DELETE-BY-ADMIN': {
+      return {
+        ...state,
+        status: action.payload,
         otherUserData: {},
         error: '',
       };
@@ -198,6 +220,40 @@ export const getUserFunction = () => async (dispatch) => {
     });
 };
 
+export const getAllUsersFunction = () => (dispatch) => {
+  axios
+    .get(`${process.env.REACT_APP_API_URL}api/profile/users`, {
+      withCredentials: true,
+    })
+    .then((response) => {
+      if (Object.keys(response.data).length === 0) {
+        dispatch({
+          type: 'USER-ERROR',
+          payload: 'empty user',
+        });
+      } else {
+        dispatch({
+          type: 'GET-ALL-USERS',
+          payload: response.data,
+        });
+      }
+    })
+    .catch((e) => {
+      const error = e.response.data;
+      if (error.message) {
+        dispatch({
+          type: 'USER-ERROR',
+          payload: error.message,
+        });
+      } else {
+        dispatch({
+          type: 'USER-ERROR',
+          payload: error,
+        });
+      }
+    });
+};
+
 export const getUserFunctionById = (id) => async (dispatch) => {
   await axios
     .get(`${process.env.REACT_APP_API_URL}api/profile/user/${id}`, {
@@ -250,7 +306,20 @@ export const changeUserDataFunction = (user, file, id) => (dispatch) => {
         payload: response.data.message,
       });
     })
-    .catch((error) => {});
+    .catch((e) => {
+      const error = e.response.data.error;
+      if (error.errors) {
+        dispatch({
+          type: 'USER-ERROR',
+          payload: error.errors[0].message,
+        });
+      } else {
+        dispatch({
+          type: 'USER-ERROR',
+          payload: error,
+        });
+      }
+    });
 };
 
 export const resetStateFunction = () => (dispatch) => {
@@ -291,16 +360,24 @@ export const changePasswordFunction = (password, id) => (dispatch) => {
     });
 };
 
-export const deleteUserFunction = (id) => (dispatch) => {
+export const deleteUserFunction = (id, isAdmin) => (dispatch) => {
   axios
     .delete(`${process.env.REACT_APP_API_URL}api/profile/delete/${id}`, {
+      data: { isAdmin },
       withCredentials: true,
     })
     .then((response) => {
-      dispatch({
-        type: 'USER-DELETE',
-        payload: response.data.message,
-      });
+      if (isAdmin !== 1) {
+        dispatch({
+          type: 'USER-DELETE',
+          payload: response.data.message,
+        });
+      } else {
+        dispatch({
+          type: 'USER-DELETE-BY-ADMIN',
+          payload: response.data.message,
+        });
+      }
     });
 };
 
@@ -324,7 +401,7 @@ export const deleteUserImageFunction = (id) => (dispatch) => {
     })
     .then((response) => {
       dispatch({
-        type: 'USER-DELETE',
+        type: 'USER-IMAGE-DELETE',
         payload: response.data.message,
       });
     });

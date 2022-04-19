@@ -45,8 +45,8 @@ export default function CreateAPostModal(props) {
     if (!post.title) {
       dispatch({
         type: 'POST-ERROR',
-        payload: 'Veuillez rentrer un titre'
-      })
+        payload: 'Veuillez rentrer un titre',
+      });
     } else if (event.target[3].files.length !== 0) {
       dispatch(createAPostFunction(post, event.target[3].files[0]));
     } else {

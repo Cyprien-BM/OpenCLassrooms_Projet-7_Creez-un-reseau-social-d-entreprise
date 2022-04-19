@@ -14,6 +14,7 @@ import arrowDown from '../../Assets/logo/arrow-down.svg';
 import './Post.css';
 import Comment from '../Comment/Comment';
 
+
 moment.updateLocale('fr', localization);
 
 export default function Post(props) {
@@ -121,7 +122,8 @@ export default function Post(props) {
                   src={arrowDown}
                   alt='Disliker le post'
                   className={
-                    'arrow ' + (isUserLikePost(post.idPOSTS) === -1 ? 'red' : '')
+                    'arrow ' +
+                    (isUserLikePost(post.idPOSTS) === -1 ? 'red' : '')
                   }
                   onClick={(event) => {
                     event.stopPropagation();
@@ -134,7 +136,11 @@ export default function Post(props) {
               <h2>{post.title}</h2>
               <p className='post-txt'>{post.content}</p>
               {post.imageUrl && (
-                <img src={post.imageUrl} alt='Image du post' className='post-img' />
+                <img
+                  src={post.imageUrl}
+                  alt='Image du post'
+                  className='post-img'
+                />
               )}
             </div>
           </div>

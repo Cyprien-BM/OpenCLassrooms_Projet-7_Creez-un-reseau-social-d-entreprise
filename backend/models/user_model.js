@@ -43,9 +43,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     nickname: {
-      unique: true,
       type: DataTypes.STRING(30),
       allowNull: false,
+      unique: {
+        msg: 'Ce pseudo est déjà utilisé'
+      },
       validate: {
         len: {
           args: [4,30],
@@ -61,6 +63,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     pictureUrl: {
       type: DataTypes.STRING(500),
+      defaultValue: 'localhost:3000/image/profile/Default.png',
     },
     isAdmin: {
       type: DataTypes.BOOLEAN,
