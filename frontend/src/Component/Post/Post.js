@@ -134,7 +134,7 @@ export default function Post(props) {
               <h2>{post.title}</h2>
               <p className='post-txt'>{post.content}</p>
               {post.imageUrl && (
-                <img src={post.imageUrl} alt='' className='post-img' />
+                <img src={post.imageUrl} alt='Image du post' className='post-img' />
               )}
             </div>
           </div>

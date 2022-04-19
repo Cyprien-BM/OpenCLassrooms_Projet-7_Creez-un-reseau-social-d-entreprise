@@ -36,11 +36,12 @@ export default function PostPage() {
 
   const [post, setPost] = useState(postState.post ? postState.post : {});
 
-  //Get user after page loaded (visitor and eventualy user visited if they are different)
+  //Get user after page loaded (visitor and eventualy user visited if they are different), get comment, post and clean error
   useEffect(() => {
     dispatch(getUserFunction());
     dispatch(getOnePostFunction(postId));
     dispatch(getAllComments());
+    dispatch({ type: 'COMMENT-CLEAN-ERROR' });
     if (postCreatorId !== userData.idUSER) {
       dispatch(getUserFunctionById(postCreatorId));
     }
@@ -271,6 +272,8 @@ export default function PostPage() {
                   onClick={(event) => {
                     event.stopPropagation();
                   }}
+                  target='_blank'
+                  rel='noopener noreferrer'
                 >
                   <img className='post-page_image' src={post.imageUrl} alt='' />
                 </a>
@@ -312,10 +315,12 @@ export default function PostPage() {
             </div>
           </>
         )}
-        <Comment
-          postId={post.idPOSTS}
-          toggleCommentModal={toggleCommentModal}
-        />
+        <div className='post-page_comment'>
+          <Comment
+            postId={post.idPOSTS}
+            toggleCommentModal={toggleCommentModal}
+          />
+        </div>
         {commentModal.status && (
           <CommentModal
             toggleCommentModal={toggleCommentModal}

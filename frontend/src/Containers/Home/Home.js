@@ -50,6 +50,7 @@ export default function Home() {
       dispatch(getUserLike());
     }
     dispatch(getUserFunction());
+    dispatch({ type: 'COMMENT-CLEAN-ERROR' });
   }, []);
   //----------------------------------------------//
 

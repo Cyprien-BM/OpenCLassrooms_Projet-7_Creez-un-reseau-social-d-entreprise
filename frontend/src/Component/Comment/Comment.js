@@ -90,6 +90,21 @@ export default function Comment(props) {
   }, [commentState.status, dispatch]);
   //---------------------------------------------//
 
+  // Timer for display error when trying to comment
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (commentState.error !== '') {
+      setVisible(!visible);
+      const timer = setTimeout(() => {
+        setVisible(false);
+        dispatch({ type: 'COMMENT-CLEAN-ERROR' });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [commentState.error]);
+  //---------------------------------------------//
+
   // Create each comment for a post
   const renderComment = () => {
     let postComment = commentState.comments.filter(
@@ -143,11 +158,17 @@ export default function Comment(props) {
           </div>
           <p>{comment.content}</p>
           {comment.imageUrl && (
-            <img
-              className='comment-img'
-              src={comment.imageUrl}
-              alt='Image du commentaire'
-            />
+            <a
+              href={comment.imageUrl}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <img
+                className='comment-img'
+                src={comment.imageUrl}
+                alt='Image du commentaire'
+              />
+            </a>
           )}
         </div>
       );
@@ -183,9 +204,7 @@ export default function Comment(props) {
           <button className='btn-component post-comment-button'>Envoi</button>
         </div>
         <img src='' alt='' className='post-comments-img_preview' ref={imgRef} />
-        {commentState.error && (
-          <p className='form-error'>{commentState.error}</p>
-        )}
+        {visible && <p className='form-error'>{commentState.error}</p>}
       </form>
       <>{renderComment()}</>
     </div>

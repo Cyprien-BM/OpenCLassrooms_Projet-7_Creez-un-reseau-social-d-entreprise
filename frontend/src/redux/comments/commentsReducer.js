@@ -145,7 +145,6 @@ export const modifyAComment = (comment, file) => (dispatch) => {
     })
     .catch((e) => {
       const error = e.response.data.error;
-      console.log(e.response.data);
       if (error.errors) {
         dispatch({
           type: 'COMMENT-ERROR',
@@ -171,8 +170,24 @@ export const deleteCommentImageFunction = (id) => (dispatch) => {
         payload: response.data.message,
       });
     })
-    .catch((error) => {
-      console.log(error.response.data);
+    .catch((e) => {
+      const error = e.response.data;
+      if (error.errors) {
+        if (
+          error.errors[0].message ===
+          'Veuillez ajouter un texte ou ajouter une image'
+        ) {
+          dispatch({
+            type: 'COMMENT-ERROR',
+            payload:
+              "Impossible de supprimer l'image sans ajouter de texte au préalable",
+          });
+        }
+      } else {
+        dispatch({
+          type: 'COMMENT-ERROR',
+          payload: error,
+        });
+      }
     });
 };
-

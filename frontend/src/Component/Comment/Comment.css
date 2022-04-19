@@ -1,7 +1,7 @@
 .post-comments-container {
   padding: 0px 40px 20px 20px;
   position: relative;
-  width: 50%;
+  width: 100%;
 }
 
 .post-comments-container form {
@@ -141,14 +141,12 @@
 @media all and (min-width: 768px) and (max-width: 991px) {
   .post-comments-container {
     padding: 10px 10px;
-    width: 80%;
   }
 }
 
 @media all and (max-width: 767px) {
   .post-comments-container {
     padding: 10px 10px;
-    width: 80%;
   }
 
   .edit-comment-img {

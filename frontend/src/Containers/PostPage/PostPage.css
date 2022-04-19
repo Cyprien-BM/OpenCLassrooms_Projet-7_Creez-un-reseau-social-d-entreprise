@@ -147,6 +147,10 @@
   color: red;
 }
 
+.post-page_comment {
+  width: 50%;
+}
+
 @media all and (max-width: 992px) {
   .post-page-body {
     padding-top: 20px;
@@ -185,5 +189,10 @@
   .post-page-img_preview {
     width: 50%;
     max-height: 400px;
+  }
+
+  .post-page_comment {
+    width: 
+    100%;
   }
 }
