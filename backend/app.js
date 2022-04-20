@@ -9,6 +9,7 @@ const postRoutes = require('./routes/post_routes');
 const commentRoutes = require('./routes/comment_routes');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+require('dotenv').config();
 
 const app = express();
 
@@ -18,7 +19,7 @@ const oneDay = 1000 * 60 * 60 * 24;
 
 app.use(
   session({
-    secret: '!Ni%f~ufG+#To<Jp>GU$X,Lc_17q.WOzVT_rtCj=S28WKg!Tp.F|lJ_NiNuBf3',
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
     cookie: { maxAge: oneDay, sameSite: 'strict' },
     resave: false,

@@ -8,22 +8,61 @@ const User = db.users;
 const token = process.env.TOKEN;
 
 exports.signeUp = (req, res, next) => {
-  bcrypt
-    .hash(req.body.password, 10)
-    .then((hash) => {
-      User.create({
-        email: req.body.email,
-        password: hash,
-        nickname: req.body.nickname,
-        pictureUrl: `${req.protocol}://${req.get(
-          'host'
-        )}/image/profile/Default.png`,
-      })
-        .then(() => res.status(201).json({ message: 'Utilisateur créé' }))
-        .catch((error) => res.status(400).json({ error }));
+  User.findAll()
+    .then((users) => {
+      if (users.length === 0) {
+        bcrypt
+          .hash(req.body.password, 10)
+          .then((hash) => {
+            User.create({
+              email: req.body.email,
+              password: hash,
+              nickname: req.body.nickname,
+              pictureUrl: `${req.protocol}://${req.get(
+                'host'
+              )}/image/profile/Default.png`,
+              isAdmin: true,
+            })
+              .then(() => res.status(201).json({ message: 'Utilisateur créé' }))
+              .catch((error) => res.status(400).json({ error }));
+          })
+          .catch((error) => res.status(500).json({ error }));
+      } else {
+        bcrypt
+          .hash(req.body.password, 10)
+          .then((hash) => {
+            User.create({
+              email: req.body.email,
+              password: hash,
+              nickname: req.body.nickname,
+              pictureUrl: `${req.protocol}://${req.get(
+                'host'
+              )}/image/profile/Default.png`,
+            })
+              .then(() => res.status(201).json({ message: 'Utilisateur créé' }))
+              .catch((error) => res.status(400).json({ error }));
+          })
+          .catch((error) => res.status(500).json({ error }));
+      }
     })
     .catch((error) => res.status(500).json({ error }));
 };
+
+  // bcrypt
+  //   .hash(req.body.password, 10)
+  //   .then((hash) => {
+  //     User.create({
+  //       email: req.body.email,
+  //       password: hash,
+  //       nickname: req.body.nickname,
+  //       pictureUrl: `${req.protocol}://${req.get(
+  //         'host'
+  //       )}/image/profile/Default.png`,
+  //     })
+  //       .then(() => res.status(201).json({ message: 'Utilisateur créé' }))
+  //       .catch((error) => res.status(400).json({ error }));
+  //   })
+  // .catch((error) => res.status(500).json({ error }));
 
 exports.login = (req, res, next) => {
   User.findOne({

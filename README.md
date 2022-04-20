@@ -62,11 +62,13 @@ npm install
 ```bash
 DB_USER = xxxx
 DB_PASSWORD = xxxx
+SESSION_SECRET = xxxx
 TOKEN = xxxx
 ```
 * où :
   * DB_USER : le nom d'utilisateur de votre instance MySQL
   * DB_PASSWORD : le mot de passe de votre instance MySQL
+  * SESSION_SECRET : Un token sécurisé à généré par vos soin pour la gestion de session (exemple : Jp>GU$X,Lc_17q.WOzVT_rtCj=S28WK)
   * TOKEN : Un token sécurisé à généré par vos soin (exemple : =y0kTR|{0iD?h3#r~nEkhuS4`k)d)
 
 
@@ -125,7 +127,7 @@ touch config/config.json
     ```bash
     sequelize db:migrate
     ```
-        ou
+    ou
     ```bash
     npx sequelize db:migrate
     ```
@@ -150,29 +152,4 @@ Listening on port 3000
 
 * Dans votre naviguateur rendez vous sur le page http://localhost:8080/login si elle n'est pas déjà ouverte
 
-* Cliquez sur 'Inscription' puis créez le premier compte qui servira de compte admin
-
-* Ouvrez un deuxième terminal et connectez vous à mysql depuis celui-ci
-
-* Connectez-vous à la base de données créée (normalement : groupomania_development)
-```bash
-mysql> use groupomania_development
-```
-* Importer la commande mySQL setAdmin.sql du dossier source
-```bash
-mysql> source 'chemin vers le fichier'\setAdmin.sql
-```
-
-* Le premier utilisateur créé (avec idUSER = 1) est maintenant l'admin, vous pouvez vérifier celà dans votre terminal mysql grâce à la commande :
-```bash
-mysql> SELECT isAdmin FROM users WHERE idUSER =1;
-```
-
-Résultat attendu :
-```bash
-+---------+
-| isAdmin |
-+---------+
-|       1 |
-+---------+
-```
+* Cliquez sur 'Inscription' puis créez le premier compte qui sera le compte admin

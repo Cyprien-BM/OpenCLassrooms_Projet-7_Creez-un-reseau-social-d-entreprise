@@ -11,6 +11,7 @@ import {
   deleteUserImageFunction,
 } from '../../redux/user/userReducer';
 import { getAllPostsFunction } from '../../redux/posts/postReducer';
+import { getAllComments } from '../../redux/comments/commentsReducer';
 import './User.css';
 import Button from '../../Component/Button/Button';
 import PasswordModal from '../../Component/Modal/PasswordModificationModal/PasswordModal';
@@ -53,6 +54,7 @@ export default function User() {
     const newUserState = { ...user, ...otherUserData };
     setUser(newUserState);
   }, [otherUserData]);
+  //----------------------------------------------//
 
   //Checking if cookie exist/is valid. If not : clear userReducer state and redirect to login page
   useEffect(() => {
@@ -72,6 +74,7 @@ export default function User() {
         dispatch(getUserFunction());
       }
       dispatch(getAllPostsFunction());
+      dispatch(getAllComments());
       dispatch(resetStateFunction());
     }
     if (userState === 'Utilisateur Supprimé') {
@@ -84,14 +87,6 @@ export default function User() {
       }
     }
   }, [userState, dispatch, navigate]);
-  //----------------------------------------------//
-
-  // Navigate to login if connection/cookie lost
-  useEffect(() => {
-    if (userState.error === '403: unauthorized request') {
-      navigate('/login');
-    }
-  }, [userState.error, navigate]);
   //----------------------------------------------//
 
   //Data binding beetween state user and form

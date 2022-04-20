@@ -175,7 +175,9 @@ exports.deleteUser = (req, res, next) => {
             }
           }
         })
-        .catch((error) => res.status(502).json({ error }));
+        .catch((error) => {
+          res.status(502).json({ error });
+        });
 
       // Delete user
       User.destroy({

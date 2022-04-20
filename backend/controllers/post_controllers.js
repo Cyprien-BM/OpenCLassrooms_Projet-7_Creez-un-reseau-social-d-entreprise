@@ -287,7 +287,7 @@ exports.deletePostImage = (req, res, next) => {
       let oldImageUrl = post.imageUrl;
       post
         .update({
-          imageUrl: '',
+          imageUrl: null,
         })
         .then(() => {
           if (oldImageUrl != null) {

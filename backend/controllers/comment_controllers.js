@@ -116,18 +116,19 @@ exports.deleteImageComment = (req, res, next) => {
       let oldImageUrl = comment.imageUrl;
       comment
         .update({
-          imageUrl: '',
+          imageUrl: null,
         })
         .then(() => {
           if (oldImageUrl != null) {
-            const fileName = comment.imageUrl.split('/images/')[1];
+            const fileName = oldImageUrl.split('/images/')[1];
             fs.unlink(`image/posts/images/${fileName}`, (error) => {
               error;
             });
           }
           res.status(200).json({ message: 'Image supprimé' });
         })
-        .catch((error) => res.status(400).json(error));
+        .catch((error) => {
+          res.status(400).json(error)});
     })
     .catch(() =>
       res.status(500).json({ message: 'Commentaire introuvable !' })

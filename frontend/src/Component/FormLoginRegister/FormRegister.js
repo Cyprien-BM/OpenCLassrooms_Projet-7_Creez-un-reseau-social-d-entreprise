@@ -9,6 +9,7 @@ import Button from '../Button/Button';
 
 export default function FormLogin() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const registerState = useSelector((state) => state.userReducer);
 
@@ -19,8 +20,6 @@ export default function FormLogin() {
   });
 
   const [error, setError] = useState();
-
-  const dispatch = useDispatch();
 
   // Register
   const submitForm = (event) => {
