@@ -21,6 +21,7 @@ export default function User() {
   const dispatch = useDispatch();
 
   const { id } = useParams();
+  console.log(id);
 
   const ref = useRef();
 
@@ -35,12 +36,12 @@ export default function User() {
     setModal(!modal);
   };
 
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(userData && userData);
 
   //Get user(s) data after page load
   useEffect(() => {
     dispatch(getUserFunction());
-    if (id !== userData.idUSER) {
+    if (parseInt(id) !== userData.idUSER) {
       dispatch(getUserFunctionById(id));
     } else {
       const newUserState = { ...user, ...userData };
@@ -49,12 +50,28 @@ export default function User() {
   }, []);
   //----------------------------------------------//
 
+  //Change user data when id URL change
+  useEffect(() => {
+    dispatch(getUserFunction());
+    if (parseInt(id) !== userData.idUSER) {
+      dispatch(getUserFunctionById(id));
+    } else {
+      const newUserState = { ...user, ...userData };
+      setUser(newUserState);
+    }
+  }, [id]);
+  //----------------------------------------------//
+
   // Get correct user data when admin visit user page
   useEffect(() => {
-    const newUserState = { ...user, ...otherUserData };
-    setUser(newUserState);
+    if (parseInt(id) !== userData.idUSER) {
+      const newUserState = { ...user, ...otherUserData };
+      setUser(newUserState);
+    }
   }, [otherUserData]);
-  //----------------------------------------------//
+  // ----------------------------------------------//
+
+  console.log(parseInt(id) !== userData.idUSER);
 
   //Checking if cookie exist/is valid. If not : clear userReducer state and redirect to login page
   useEffect(() => {
@@ -65,7 +82,7 @@ export default function User() {
   }, [userError, dispatch, navigate]);
   //----------------------------------------------//
 
-  //Update userState after modification, navigate to login if user deleted
+  //Update States after modification, navigate to login if user deleted
   useEffect(() => {
     if (userState === 'Profil modifié !' || userState === 'Image supprimé') {
       if (parseInt(id) !== userData.idUSER) {
@@ -134,6 +151,8 @@ export default function User() {
     }
   };
   //----------------------------------------------//
+
+  console.log(user);
 
   return (
     <div className='user-page'>

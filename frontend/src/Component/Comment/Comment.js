@@ -180,26 +180,31 @@ export default function Comment(props) {
   return (
     <div className='post-comments-container'>
       <form onSubmit={submitForm} action=''>
-        <textarea
-          ref={contentRef}
-          onInput={autoGrow}
-          onBlur={loseFocus}
-          className='comment-input'
-          placeholder='Envie de commenter ?'
-          value={comment.content}
-        ></textarea>
+        <label className='post-comments_content-label'>
+          Ajouter un commentaire ?
+          <textarea
+            ref={contentRef}
+            onInput={autoGrow}
+            onBlur={loseFocus}
+            className='comment-input'
+            placeholder='Envie de commenter ?'
+            value={comment.content}
+          ></textarea>
+        </label>
+
         <div className='post-comments_file-and-btn-container'>
           <div className='post-comments_file-container'>
-            <label htmlFor='post-comments_form-img'>Ajouter une photo ?</label>
-            <input
-              onInput={handleInputs}
-              type='file'
-              id='post-comments_form-img'
-              className='post-comments_form-img-input'
-              accept='.jpeg, .jpg, .png, .gif'
-              name='image'
-              ref={inputRef}
-            />
+            <label className='post-comments_file-label'>
+              Ajouter une photo ?
+              <input
+                onInput={handleInputs}
+                type='file'
+                className='post-comments_form-img-input'
+                accept='.jpeg, .jpg, .png, .gif'
+                name='image'
+                ref={inputRef}
+              />
+            </label>
           </div>
           <button className='btn-component post-comment-button'>Envoi</button>
         </div>

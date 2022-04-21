@@ -5,7 +5,7 @@
 ## Instructions préliminaires : 
 
 * Pour ce projet il vous faudra avoir installé :
-  * Node.js
+  * Node.js (Projet développé avec la v14.17.6)
   * MySQL 
 
 * Clonez ce repository dans un dossier source vide
