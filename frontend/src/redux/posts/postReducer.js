@@ -20,36 +20,63 @@ function postReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         post: action.payload,
+        error: '',
       };
     }
     case 'CREATE-POST': {
+      const newPostsArray = [...state.posts];
+      newPostsArray.unshift(action.payload);
       return {
         ...state,
-        status: action.payload,
+        posts: newPostsArray,
+        status: 'Post créé',
+        error: '',
       };
     }
     case 'POST-MODIFICATION': {
+      const newPostsArray = [...state.posts];
+      const postIndex = newPostsArray.findIndex(
+        (post) => post.idPOSTS === action.payload.idPOSTS
+      );
+      const newPost = { ...newPostsArray[postIndex], ...action.payload };
+      newPostsArray[postIndex] = newPost;
       return {
         ...state,
-        status: action.payload,
+        posts: newPostsArray,
+        post: newPost,
         error: '',
       };
     }
     case 'POST-DELETE': {
+      const newPostsArray = [...state.posts];
+      const postIndex = newPostsArray.findIndex(
+        (post) => post.idPOSTS === action.payload
+      );
+      newPostsArray.splice(postIndex, 1)
       return {
         ...state,
         post: {},
-        status: action.payload,
+        posts: newPostsArray,
+        status: 'Post supprimé',
         error: '',
       };
     }
     case 'POST-LIKE': {
+      const newPostsArray = [...state.posts];
+      const postIndex = newPostsArray.findIndex(
+        (post) => post.idPOSTS === action.payload.idPOSTS
+      );
+      const newPost = { ...newPostsArray[postIndex], ...action.payload };
+      newPostsArray[postIndex].likes = action.payload.likes;
       return {
         ...state,
-        status: action.payload,
+        posts: newPostsArray,
+        post: newPost,
+        status: 'like effectué',
+        error: '',
       };
     }
-    case 'CLEAN-STATUS': {
+    case 'POST-CLEAN-STATUS': {
       return {
         ...state,
         status: '',
@@ -118,7 +145,7 @@ export const createAPostFunction = (post, file) => (dispatch) => {
     .then((response) => {
       dispatch({
         type: 'CREATE-POST',
-        payload: response.data.message,
+        payload: response.data,
       });
     })
     .catch((e) => {
@@ -162,7 +189,7 @@ export const postModificationFunction = (post, file, id) => (dispatch) => {
     .then((response) => {
       dispatch({
         type: 'POST-MODIFICATION',
-        payload: response.data.message,
+        payload: response.data,
       });
     })
     .catch((e) => {
@@ -186,11 +213,25 @@ export const deletePostFunction = (id) => (dispatch) => {
     .delete(`${process.env.REACT_APP_API_URL}api/post/${id}`, {
       withCredentials: true,
     })
-    .then((response) => {
+    .then(() => {
       dispatch({
         type: 'POST-DELETE',
-        payload: response.data.message,
+        payload: parseInt(id),
       });
+    })
+    .catch((e) => {
+      const error = e.response.data;
+      if (error.errors) {
+        dispatch({
+          type: 'POST-ERROR',
+          payload: error.errors[0].message,
+        });
+      } else {
+        dispatch({
+          type: 'POST-ERROR',
+          payload: error,
+        });
+      }
     });
 };
 
@@ -206,7 +247,7 @@ export const likeFunction = (likeValue, id) => (dispatch) => {
     .then((response) => {
       dispatch({
         type: 'POST-LIKE',
-        payload: response.data.message,
+        payload: response.data,
       });
     });
 };
@@ -218,8 +259,8 @@ export const deletePostImageFunction = (id) => (dispatch) => {
     })
     .then((response) => {
       dispatch({
-        type: 'POST-DELETE',
-        payload: response.data.message,
+        type: 'POST-MODIFICATION',
+        payload: response.data,
       });
     })
     .catch((e) => {

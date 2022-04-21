@@ -15,6 +15,8 @@ function commentsReducer(state = INITIAL_STATE, action) {
       };
     }
     case 'POST-A-COMMENT': {
+      const newCommentsArray = [...state.comments];
+      newCommentsArray.push(action.payload);
       return {
         ...state,
         status: action.payload,

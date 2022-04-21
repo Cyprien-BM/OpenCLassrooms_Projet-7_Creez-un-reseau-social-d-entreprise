@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import {
-  getAllPostsFunction,
   likeFunction,
 } from '../../redux/posts/postReducer';
 import { getUserLike } from '../../redux/user/userReducer';
@@ -24,21 +23,6 @@ export default function Post(props) {
   const postState = useSelector((state) => state.postReducer);
   const userState = useSelector((state) => state.userReducer);
 
-  // Checking post status, if any modification : clean it after recovering all post and likes
-  useEffect(() => {
-    if (
-      postState.status === 'Post créé' ||
-      postState.status === 'Post modifié' ||
-      postState.status === 'Post supprimé' ||
-      postState.status === 'Like éffectué' ||
-      postState.status === 'Image supprimé'
-    ) {
-      dispatch(getAllPostsFunction());
-      dispatch({ type: 'CLEAN-STATUS' });
-      dispatch(getUserLike());
-    }
-  }, [postState.status, dispatch]);
-
   //Checking if cookie exist/is valid with postState => If not : redirect to login page
   useEffect(() => {
     if (postState.error === '403: unauthorized request') {
@@ -54,6 +38,13 @@ export default function Post(props) {
   //Get user likes for btn styles
   const like = (likeValue, id) => dispatch(likeFunction(likeValue, id));
 
+  useEffect(() => {
+    if (postState.status === 'like effectué') {
+      dispatch({ type: 'POST-CLEAN-STATUS' });
+      dispatch(getUserLike())
+    }
+  }, [postState.status])
+
   const isUserLikePost = (postId) => {
     const likeFound = userState.userLike.find((post) => post.postId === postId);
     if (likeFound) {
@@ -63,10 +54,6 @@ export default function Post(props) {
   //-----------------------------------------------------------------//
 
   return postState.posts.map((post) => {
-    let sumLike = 0;
-    post.Likes.map((like) => {
-      sumLike += like.likeValue;
-    });
     return (
       <article key={uuidv4()} className='post'>
         <div>
@@ -113,10 +100,10 @@ export default function Post(props) {
                 <p
                   className={
                     'post-like-number ' +
-                    (sumLike > 0 ? 'green' : sumLike < 0 ? 'red' : '')
+                    (post.likes > 0 ? 'green' : post.likes < 0 ? 'red' : '')
                   }
                 >
-                  {sumLike}
+                  {post.likes}
                 </p>
                 <img
                   src={arrowDown}

@@ -14,7 +14,6 @@ exports.getAllPost = (req, res, next) => {
         model: db.users,
         attributes: ['nickname', 'idUSER', 'pictureUrl'],
       },
-      { model: db.like, attributes: ['likeValue'] },
     ],
   })
     .then((posts) => {
@@ -54,7 +53,21 @@ exports.createAPost = (req, res, next) => {
     userId: res.locals.id,
     imageUrl: fileURL,
   })
-    .then(() => res.status(201).json({ message: 'Post créé' }))
+    .then((post) => {
+      Post.findOne({
+        where: {
+          idPOSTS: post.idPOSTS,
+        },
+        include: [
+          {
+            model: db.users,
+            attributes: ['nickname', 'idUSER', 'pictureUrl'],
+          },
+        ],
+      })
+        .then((post) => res.status(200).json(post))
+        .catch((error) => res.status(500).json({ message: 'Post introuvable !' }));
+    })
     .catch((error) => {
       if (req.file) {
         fs.unlink(`image/posts/images/${req.file.filename}`, (error) => {
@@ -95,7 +108,15 @@ exports.modifyAPost = (req, res, next) => {
           content: req.body.content,
           imageUrl: fileURL,
         })
-        .then(() => res.status(200).json({ message: 'Post modifié' }))
+        .then(() => {
+          Post.findOne({
+            where: {
+              idPOSTS: req.params.id,
+            },
+          })
+            .then((post) => res.status(200).json(post))
+            .catch((error) => res.status(400).json(error));
+        })
         .catch((error) => res.status(400).json(error));
     })
     .catch((error) => {
@@ -267,7 +288,7 @@ exports.likeAPost = (req, res, next) => {
     ],
     function (post) {
       if (post) {
-        return res.status(201).json({ message: 'Like éffectué' });
+        return res.status(201).json(post.dataValues);
       } else {
         return res
           .status(500)
@@ -296,7 +317,8 @@ exports.deletePostImage = (req, res, next) => {
               error;
             });
           }
-          res.status(200).json({ message: 'Image supprimé' });
+          console.log(post);
+          res.status(200).json(post.dataValues);
         })
         .catch((error) => {
           res.status(400).json(error);

@@ -9,6 +9,7 @@ import {
   getUserLike,
 } from '../../redux/user/userReducer';
 import {
+  getAllPostsFunction,
   getOnePostFunction,
   postModificationFunction,
   deletePostFunction,
@@ -49,6 +50,15 @@ export default function PostPage() {
   }, []);
   //----------------------------------------------//
 
+  useEffect(() => {
+    if (postState.posts.length === 0) {
+      dispatch(getAllPostsFunction());
+    }
+    if (userState.userLike.length === 0) {
+      dispatch(getUserLike());
+    }
+  }, []);
+
   // Update state post when postState from reducer change
   useEffect(() => {
     const postCopy = { ...post };
@@ -59,17 +69,8 @@ export default function PostPage() {
 
   // Update postState and LikeState when a post is modified, deleted or liked
   useEffect(() => {
-    if (postState.status === 'Like éffectué') {
-      dispatch(getOnePostFunction(postId));
-      dispatch(getUserLike());
-      dispatch({ type: 'CLEAN-STATUS' });
-    } else if (
-      postState.status === 'Post modifié' ||
-      postState.status === 'Image supprimé'
-    ) {
-      dispatch({ type: 'CLEAN-ERROR' });
-      dispatch(getOnePostFunction(postId));
-    } else if (postState.status === 'Post supprimé') {
+   if (postState.status === 'Post supprimé') {
+      dispatch({ type: 'POST-CLEAN-STATUS' });
       navigate('/home');
     }
   }, [postState.status, dispatch, navigate]);
@@ -142,10 +143,18 @@ export default function PostPage() {
   //Get user likes for btn styles
   const isUserLikePost = (postId) => {
     const likeFound = userState.userLike.find((post) => post.postId === postId);
+    console.log(likeFound);
     if (likeFound) {
       return likeFound.likeValue;
     }
   };
+
+  useEffect(() => {
+    if (postState.status === 'like effectué') {
+      dispatch({ type: 'POST-CLEAN-STATUS' });
+      dispatch(getUserLike())
+    }
+  }, [postState.status])
 
   const like = (likeValue, id) => dispatch(likeFunction(likeValue, id));
   //----------------------------------------------//
