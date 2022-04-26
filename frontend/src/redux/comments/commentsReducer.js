@@ -19,14 +19,21 @@ function commentsReducer(state = INITIAL_STATE, action) {
       newCommentsArray.push(action.payload);
       return {
         ...state,
-        status: action.payload,
+        status: 'Commentaire Créé',
+        comments: newCommentsArray,
         error: '',
       };
     }
     case 'DELETE-A-COMMENT': {
+      const newCommentsArray = [...state.comments];
+      const commentIndex = newCommentsArray.findIndex(
+        (comment) => comment.commentId === action.payload.commentId
+      );
+      newCommentsArray.splice(commentIndex, 1)
       return {
         ...state,
-        status: action.payload,
+        comments: newCommentsArray,
+        status: 'Commentaire supprimé',
         error: '',
       };
     }
@@ -37,9 +44,40 @@ function commentsReducer(state = INITIAL_STATE, action) {
       };
     }
     case 'MODIFY-A-COMMENT': {
+      const newCommentsArray = [...state.comments];
+      const commentIndex = newCommentsArray.findIndex(
+        (comment) => comment.commentId === action.payload.commentId
+      );
+      const newComment = {
+        ...newCommentsArray[commentIndex],
+        ...action.payload,
+      };
+      newCommentsArray[commentIndex] = newComment;
       return {
         ...state,
-        status: action.payload,
+        comments: newCommentsArray,
+        status: 'Commentaire modifié',
+        error: '',
+      };
+    }
+    case 'MODIFY-COMMENT-USER-DATA': {
+      const modifiedUser = {
+        nickname: action.payload.nickname,
+        idUSER: action.payload.idUSER,
+        pictureUrl: action.payload.pictureUrl,
+      };
+      const newCommentsArray = [...state.comments];
+      const modifiedArray = newCommentsArray.map((comment) => {
+        if (comment.user.idUSER === action.payload.idUSER) {
+          comment.user = modifiedUser;
+          return comment;
+        }
+        return comment;
+      });
+      return {
+        ...state,
+        comments: modifiedArray,
+        status: '',
         error: '',
       };
     }
@@ -91,7 +129,7 @@ export const postAComment = (comment, file, postId) => (dispatch) => {
     .then((response) => {
       dispatch({
         type: 'POST-A-COMMENT',
-        payload: response.data.message,
+        payload: response.data,
       });
     })
     .catch((e) => {
@@ -118,7 +156,7 @@ export const deleteCommentFunction = (id) => (dispatch) => {
     .then((response) => {
       dispatch({
         type: 'DELETE-A-COMMENT',
-        payload: response.data.message,
+        payload: parseInt(id),
       });
     })
     .catch((error) => {
@@ -145,7 +183,7 @@ export const modifyAComment = (comment, file) => (dispatch) => {
     .then((response) => {
       dispatch({
         type: 'MODIFY-A-COMMENT',
-        payload: response.data.message,
+        payload: response.data,
       });
     })
     .catch((e) => {
@@ -171,8 +209,8 @@ export const deleteCommentImageFunction = (id) => (dispatch) => {
     })
     .then((response) => {
       dispatch({
-        type: 'DELETE-A-COMMENT',
-        payload: response.data.message,
+        type: 'MODIFY-A-COMMENT',
+        payload: response.data,
       });
     })
     .catch((e) => {
@@ -196,3 +234,10 @@ export const deleteCommentImageFunction = (id) => (dispatch) => {
       }
     });
 };
+
+export const ModifyUserDataOnComments = (userData) => (dispatch) => {
+  dispatch({
+    type: 'MODIFY-COMMENT-USER-DATA',
+    payload: userData,
+  });
+}

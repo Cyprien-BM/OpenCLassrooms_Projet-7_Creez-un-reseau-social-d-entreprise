@@ -12,16 +12,13 @@ exports.getUser = (req, res, next) => {
     where: {
       idUSER: res.locals.id,
     },
-    raw: true,
   })
     .then((user) => res.status(200).json(user))
     .catch((error) => res.status(400).json({ error }));
 };
 
 exports.getAllUsers = (req, res, next) => {
-  User.findAll({
-    raw: true,
-  })
+  User.findAll({})
     .then((users) => res.status(200).json(users))
     .catch((error) => res.status(400).json({ error }));
 };
@@ -31,7 +28,6 @@ exports.getUserById = (req, res, next) => {
     where: {
       idUSER: req.params.id,
     },
-    raw: true,
   })
     .then((user) => {
       res.status(200).json({ user, otherUser: true });
@@ -45,7 +41,6 @@ exports.getUserLike = (req, res, next) => {
     where: {
       userId: res.locals.id,
     },
-    raw: true,
   })
     .then((like) => {
       res.status(201).json(like);
@@ -82,7 +77,6 @@ exports.modifyUserInformation = (req, res, next) => {
     where: {
       idUSER: req.params.id,
     },
-    raw: true,
   })
     .then((user) => {
       let imgUrl;
@@ -113,7 +107,15 @@ exports.modifyUserInformation = (req, res, next) => {
           },
         }
       )
-        .then(() => res.status(200).json({ message: 'Profil modifié !' }))
+        .then(() => {
+          User.findOne({
+            where: {
+              idUSER: req.params.id,
+            },
+          })
+            .then((user) => res.status(200).json(user))
+            .catch((error) => res.status(400).json({ error }));
+        })
         .catch((error) => {
           if (req.file) {
             fs.unlink(`image/profile/images/${req.file.filename}`, (error) => {
@@ -226,7 +228,7 @@ exports.deleteImageUser = (req, res, next) => {
             'host'
           )}/image/profile/Default.png`,
         })
-        .then(() => res.status(200).json({ message: 'Image supprimé' }))
+        .then(() => res.status(200).json(user.dataValues))
         .catch((error) =>
           res.status(400).json({ message: "Impossible de supprimer l'image" })
         );

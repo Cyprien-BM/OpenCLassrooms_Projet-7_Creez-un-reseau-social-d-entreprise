@@ -27,6 +27,14 @@ export default function Comment(props) {
     imageUrl: '',
   });
 
+  // Get all states after page load
+  useEffect(() => {
+    if (commentState.comments.length === 0) {
+      dispatch(getAllComments());
+    }
+  }, []);
+  //----------------------------------------------//
+
   //Data binding beetween state comment and form
   const handleInputs = (event) => {
     if (event.target.classList.contains('post-comments_form-img-input')) {
@@ -75,17 +83,12 @@ export default function Comment(props) {
   //Update comment state after any creation or modification and clean image preview
   useEffect(() => {
     if (
-      commentState.status === 'Commentaire créé' ||
-      commentState.status === 'Commentaire modifié !' ||
-      commentState.status === 'Commentaire supprimé' ||
-      commentState.status === 'Image supprimé'
+      commentState.status === 'Commentaire modifié' ||
+      commentState.status === 'Commentaire Créé'
     ) {
-      dispatch(getAllComments());
       dispatch({ type: 'CLEAN-COMMENT-STATUS' });
       imgRef.current.src = '';
       inputRef.current.value = '';
-      const newCommentState = { ...comment, content: '' };
-      setComment(newCommentState);
     }
   }, [commentState.status, dispatch]);
   //---------------------------------------------//
@@ -137,7 +140,7 @@ export default function Comment(props) {
               </p>
             </div>
             {userState.userData.idUSER === comment.userId ||
-            userState.userData.isAdmin === 1 ? (
+            userState.userData.isAdmin ? (
               <div className='edit-comment-container'>
                 <img
                   src={editCommentLogo}

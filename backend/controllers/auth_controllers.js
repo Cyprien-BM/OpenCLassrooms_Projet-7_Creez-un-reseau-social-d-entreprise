@@ -53,7 +53,6 @@ exports.login = (req, res, next) => {
     where: {
       email: req.body.email,
     },
-    raw: true,
   })
     .then((user) => {
       if (!user) {

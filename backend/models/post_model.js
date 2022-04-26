@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(100),
         allowNull: false,
         unique: {
-          msg: 'Ce titre est déjà utilisé'
+          msg: 'Ce titre est déjà utilisé',
         },
       },
       content: {

@@ -53,11 +53,25 @@ function userReducer(state = INITIAL_STATE, action) {
       };
     }
     case 'USER-MODIFICATION': {
-      return {
-        ...state,
-        status: action.payload,
-        error: '',
-      };
+      if (state.userData.idUSER === action.payload.idUSER) {
+        const newUser = { ...state.userData, ...action.payload };
+        return {
+          ...state,
+          userData: newUser,
+          status: 'Profil modifié',
+          error: '',
+        };
+      } else if (state.userData.idUSER !== action.payload.idUSER) {
+        const newUser = { ...state.userData, ...action.payload };
+        return {
+          ...state,
+          otherUserData: newUser,
+          status: 'Profil modifié',
+          error: '',
+        };
+      } else {
+        break;
+      }
     }
     case 'PASSWORD-MODIFICATION': {
       return {
@@ -76,19 +90,10 @@ function userReducer(state = INITIAL_STATE, action) {
         error: '',
       };
     }
-    case 'USER-IMAGE-DELETE': {
-      return {
-        ...state,
-        status: action.payload,
-        error: '',
-      };
-    }
     case 'USER-DELETE': {
       return {
         ...state,
         status: action.payload,
-        userData: {},
-        otherUserData: {},
         error: '',
       };
     }
@@ -273,16 +278,23 @@ export const getUserFunctionById = (id) => async (dispatch) => {
       }
     })
     .catch((e) => {
-      const error = e.response.data;
-      if (error.message) {
-        dispatch({
-          type: 'USER-ERROR',
-          payload: error.message,
-        });
+      if (e.response) {
+        const error = e.response.data;
+        if (error.message) {
+          dispatch({
+            type: 'USER-ERROR',
+            payload: error.message,
+          });
+        } else {
+          dispatch({
+            type: 'USER-ERROR',
+            payload: error,
+          });
+        }
       } else {
         dispatch({
           type: 'USER-ERROR',
-          payload: error,
+          payload: '',
         });
       }
     });
@@ -303,7 +315,7 @@ export const changeUserDataFunction = (user, file, id) => (dispatch) => {
     .then((response) => {
       dispatch({
         type: 'USER-MODIFICATION',
-        payload: response.data.message,
+        payload: response.data,
       });
     })
     .catch((e) => {
@@ -401,8 +413,8 @@ export const deleteUserImageFunction = (id) => (dispatch) => {
     })
     .then((response) => {
       dispatch({
-        type: 'USER-IMAGE-DELETE',
-        payload: response.data.message,
+        type: 'USER-MODIFICATION',
+        payload: response.data,
       });
     });
 };

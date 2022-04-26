@@ -31,7 +31,23 @@ exports.createComment = (req, res, next) => {
     content: req.body.content,
     imageUrl: fileURL,
   })
-    .then(() => res.status(201).json({ message: 'Commentaire créé' }))
+    .then((comment) => {
+      Comment.findOne({
+        where: {
+          commentId: comment.commentId,
+        },
+        include: [
+          {
+            model: db.users,
+            attributes: ['nickname', 'idUSER', 'pictureUrl'],
+          },
+        ],
+      })
+        .then((comment) => res.status(200).json(comment))
+        .catch((error) => {
+          res.status(500).json({ message: 'Aucun commentaire trouvé' });
+        });
+    })
     .catch((error) => {
       if (req.file) {
         fs.unlink(`image/posts/images/${req.file.filename}`, (error) => {
@@ -71,7 +87,7 @@ exports.modifyComment = (req, res, next) => {
           content: req.body.content,
           imageUrl: fileURL,
         })
-        .then(() => res.status(200).json({ message: 'Commentaire modifié !' }))
+        .then(() => res.status(200).json(comment.dataValues))
         .catch((error) => res.status(400).json({ error }));
     })
     .catch((error) => {
@@ -125,10 +141,11 @@ exports.deleteImageComment = (req, res, next) => {
               error;
             });
           }
-          res.status(200).json({ message: 'Image supprimé' });
+          res.status(200).json(comment.dataValues);
         })
         .catch((error) => {
-          res.status(400).json(error)});
+          res.status(400).json(error);
+        });
     })
     .catch(() =>
       res.status(500).json({ message: 'Commentaire introuvable !' })

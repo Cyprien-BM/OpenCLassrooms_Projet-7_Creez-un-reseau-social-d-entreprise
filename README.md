@@ -136,10 +136,6 @@ touch config/config.json
 ```bash
 node server
 ```
-ou
-```bash
-nodemon
-```
 
 Le terminal doit vous afficher un message similaire à celui-ci :
 

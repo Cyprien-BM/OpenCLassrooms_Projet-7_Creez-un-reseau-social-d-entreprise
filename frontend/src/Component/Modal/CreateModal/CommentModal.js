@@ -36,10 +36,8 @@ export default function CommentModal(props) {
 
   // Clean postState status and close modal after post creation
   useEffect(() => {
-    if (
-      commentState.status === 'Commentaire modifié !' ||
-      commentState.status === 'Image supprimé'
-    ) {
+    if (commentState.status === 'Commentaire modifié') {
+      dispatch({ type: 'CLEAN-COMMENT-STATUS' });
       props.toggleCommentModal();
     }
   }, [commentState.status, props]);

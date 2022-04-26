@@ -2,9 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  likeFunction,
-} from '../../redux/posts/postReducer';
+import { likeFunction } from '../../redux/posts/postReducer';
 import { getUserLike } from '../../redux/user/userReducer';
 import moment from 'moment';
 import localization from 'moment/locale/fr';
@@ -12,7 +10,6 @@ import arrowUp from '../../Assets/logo/arrow-up.svg';
 import arrowDown from '../../Assets/logo/arrow-down.svg';
 import './Post.css';
 import Comment from '../Comment/Comment';
-
 
 moment.updateLocale('fr', localization);
 
@@ -36,14 +33,15 @@ export default function Post(props) {
   //-----------------------------------------------------------------//
 
   //Get user likes for btn styles
-  const like = (likeValue, id) => dispatch(likeFunction(likeValue, id));
+  const like = (likeValue, id, userId) =>
+    dispatch(likeFunction(likeValue, id, userId));
 
   useEffect(() => {
     if (postState.status === 'like effectué') {
       dispatch({ type: 'POST-CLEAN-STATUS' });
-      dispatch(getUserLike())
+      dispatch(getUserLike());
     }
-  }, [postState.status])
+  }, [postState.status]);
 
   const isUserLikePost = (postId) => {
     const likeFound = userState.userLike.find((post) => post.postId === postId);
@@ -54,12 +52,16 @@ export default function Post(props) {
   //-----------------------------------------------------------------//
 
   return postState.posts.map((post) => {
+    let totalLike = 0;
+    post.Likes.forEach((like) => {
+      totalLike += like.likeValue;
+    });
     return (
       <article key={uuidv4()} className='post'>
         <div>
           <div
             className='post-content'
-            onClick={(event) =>
+            onClick={() =>
               navigate(`/post/${post.idPOSTS}/${post.user.idUSER}`)
             }
           >
@@ -94,16 +96,16 @@ export default function Post(props) {
                   }
                   onClick={(event) => {
                     event.stopPropagation();
-                    like(1, post.idPOSTS);
+                    like(1, post.idPOSTS, userState.userData.idUSER);
                   }}
                 />
                 <p
                   className={
                     'post-like-number ' +
-                    (post.likes > 0 ? 'green' : post.likes < 0 ? 'red' : '')
+                    (totalLike > 0 ? 'green' : totalLike < 0 ? 'red' : '')
                   }
                 >
-                  {post.likes}
+                  {totalLike}
                 </p>
                 <img
                   src={arrowDown}
@@ -114,7 +116,7 @@ export default function Post(props) {
                   }
                   onClick={(event) => {
                     event.stopPropagation();
-                    like(-1, post.idPOSTS);
+                    like(-1, post.idPOSTS, userState.userData.idUSER);
                   }}
                 />
               </div>

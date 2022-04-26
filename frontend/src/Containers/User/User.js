@@ -10,8 +10,8 @@ import {
   deleteUserFunction,
   deleteUserImageFunction,
 } from '../../redux/user/userReducer';
-import { getAllPostsFunction } from '../../redux/posts/postReducer';
-import { getAllComments } from '../../redux/comments/commentsReducer';
+import { ModifyUserDataOnPosts } from '../../redux/posts/postReducer';
+import { ModifyUserDataOnComments } from '../../redux/comments/commentsReducer';
 import './User.css';
 import Button from '../../Component/Button/Button';
 import PasswordModal from '../../Component/Modal/PasswordModificationModal/PasswordModal';
@@ -21,7 +21,6 @@ export default function User() {
   const dispatch = useDispatch();
 
   const { id } = useParams();
-  console.log(id);
 
   const ref = useRef();
 
@@ -50,19 +49,16 @@ export default function User() {
   }, []);
   //----------------------------------------------//
 
-  //Change user data when id URL change
+  // Get correct user data depending on who visits the page
   useEffect(() => {
-    dispatch(getUserFunction());
     if (parseInt(id) !== userData.idUSER) {
       dispatch(getUserFunctionById(id));
     } else {
       const newUserState = { ...user, ...userData };
       setUser(newUserState);
     }
-  }, [id]);
-  //----------------------------------------------//
+  }, [userData, id]);
 
-  // Get correct user data when admin visit user page
   useEffect(() => {
     if (parseInt(id) !== userData.idUSER) {
       const newUserState = { ...user, ...otherUserData };
@@ -70,8 +66,6 @@ export default function User() {
     }
   }, [otherUserData]);
   // ----------------------------------------------//
-
-  console.log(parseInt(id) !== userData.idUSER);
 
   //Checking if cookie exist/is valid. If not : clear userReducer state and redirect to login page
   useEffect(() => {
@@ -84,26 +78,35 @@ export default function User() {
 
   //Update States after modification, navigate to login if user deleted
   useEffect(() => {
-    if (userState === 'Profil modifié !' || userState === 'Image supprimé') {
+    if (userState === 'Profil modifié' || userState === 'Image supprimé') {
       if (parseInt(id) !== userData.idUSER) {
         dispatch(getUserFunctionById(id));
       } else {
         dispatch(getUserFunction());
       }
-      dispatch(getAllPostsFunction());
-      dispatch(getAllComments());
-      dispatch(resetStateFunction());
     }
     if (userState === 'Utilisateur Supprimé') {
       dispatch({ type: 'RESET-STATE', payload: '' });
-      if (userData.isAdmin === 1) {
-        dispatch(getAllPostsFunction());
+      if (userData.isAdmin === true) {
         navigate('/home');
       } else {
         navigate('/login');
       }
     }
   }, [userState, dispatch, navigate]);
+  //----------------------------------------------//
+
+  // Update post and comment data data from user after user modification
+  useEffect(() => {
+    if (userState === 'Profil modifié') {
+      dispatch(ModifyUserDataOnPosts(user));
+      dispatch(ModifyUserDataOnComments(user));
+      dispatch({
+        type: 'RESET-STATE',
+        payload: '',
+      });
+    }
+  }, [user, dispatch, navigate]);
   //----------------------------------------------//
 
   //Data binding beetween state user and form
@@ -134,6 +137,10 @@ export default function User() {
   };
 
   const deleteUser = () => {
+    if (userData.isAdmin && parseInt(id) === userData.idUSER) {
+      alert("impossible de supprimer l'admin");
+      return;
+    }
     const answer = window.confirm(
       "Etes vous sûr de vouloir supprimer l'utilisateur ?"
     );
@@ -152,8 +159,6 @@ export default function User() {
   };
   //----------------------------------------------//
 
-  console.log(user);
-
   return (
     <div className='user-page'>
       <header className='user-header'>
@@ -162,7 +167,7 @@ export default function User() {
       <main>
         {/* IF USER VISITE HIS PROFILE OR IF HE IS ADMIN */}
 
-        {parseInt(id) === userData.idUSER || userData.isAdmin === 1 ? (
+        {parseInt(id) === userData.idUSER || userData.isAdmin ? (
           <>
             {modal && (
               <>
@@ -278,7 +283,7 @@ export default function User() {
                 >
                   Supprimer
                 </button>
-                {userData.isAdmin === 1 && (
+                {userData.isAdmin === true && (
                   <Link className='users-link' to={`/users`}>
                     <button
                       type='button'
@@ -314,9 +319,11 @@ export default function User() {
                 </p>
                 <p className='user_data-title'>Nom</p>
                 <p className='user_data-content'>
-                  {otherUserData.lastname
-                    ? otherUserData.lastname
-                    : 'Non renseigné'}
+                  {!otherUserData.lastname
+                    ? 'Non renseigné'
+                    : otherUserData.lastname === 'null'
+                    ? 'Non renseigné'
+                    : otherUserData.lastname}
                 </p>
               </div>
             </div>

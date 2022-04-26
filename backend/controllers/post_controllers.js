@@ -14,6 +14,7 @@ exports.getAllPost = (req, res, next) => {
         model: db.users,
         attributes: ['nickname', 'idUSER', 'pictureUrl'],
       },
+      { model: db.like, attributes: ['likeValue', 'userId'] },
     ],
   })
     .then((posts) => {
@@ -34,6 +35,7 @@ exports.getOnePost = (req, res, next) => {
         model: db.users,
         attributes: ['nickname', 'idUSER'],
       },
+      { model: db.like, attributes: ['likeValue', 'userId'] },
     ],
   })
     .then((post) => res.status(200).json(post))
@@ -63,10 +65,13 @@ exports.createAPost = (req, res, next) => {
             model: db.users,
             attributes: ['nickname', 'idUSER', 'pictureUrl'],
           },
+          { model: db.like, attributes: ['likeValue', 'userId'] },
         ],
       })
         .then((post) => res.status(200).json(post))
-        .catch((error) => res.status(500).json({ message: 'Post introuvable !' }));
+        .catch((error) =>
+          res.status(500).json({ message: 'Post introuvable !' })
+        );
     })
     .catch((error) => {
       if (req.file) {
@@ -317,7 +322,6 @@ exports.deletePostImage = (req, res, next) => {
               error;
             });
           }
-          console.log(post);
           res.status(200).json(post.dataValues);
         })
         .catch((error) => {
@@ -325,4 +329,19 @@ exports.deletePostImage = (req, res, next) => {
         });
     })
     .catch(() => res.status(500).json({ message: 'Post introuvable' }));
+};
+
+exports.getPostLike = (req, res, next) => {
+  Like.findAll({
+    where: {
+      postId: req.params.id,
+    },
+    attributes: ['likeValue', 'userId', 'postId'],
+  })
+    .then((likes) => {
+      res.status(200).json(likes);
+    })
+    .catch((error) => {
+      res.status(400).json(error);
+    });
 };

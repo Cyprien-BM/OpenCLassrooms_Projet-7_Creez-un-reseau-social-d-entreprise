@@ -52,7 +52,7 @@ function postReducer(state = INITIAL_STATE, action) {
       const postIndex = newPostsArray.findIndex(
         (post) => post.idPOSTS === action.payload
       );
-      newPostsArray.splice(postIndex, 1)
+      newPostsArray.splice(postIndex, 1);
       return {
         ...state,
         post: {},
@@ -64,15 +64,37 @@ function postReducer(state = INITIAL_STATE, action) {
     case 'POST-LIKE': {
       const newPostsArray = [...state.posts];
       const postIndex = newPostsArray.findIndex(
-        (post) => post.idPOSTS === action.payload.idPOSTS
+        (post) => post.idPOSTS === action.postId
       );
-      const newPost = { ...newPostsArray[postIndex], ...action.payload };
-      newPostsArray[postIndex].likes = action.payload.likes;
+      newPostsArray[postIndex].Likes = action.payload;
+      const newPost = { ...newPostsArray[postIndex] };
+      newPost.Likes = action.payload;
       return {
         ...state,
         posts: newPostsArray,
         post: newPost,
         status: 'like effectué',
+        error: '',
+      };
+    }
+    case 'MODIFY-POST-USER-DATA': {
+      const modifiedUser = {
+        nickname: action.payload.nickname,
+        idUSER: action.payload.idUSER,
+        pictureUrl: action.payload.pictureUrl,
+      };
+      const newPostsArray = [...state.posts];
+      const modifiedArray = newPostsArray.map((post) => {
+        if (post.user.idUSER === action.payload.idUSER) {
+          post.user = modifiedUser;
+          return post;
+        }
+        return post;
+      });
+      return {
+        ...state,
+        posts: modifiedArray,
+        status: '',
         error: '',
       };
     }
@@ -235,7 +257,7 @@ export const deletePostFunction = (id) => (dispatch) => {
     });
 };
 
-export const likeFunction = (likeValue, id) => (dispatch) => {
+export const likeFunction = (likeValue, id, userId) => (dispatch) => {
   axios
     .post(
       `${process.env.REACT_APP_API_URL}api/post/like/${id}`,
@@ -244,12 +266,21 @@ export const likeFunction = (likeValue, id) => (dispatch) => {
         withCredentials: true,
       }
     )
-    .then((response) => {
-      dispatch({
-        type: 'POST-LIKE',
-        payload: response.data,
-      });
-    });
+    .then(() => {
+      axios
+        .get(`${process.env.REACT_APP_API_URL}api/post/like/${id}`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          dispatch({
+            type: 'POST-LIKE',
+            payload: response.data,
+            postId: id,
+          });
+        })
+        .catch();
+    })
+    .catch();
 };
 
 export const deletePostImageFunction = (id) => (dispatch) => {
@@ -283,4 +314,11 @@ export const deletePostImageFunction = (id) => (dispatch) => {
         });
       }
     });
+};
+
+export const ModifyUserDataOnPosts = (userData) => (dispatch) => {
+  dispatch({
+    type: 'MODIFY-POST-USER-DATA',
+    payload: userData,
+  });
 };

@@ -60,6 +60,13 @@ export default function PostPage() {
   }, []);
 
   // Update state post when postState from reducer change
+  let totalLike = 0;
+  if (post.Likes) {
+    post.Likes.forEach((like) => {
+      totalLike += like.likeValue;
+    });
+  }
+
   useEffect(() => {
     const postCopy = { ...post };
     const newPostState = Object.assign(postCopy, postState.post);
@@ -69,7 +76,7 @@ export default function PostPage() {
 
   // Update postState and LikeState when a post is modified, deleted or liked
   useEffect(() => {
-   if (postState.status === 'Post supprimé') {
+    if (postState.status === 'Post supprimé') {
       dispatch({ type: 'POST-CLEAN-STATUS' });
       navigate('/home');
     }
@@ -143,7 +150,6 @@ export default function PostPage() {
   //Get user likes for btn styles
   const isUserLikePost = (postId) => {
     const likeFound = userState.userLike.find((post) => post.postId === postId);
-    console.log(likeFound);
     if (likeFound) {
       return likeFound.likeValue;
     }
@@ -152,9 +158,9 @@ export default function PostPage() {
   useEffect(() => {
     if (postState.status === 'like effectué') {
       dispatch({ type: 'POST-CLEAN-STATUS' });
-      dispatch(getUserLike())
+      dispatch(getUserLike());
     }
-  }, [postState.status])
+  }, [postState.status]);
 
   const like = (likeValue, id) => dispatch(likeFunction(likeValue, id));
   //----------------------------------------------//
@@ -165,8 +171,7 @@ export default function PostPage() {
         <Navbar userData={userData} />
       </header>
       <main className='post-page-body'>
-        {parseInt(postCreatorId) === userData.idUSER ||
-        userData.isAdmin === 1 ? (
+        {parseInt(postCreatorId) === userData.idUSER || userData.isAdmin ? (
           <form onSubmit={submitForm} className='post-page-form'>
             <div className='post-page-form_media-container'>
               <label htmlFor=''>Média</label>
@@ -251,10 +256,10 @@ export default function PostPage() {
                 <p
                   className={
                     'post-like-number ' +
-                    (post.likes > 0 ? 'green' : post.likes < 0 ? 'red' : '')
+                    (totalLike > 0 ? 'green' : totalLike < 0 ? 'red' : '')
                   }
                 >
-                  {post.likes}
+                  {totalLike}
                 </p>
                 <img
                   src={arrowDown}
@@ -304,10 +309,10 @@ export default function PostPage() {
                 <p
                   className={
                     'post-like-number ' +
-                    (post.likes > 0 ? 'green' : post.likes < 0 ? 'red' : '')
+                    (totalLike > 0 ? 'green' : totalLike < 0 ? 'red' : '')
                   }
                 >
-                  {post.likes}
+                  {totalLike}
                 </p>
                 <img
                   src={arrowDown}

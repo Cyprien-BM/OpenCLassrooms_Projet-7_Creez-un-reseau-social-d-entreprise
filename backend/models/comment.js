@@ -14,9 +14,7 @@ function inputValidator(input) {
 }
 //----------------------------------------------------------//
 
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Comment extends Model {
     /**
@@ -28,58 +26,60 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Comment.init({
-    commentId: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER
-    },
-    postId: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
-      onDelete: 'CASCADE',
-      references: {
-        model: 'posts',
-        key: 'idPOSTS'
-      }
-    },
-    userId: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
-      onDelete: 'CASCADE',
-      references: {
-        model: 'users',
-        key: 'idUSER'
-      }
-    },
-    content: {
-      type: DataTypes.STRING(1500)
-    },
-    imageUrl: {
-      type: DataTypes.STRING(500)
-    },
-  }, 
-  {
-    sequelize,
-    validate: {
-      validateInput() {
-        if (!this.content && !this.imageUrl) {
-          throw new Error('Veuillez ajouter un texte ou ajouter une image');
-        } else if (
-          inputValidator(this.title) ||
-          inputValidator(this.content)
-        ) {
-          throw new Error(
-            "Veuillez remplir les champs d'input avec des caractères valides"
-          );
-        }
+  Comment.init(
+    {
+      commentId: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      postId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'posts',
+          key: 'idPOSTS',
+        },
+      },
+      userId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'users',
+          key: 'idUSER',
+        },
+      },
+      content: {
+        type: DataTypes.STRING(1500),
+      },
+      imageUrl: {
+        type: DataTypes.STRING(500),
       },
     },
-  },
-  {
-    sequelize,
-    modelName: 'Comment',
-  });
+    {
+      sequelize,
+      validate: {
+        validateInput() {
+          if (!this.content && !this.imageUrl) {
+            throw new Error('Veuillez ajouter un texte ou ajouter une image');
+          } else if (
+            inputValidator(this.title) ||
+            inputValidator(this.content)
+          ) {
+            throw new Error(
+              "Veuillez remplir les champs d'input avec des caractères valides"
+            );
+          }
+        },
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Comment',
+    }
+  );
   return Comment;
 };

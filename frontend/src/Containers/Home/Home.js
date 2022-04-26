@@ -54,6 +54,14 @@ export default function Home() {
   }, []);
   //----------------------------------------------//
 
+  useEffect(() => {
+    if (userState.status === 'Utilisateur Supprimé') {
+      dispatch(getAllPostsFunction());
+      dispatch(getAllComments());
+    }
+  }, []);
+  //----------------------------------------------//
+
   return (
     <>
       <header className='home-header'>
