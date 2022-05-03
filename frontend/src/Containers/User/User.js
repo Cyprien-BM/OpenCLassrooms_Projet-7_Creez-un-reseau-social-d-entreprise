@@ -86,10 +86,10 @@ export default function User() {
       }
     }
     if (userState === 'Utilisateur Supprimé') {
-      dispatch({ type: 'RESET-STATE', payload: '' });
       if (userData.isAdmin === true) {
         navigate('/home');
       } else {
+        dispatch({ type: 'RESET-STATE', payload: '' });
         navigate('/login');
       }
     }
