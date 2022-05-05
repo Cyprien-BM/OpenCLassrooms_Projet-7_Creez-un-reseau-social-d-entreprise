@@ -89,7 +89,11 @@ export default function Post(props) {
               <div className='post-likes'>
                 <img
                   src={arrowUp}
-                  alt='Liker le post'
+                  alt={
+                    'Liker le post' + (isUserLikePost(post.idPOSTS) === 1
+                      ? ' Post déjà liké'
+                      : '')
+                  }
                   className={
                     'arrow ' +
                     (isUserLikePost(post.idPOSTS) === 1 ? 'green' : '')
@@ -109,7 +113,9 @@ export default function Post(props) {
                 </p>
                 <img
                   src={arrowDown}
-                  alt='Disliker le post'
+                  alt={'Disliker le post' + (isUserLikePost(post.idPOSTS) === -1
+                  ? ' Post déjà disliké'
+                  : '')}
                   className={
                     'arrow ' +
                     (isUserLikePost(post.idPOSTS) === -1 ? 'red' : '')
